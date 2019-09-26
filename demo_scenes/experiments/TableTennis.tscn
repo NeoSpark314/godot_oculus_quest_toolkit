@@ -1,0 +1,49 @@
+[gd_scene load_steps=13 format=2]
+
+[ext_resource path="res://demo_scenes/experiments/TableTennis.gd" type="Script" id=1]
+[ext_resource path="res://OQ_Toolkit/OQ_ARVRCamera.tscn" type="PackedScene" id=2]
+[ext_resource path="res://OQ_Toolkit/OQ_ARVRController/Feature_ControllerModel_Left.tscn" type="PackedScene" id=3]
+[ext_resource path="res://OQ_Toolkit/OQ_LeftController.tscn" type="PackedScene" id=4]
+[ext_resource path="res://OQ_Toolkit/OQ_ARVRController/Feature_RigidBodyGrab.tscn" type="PackedScene" id=5]
+[ext_resource path="res://OQ_Toolkit/OQ_ARVROrigin.tscn" type="PackedScene" id=6]
+[ext_resource path="res://demo_scenes/static_objects/TableTennisRoom.tscn" type="PackedScene" id=7]
+[ext_resource path="res://OQ_Toolkit/OQ_RightController.tscn" type="PackedScene" id=8]
+[ext_resource path="res://OQ_Toolkit/OQ_ARVRController/Feature_ControllerModel_Right.tscn" type="PackedScene" id=9]
+[ext_resource path="res://demo_scenes/actors/TableTennisBall.tscn" type="PackedScene" id=10]
+[ext_resource path="res://demo_scenes/actors/TableTennisRacket.tscn" type="PackedScene" id=11]
+[ext_resource path="res://OQ_Toolkit/OQ_ARVROrigin/Feature_VRSimulator.tscn" type="PackedScene" id=12]
+
+
+
+
+
+[node name="TableTennis" type="Spatial"]
+script = ExtResource( 1 )
+
+[node name="Ball" parent="." instance=ExtResource( 10 )]
+
+[node name="TableTennisRacket" parent="." instance=ExtResource( 11 )]
+transform = Transform( -0.999584, 0, 0.0288288, 0, 1, 0, -0.0288288, 0, -0.999584, 0, 0.921107, 0.178352 )
+
+[node name="TableTennisRoom" parent="." instance=ExtResource( 7 )]
+
+[node name="OQ_ARVROrigin" parent="." instance=ExtResource( 6 )]
+
+[node name="OQ_ARVRCamera" parent="OQ_ARVROrigin" instance=ExtResource( 2 )]
+transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1.1827, -0.551665 )
+
+[node name="OQ_LeftController" parent="OQ_ARVROrigin" instance=ExtResource( 4 )]
+transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1.1827, -0.551665 )
+
+[node name="Feature_ControllerModel_Left" parent="OQ_ARVROrigin/OQ_LeftController" instance=ExtResource( 3 )]
+
+[node name="Feature_RigidBodyGrab" parent="OQ_ARVROrigin/OQ_LeftController" instance=ExtResource( 5 )]
+
+[node name="OQ_RightController" parent="OQ_ARVROrigin" instance=ExtResource( 8 )]
+transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1.1827, -0.551665 )
+
+[node name="Feature_ControllerModel_Right" parent="OQ_ARVROrigin/OQ_RightController" instance=ExtResource( 9 )]
+
+[node name="Feature_RigidBodyGrab" parent="OQ_ARVROrigin/OQ_RightController" instance=ExtResource( 5 )]
+
+[node name="Feature_VRSimulator" parent="OQ_ARVROrigin" instance=ExtResource( 12 )]

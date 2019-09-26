@@ -1,0 +1,88 @@
+[gd_scene load_steps=13 format=2]
+
+[ext_resource path="res://OQ_Toolkit/OQ_ARVRCamera.tscn" type="PackedScene" id=1]
+[ext_resource path="res://demo_scenes/experiments/TestRoom.gd" type="Script" id=2]
+[ext_resource path="res://OQ_Toolkit/OQ_ARVRController/Feature_ControllerModel_Left.tscn" type="PackedScene" id=3]
+[ext_resource path="res://OQ_Toolkit/OQ_UI2D/OQ_UI2DCanvas.tscn" type="PackedScene" id=4]
+[ext_resource path="res://demo_scenes/static_objects/TableTennisRoom.tscn" type="PackedScene" id=5]
+[ext_resource path="res://OQ_Toolkit/OQ_LeftController.tscn" type="PackedScene" id=6]
+[ext_resource path="res://OQ_Toolkit/OQ_ARVROrigin.tscn" type="PackedScene" id=7]
+[ext_resource path="res://OQ_Toolkit/OQ_RightController.tscn" type="PackedScene" id=8]
+[ext_resource path="res://OQ_Toolkit/OQ_UI2D/theme/oq_ui2d_standard.theme" type="Theme" id=9]
+[ext_resource path="res://OQ_Toolkit/OQ_ARVRController/Feature_ControllerModel_Right.tscn" type="PackedScene" id=10]
+[ext_resource path="res://OQ_Toolkit/OQ_ARVRController/Feature_UIRayCast.tscn" type="PackedScene" id=11]
+[ext_resource path="res://OQ_Toolkit/OQ_ARVROrigin/Feature_VRSimulator.tscn" type="PackedScene" id=12]
+
+
+
+
+[node name="TestRoom" type="Spatial"]
+script = ExtResource( 2 )
+
+[node name="OQ_ARVROrigin" parent="." instance=ExtResource( 7 )]
+
+[node name="OQ_ARVRCamera" parent="OQ_ARVROrigin" instance=ExtResource( 1 )]
+transform = Transform( -1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 1.36845, 0 )
+
+[node name="OQ_LeftController" parent="OQ_ARVROrigin" instance=ExtResource( 6 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.37551, 0.0958476 )
+
+[node name="Feature_ControllerModel_Left" parent="OQ_ARVROrigin/OQ_LeftController" instance=ExtResource( 3 )]
+
+[node name="OQ_RightController" parent="OQ_ARVROrigin" instance=ExtResource( 8 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.37551, 0.0958476 )
+
+[node name="Feature_ControllerModel_Right" parent="OQ_ARVROrigin/OQ_RightController" instance=ExtResource( 10 )]
+
+[node name="Feature_UIRayCast" parent="OQ_ARVROrigin/OQ_RightController" instance=ExtResource( 11 )]
+ui_raycast_visible_button = 0
+
+[node name="Feature_VRSimulator" parent="OQ_ARVROrigin" instance=ExtResource( 12 )]
+
+[node name="TableTennisRoom" parent="." instance=ExtResource( 5 )]
+
+[node name="OQ_UI2DCanvas" parent="." instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.52629, 1.35026 )
+
+[node name="Control" type="Control" parent="OQ_UI2DCanvas"]
+margin_right = 512.0
+margin_bottom = 512.0
+theme = ExtResource( 9 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="OQ_UI2DCanvas/Control"]
+margin_right = 40.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="OQ_UI2DCanvas/Control/VBoxContainer"]
+margin_right = 333.0
+margin_bottom = 33.0
+text = "UI Test Window"
+
+[node name="CheckButton" type="CheckButton" parent="OQ_UI2DCanvas/Control/VBoxContainer"]
+margin_top = 37.0
+margin_right = 333.0
+margin_bottom = 78.0
+text = "CheckButton"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="OQ_UI2DCanvas/Control/VBoxContainer"]
+margin_top = 82.0
+margin_right = 333.0
+margin_bottom = 123.0
+
+[node name="CheckBox" type="CheckBox" parent="OQ_UI2DCanvas/Control/VBoxContainer/HBoxContainer"]
+margin_right = 161.0
+margin_bottom = 41.0
+text = "Check Box"
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="OQ_UI2DCanvas/Control/VBoxContainer/HBoxContainer"]
+margin_left = 165.0
+margin_right = 333.0
+margin_bottom = 41.0
+text = "Color Picker"
+color = Color( 0.156863, 0.639216, 0.298039, 1 )

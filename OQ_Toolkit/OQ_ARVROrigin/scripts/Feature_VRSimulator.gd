@@ -1,0 +1,211 @@
+# The Feature_VRSimulator provides some basic functionality to control the ARVRNodes
+# via keyboard for desktop debugging and basic tests
+extends Spatial
+
+export var walk_speed = 1.0;
+
+
+export var controller_move_speed = 0.002;
+
+export var player_height = 1.8;
+
+# camera relative positioning of controllers
+var left_controller_node = null;
+var right_controller_node = null;
+
+var info_label;
+
+const info_text = """VR Simulator Keys:
+ mouse right-click: move (camera or controller)
+ W A S D: move (camera or controller)
+
+ hold CTRL/ALT: enable left/right controller for manipulation
+   Keypad 8 4 2 6: analog stick
+   'Q': index trigger (or left mouse button for right trigger)
+   'E': grip trigger 
+   Keypad 0: Enter/Menu Button (on left controller)
+   Keypad 7: Y/B Button
+   Keypad 1: X/A Button
+	
+ 'r': reset controller positions
+"""
+
+var initialized = false;
+
+func initialize():
+	if (vr.inVR): return;
+	if (initialized): return;
+
+	if (!vr.vrOrigin):
+		vr.log_error(" in Feature_VRSimulator: no vrOrigin.");
+	if (!vr.vrCamera):
+		vr.log_error(" in Feature_VRSimulator: no vrCamera.");
+	if (!vr.leftController):
+		vr.log_error(" in Feature_VRSimulator: no leftController.");
+	if (!vr.rightController):
+		vr.log_error(" in Feature_VRSimulator: no rightController.");
+
+	# set up everything for simulation
+	left_controller_node = Spatial.new();
+	vr.vrCamera.add_child(left_controller_node);
+
+	right_controller_node = Spatial.new();
+	vr.vrCamera.add_child(right_controller_node);
+
+
+	# show some keyboard info in a UI overlay
+	info_label = Label.new();
+	info_label.text = info_text;
+	var m = 8;
+	info_label.margin_left = m;
+	info_label.margin_right = m;
+	info_label.margin_top = m;
+	info_label.margin_bottom = m;
+	var rect = ColorRect.new();
+	
+	rect.color = Color(0, 0, 0, 0.7);
+	rect.rect_size = info_label.get_minimum_size(); #Vector2(128, 128);
+	rect.add_child(info_label);
+	add_child(rect);
+
+	vr.vrCamera.translation.y = player_height;
+	_reset_controller_position();
+	initialized = true;
+
+
+func _reset_controller_position():
+	left_controller_node.translation = Vector3(-0.2, -0.1, -0.4);
+	right_controller_node.translation = Vector3( 0.2, -0.1, -0.4);
+	_update_virtual_controller_position();
+
+# moves the ARVRController nodes to the simulated position
+func _update_virtual_controller_position():
+	if (vr.leftController):
+		vr.leftController.global_transform = left_controller_node.global_transform;
+	if (vr.rightController):
+		vr.rightController.global_transform = right_controller_node.global_transform;
+
+
+func _is_interact_left():
+	return Input.is_key_pressed(KEY_CONTROL);
+
+func _is_interact_right():
+	return Input.is_key_pressed(KEY_ALT);
+
+
+func _interact_move_controller(dir):
+	if (_is_interact_left()):
+		left_controller_node.translation += dir;
+	if (_is_interact_right()):
+		right_controller_node.translation += dir;
+	_update_virtual_controller_position();
+
+
+
+
+func _update_keyboard(dt):
+
+	var dir = Vector3(0,0,0);
+	if (Input.is_key_pressed(KEY_W)):
+		dir += Vector3(0,0,-1);
+	if (Input.is_key_pressed(KEY_S)):
+		dir += Vector3(0,0,1);
+	if (Input.is_key_pressed(KEY_A)):
+		dir += Vector3(-1,0,0);
+	if (Input.is_key_pressed(KEY_D)):
+		dir += Vector3(1,0,0);
+
+	if (_is_interact_left() || _is_interact_right()):
+		dir.x = 0.0; # only z axis with keyboard;
+		if (dir.length_squared() > 0.01):
+			dir = dir.normalized();
+			_interact_move_controller(dir * dt);
+	else:
+		dir = vr.vrCamera.transform.basis.xform((dir));
+		dir.y = 0.0;
+		if (dir.length_squared() > 0.01):
+			vr.vrCamera.translation = vr.vrCamera.translation + dir.normalized() * dt  * walk_speed;
+			_update_virtual_controller_position();
+			
+	# Num pad for controller keys:
+	var stick_x = 0.0
+	var stick_y = 0.0
+	
+	if (Input.is_key_pressed(KEY_KP_4) || Input.is_key_pressed(KEY_KP_4)): stick_x = -1.0;
+	if (Input.is_key_pressed(KEY_KP_6)): stick_x = 1.0;
+	if (Input.is_key_pressed(KEY_KP_8)): stick_y = 1.0;
+	if (Input.is_key_pressed(KEY_KP_2)): stick_y = -1.0;
+	
+	#var button_grip_trigger = 1 if (Input.is_mouse_button_pressed(1)) else 0;
+	var button_grip_trigger = 1 if (Input.is_key_pressed(KEY_E)) else 0;
+	var button_index_trigger = 1 if (Input.is_key_pressed(KEY_Q)) else 0;
+	var button_YB = 1 if (Input.is_key_pressed(KEY_KP_7)) else 0;
+	var button_XA = 1 if (Input.is_key_pressed(KEY_KP_1)) else 0;
+	
+	var button_enter =  1 if (Input.is_key_pressed(KEY_KP_0)) else 0;
+	
+	# allow button enter always as it is only on left controller
+	vr.leftController._simulation_buttons_pressed[vr.CONTROLLER_BUTTON.ENTER] = button_enter;
+	
+	if (Input.is_mouse_button_pressed(1)):
+		vr.rightController._simulation_buttons_pressed[vr.CONTROLLER_BUTTON.INDEX_TRIGGER] = 1;
+	else:
+		vr.rightController._simulation_buttons_pressed[vr.CONTROLLER_BUTTON.INDEX_TRIGGER] = 0;
+	
+	if (_is_interact_left()):
+		vr.leftController._simulation_joystick_axis[vr.CONTROLLER_AXIS.JOYSTICK_X] = stick_x;
+		vr.leftController._simulation_joystick_axis[vr.CONTROLLER_AXIS.JOYSTICK_Y] = stick_y;
+		
+		vr.leftController._simulation_buttons_pressed[vr.CONTROLLER_BUTTON.GRIP_TRIGGER] = button_grip_trigger;
+		vr.leftController._simulation_buttons_pressed[vr.CONTROLLER_BUTTON.INDEX_TRIGGER] = button_index_trigger;
+		vr.leftController._simulation_buttons_pressed[vr.CONTROLLER_BUTTON.YB] = button_YB;
+		vr.leftController._simulation_buttons_pressed[vr.CONTROLLER_BUTTON.XA] = button_XA;
+		
+	if (_is_interact_right()):
+		vr.rightController._simulation_joystick_axis[vr.CONTROLLER_AXIS.JOYSTICK_X] = stick_x;
+		vr.rightController._simulation_joystick_axis[vr.CONTROLLER_AXIS.JOYSTICK_Y] = stick_y;
+
+		vr.rightController._simulation_buttons_pressed[vr.CONTROLLER_BUTTON.GRIP_TRIGGER] = button_grip_trigger;
+		vr.rightController._simulation_buttons_pressed[vr.CONTROLLER_BUTTON.INDEX_TRIGGER] = button_index_trigger;
+		vr.rightController._simulation_buttons_pressed[vr.CONTROLLER_BUTTON.YB] = button_YB;
+		vr.rightController._simulation_buttons_pressed[vr.CONTROLLER_BUTTON.XA] = button_XA;
+
+
+
+
+	
+
+
+
+func _input(event):
+	if vr.inVR: return;
+
+	# basic keyboard events
+	if (event is InputEventKey && event.pressed):
+		if (event.scancode == KEY_R):
+			_reset_controller_position();
+
+	# camera movement on mouse movement
+	if (event is InputEventMouseMotion && Input.is_mouse_button_pressed(2)):
+		if (_is_interact_left() || _is_interact_right()):
+			var move = Vector3(event.relative.x, -event.relative.y, 0.0);
+			_interact_move_controller(move * controller_move_speed);
+		else:
+			var yaw = event.relative.x;
+			var pitch = event.relative.y;
+			vr.vrCamera.rotate_y(deg2rad(-yaw));
+			vr.vrCamera.rotate_object_local(Vector3(1,0,0), deg2rad(-pitch));
+			_update_virtual_controller_position();
+
+
+func _physics_process(dt):
+	if vr.inVR: return;
+	
+	if (!initialized): initialize();
+
+	vr.vrCamera.translation.y = player_height;
+
+	_update_keyboard(dt);
+
+
+

@@ -1,0 +1,53 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://OQ_Toolkit/OQ_UI2D/scripts/OQ_UI2DLabel.gd" type="Script" id=1]
+[ext_resource path="res://OQ_Toolkit/OQ_UI2D/theme/oq_ui2d_standard.theme" type="Theme" id=2]
+
+
+[sub_resource type="ViewportTexture" id=1]
+viewport_path = NodePath("Viewport")
+
+[sub_resource type="SpatialMaterial" id=2]
+resource_local_to_scene = true
+flags_unshaded = true
+params_cull_mode = 2
+albedo_texture = SubResource( 1 )
+
+[sub_resource type="PlaneMesh" id=3]
+resource_local_to_scene = true
+material = SubResource( 2 )
+size = Vector2( 0.2, 0.1 )
+
+[node name="OQ_UILabel" type="Spatial"]
+script = ExtResource( 1 )
+text = "I am a Label"
+
+[node name="Viewport" type="Viewport" parent="."]
+size = Vector2( 512, 256 )
+hdr = false
+usage = 0
+
+[node name="CenterContainer" type="CenterContainer" parent="Viewport"]
+margin_right = 512.0
+margin_bottom = 256.0
+theme = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Viewport/CenterContainer"]
+margin_left = 25.0
+margin_top = 75.0
+margin_right = 486.0
+margin_bottom = 180.0
+text = "I Am a Label
+I Will get autoresized during runtime
+"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MeshInstance" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, 0, 0, 0 )
+mesh = SubResource( 3 )
+material/0 = null

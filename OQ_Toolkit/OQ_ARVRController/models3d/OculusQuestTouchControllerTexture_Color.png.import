@@ -1,0 +1,36 @@
+[remap]
+
+importer="texture"
+type="StreamTexture"
+path.s3tc="res://.import/OculusQuestTouchControllerTexture_Color.png-50b970087254ba4407e4489b8d7b9761.s3tc.stex"
+path.etc2="res://.import/OculusQuestTouchControllerTexture_Color.png-50b970087254ba4407e4489b8d7b9761.etc2.stex"
+metadata={
+"imported_formats": [ "s3tc", "etc2" ],
+"vram_texture": true
+}
+
+[deps]
+
+source_file="res://OQ_Toolkit/OQ_ARVRController/models3d/OculusQuestTouchControllerTexture_Color.png"
+dest_files=[ "res://.import/OculusQuestTouchControllerTexture_Color.png-50b970087254ba4407e4489b8d7b9761.s3tc.stex", "res://.import/OculusQuestTouchControllerTexture_Color.png-50b970087254ba4407e4489b8d7b9761.etc2.stex" ]
+
+[params]
+
+compress/mode=2
+compress/lossy_quality=0.7
+compress/hdr_mode=0
+compress/bptc_ldr=0
+compress/normal_map=2
+flags/repeat=true
+flags/filter=true
+flags/mipmaps=true
+flags/anisotropic=false
+flags/srgb=1
+process/fix_alpha_border=false
+process/premult_alpha=false
+process/HDR_as_SRGB=false
+process/invert_color=false
+stream=false
+size_limit=0
+detect_3d=false
+svg/scale=1.0
