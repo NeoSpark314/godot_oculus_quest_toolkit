@@ -21,7 +21,9 @@ func update_log():
 	log_label.text = "";
 	for i in range(vr._log_buffer_count):
 		var msg = vr._log_buffer[i % vr._log_buffer.size()];
-		log_label.text += msg[1] + "\n";
+		log_label.text += msg[1];
+		if (msg[2] > 1): log_label.text += " [%d]" % msg[2];
+		log_label.text += "\n";
 		
 	var sb = scroll.get_v_scrollbar();
 	sb.value = sb.max_value; # autoscroll to the last line of the log buffer

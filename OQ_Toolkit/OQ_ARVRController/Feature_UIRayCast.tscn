@@ -2,7 +2,6 @@
 
 [ext_resource path="res://OQ_Toolkit/OQ_ARVRController/scripts/Feature_UIRayCast.gd" type="Script" id=1]
 
-
 [sub_resource type="CubeMesh" id=1]
 size = Vector3( 0.004, 0.004, 1 )
 

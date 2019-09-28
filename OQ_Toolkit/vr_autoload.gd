@@ -189,20 +189,90 @@ func set_display_refresh_rate(value):
 
 func get_boundary_oriented_bounding_box():
 	if (!ovrGuardianSystem):
-		log_error("set_display_refresh_rate(): no ovrDisplayRefreshRate object.");
+		log_error("set_display_refresh_rate(): no ovrGuardianSystem object.");
 		return [];
 	else:
 		return ovrGuardianSystem.get_boundary_oriented_bounding_box();
 		
+func request_boundary_visible(val):
+	if (!ovrGuardianSystem):
+		log_error("request_boundary_visible(): no ovrGuardianSystem object.");
+		return false;
+	else:
+		return ovrGuardianSystem.request_boundary_visible(val);
+		
+func get_boundary_visible():
+	if (!ovrGuardianSystem):
+		log_error("get_boundary_visible(): no ovrGuardianSystem object.");
+		return false;
+	else:
+		return ovrGuardianSystem.get_boundary_visible();
+
 
 func get_tracking_space():
 	if (!ovrTrackingTransform):
 		log_error("get_tracking_space(): no ovrTrackingTransform object.");
-		return 0;
+		return -1;
 	else:
 		return ovrTrackingTransform.get_tracking_space();
+		
+enum TrackingSpace {
+	VRAPI_TRACKING_SPACE_LOCAL = 0, # Eye level origin - controlled by system recentering
+	VRAPI_TRACKING_SPACE_LOCAL_FLOOR = 1, # Floor level origin - controlled by system recentering
+	VRAPI_TRACKING_SPACE_LOCAL_TILTED = 2, # Tilted pose for "bed mode" - controlled by system recentering
+	VRAPI_TRACKING_SPACE_STAGE = 3, # Floor level origin - controlled by Guardian setup
+	VRAPI_TRACKING_SPACE_LOCAL_FIXED_YAW = 7
+}
 
+func set_tracking_space(tracking_space):
+	if (!ovrTrackingTransform):
+		log_error("set_tracking_space(): no ovrTrackingTransform object.");
+		return false;
+	else:
+		return ovrTrackingTransform.set_tracking_space(tracking_space);
+
+
+enum ExtraLatencyMode {
+	VRAPI_EXTRA_LATENCY_MODE_OFF = 0,
+	VRAPI_EXTRA_LATENCY_MODE_ON = 1,
+	VRAPI_EXTRA_LATENCY_MODE_DYNAMIC = 2
+}
+
+func set_extra_latency_mode(latency_mode):
+	if (!ovrPerfromance):
+		log_error("set_tracking_space(): no ovrPerfromance object.");
+		return false;
+	else:
+		return ovrPerfromance.set_extra_latency_mode(latency_mode);
+
+var _active_scene_path = null; # this assumes that only a single scene will every be switched
+var scene_switch_root = null;
+
+# helper function to switch different scenes; this will be in the
+# future extend to allow for some transtioning to happen as well as maybe some shader caching
+func switch_scene(scene_path, wait_time = 0.0):
+	if (scene_switch_root == null):
+		log_error("vr.switch_scene(...) called byt no scene_switch_root configured");
 	
+	if (_active_scene_path == scene_path): return;
+	if (wait_time > 0.0 && _active_scene_path != null):
+		yield(get_tree().create_timer(wait_time), "timeout")
+
+	for s in scene_switch_root.get_children():
+		if (s.has_method("scene_exit")): s.scene_exit();
+		scene_switch_root.remove_child(s);
+		s.queue_free();
+
+	var next_scene_resource = load(scene_path);
+	if (next_scene_resource):
+		_active_scene_path = scene_path;
+		var next_scene = next_scene_resource.instance();
+		vr.log_info("    switiching to scene '%s'" % scene_path)
+		scene_switch_root.add_child(next_scene);
+		if (next_scene.has_method("scene_enter")): next_scene.scene_enter();
+	else:
+		vr.log_error("could not load scene '%s'" % scene_path)
+
 
 func initialize():
 	_init_vr_log();
@@ -212,25 +282,35 @@ func initialize():
 	log_info("  Interfaces count: %d" % interface_count)
 	var arvr_interface = ARVRServer.find_interface("OVRMobile")
 	if arvr_interface and arvr_interface.initialize():
+		get_viewport().arvr = true
+		Engine.target_fps = 72 # TODO: only true for Oculus Quest; query the info here
+		inVR = true;
+
+		# load all native interfaces to the vrApi
 		var OvrDisplayRefreshRate = load("res://addons/godot_ovrmobile/OvrDisplayRefreshRate.gdns");
 		var OvrGuardianSystem = load("res://addons/godot_ovrmobile/OvrGuardianSystem.gdns");
-		var OvrInitConfig = load("res://addons/godot_ovrmobile/OvrInitconfig.gdns");
+		var OvrInitConfig = load("res://addons/godot_ovrmobile/OvrInitConfig.gdns");
 		var OvrPerformance = load("res://addons/godot_ovrmobile/OvrPerformance.gdns");
 		var OvrTrackingTransform = load("res://addons/godot_ovrmobile/OvrTrackingTransform.gdns");
 		
-		get_viewport().arvr = true
-		log_info("  Loaded OVRMobile Inteface")
-		inVR = true;
-
-		ovrDisplayRefreshRate = OvrDisplayRefreshRate.new();
-		ovrGuardianSystem = OvrGuardianSystem.new();
-		ovrInitConfig = OvrInitConfig.new();
-		ovrPerfromance = OvrPerformance.new();
-		ovrTrackingTransform = OvrTrackingTransform.new();
+		if (OvrDisplayRefreshRate): ovrDisplayRefreshRate = OvrDisplayRefreshRate.new();
+		else: log_error("Failed to load OvrDisplayRefreshRate.gdns");
+		if (OvrGuardianSystem): ovrGuardianSystem = OvrGuardianSystem.new();
+		else: log_error("Failed to load OvrGuardianSystem.gdns");
+		if (OvrInitConfig): ovrInitConfig = OvrInitConfig.new();
+		else: log_error("Failed to load OvrInitConfig.gdns");
+		if (OvrPerformance): ovrPerfromance = OvrPerformance.new();
+		else: log_error("Failed to load OvrPerformance.gdns");
+		if (OvrTrackingTransform): ovrTrackingTransform = OvrTrackingTransform.new();
+		else: log_error("Failed to load OvrTrackingTransform.gdns");
 		
 		log_info(str("    Supported display refresh rates: ", get_supported_display_refresh_rates()));
+
+		# We default here to extra latency mode on to have some performace headroom
+		set_extra_latency_mode(ExtraLatencyMode.VRAPI_EXTRA_LATENCY_MODE_ON);
+
+		log_info("  Finished loading OVRMobile Interface.")
 		
-		Engine.target_fps = 72 # TODO: only true for Oculus Quest; query the info here
 		# TODO: set physics FPS here too instead of in the project settings
 		return true;
 	else:

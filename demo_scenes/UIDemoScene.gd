@@ -55,14 +55,8 @@ func _on_ClickTurnAngleSpinBox_value_changed(value):
 
 
 func _on_ButtonPhysics_pressed():
-	if (get_parent().has_method("switchScene")):
-		get_parent().switchScene("res://demo_scenes/PhysicsScene.tscn");
-	else:
-		vr.log_warning("No parent with switchScene function");
+	vr.switch_scene("res://demo_scenes/PhysicsScene.tscn");
 
 
 func _on_ButtonClimbing_pressed():
-	if (get_parent().has_method("switchScene")):
-		get_parent().switchScene("res://demo_scenes/ClimbingScene.tscn");
-	else:
-		vr.log_warning("No parent with switchScene function");
+	vr.switch_scene("res://demo_scenes/ClimbingScene.tscn");
