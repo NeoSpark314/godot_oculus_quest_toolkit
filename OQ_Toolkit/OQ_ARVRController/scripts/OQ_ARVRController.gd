@@ -89,8 +89,16 @@ func _update_buttons_and_sticks():
 			
 			
 
+var first_time = true;
 
 func _process(dt):
 	if (get_is_active() || !vr.inVR): # wait for active controller; or update if we are in simulation mode
 		_update_buttons_and_sticks();
+		
+		# this avoid getting just_pressed events when a key is pressed and the controller becomes 
+		# active (like it happens on vr.scene_change!)
+		if (first_time): 
+			_update_buttons_and_sticks();
+			first_time = false;
+
 

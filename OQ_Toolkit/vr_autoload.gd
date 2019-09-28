@@ -189,10 +189,15 @@ func set_display_refresh_rate(value):
 
 func get_boundary_oriented_bounding_box():
 	if (!ovrGuardianSystem):
-		log_error("set_display_refresh_rate(): no ovrGuardianSystem object.");
-		return [];
+		log_error("get_boundary_oriented_bounding_box(): no ovrGuardianSystem object.");
+		return [Transform(), Vector3(1.93, 2.5, 2.25)]; # return a default value
 	else:
-		return ovrGuardianSystem.get_boundary_oriented_bounding_box();
+		var ret = ovrGuardianSystem.get_boundary_oriented_bounding_box();
+		if (!ret || !(ret is Array) || ret.size() != 2):
+			log_error(str("get_boundary_oriented_bounding_box(): invalid return value: ", ret));
+		return ret;
+			
+		
 		
 func request_boundary_visible(val):
 	if (!ovrGuardianSystem):
