@@ -175,6 +175,7 @@ As this is a very early version there are some known issues that are not yet res
 
 - No shader precompilation/caching. This means there will be a **very** noticeable hiccup when new objects/materials are rendered for the first time (like showing the UI pointer or when transitioning scenes). This will be essential to resolve for actual applications!
 - No mip-mapping for UI canvas (thus text looks very bad at some distance)
+- The UI seems to have a wrong gamma applied in the texture
 
 
 ## Planned features
@@ -196,3 +197,4 @@ There are a lot of potential extensions and missing features. Some of the things
 
 ## Licensing
 The Godot Oculus Quest Toolkit and the demo scenes in this repository are licensed under an MIT License. The Oculus Touch controller 3d models and the Oculus Mobile SDK contained in this repository are copyright Oculus, see http://oculus.com for license information.
+The Roboto font used is licensed under an Apache License and available at https://github.com/google/roboto.
