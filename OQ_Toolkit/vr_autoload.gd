@@ -10,6 +10,7 @@ var ovrGuardianSystem =  null;
 var ovrInitConfig =  null;
 var ovrPerfromance =  null;
 var ovrTrackingTransform =  null;
+var ovrUtilities =  null;
 
 # Global accessors to the tracked vr objects; they will be set by the scripts attached
 # to the OQ_ objects
@@ -237,6 +238,13 @@ func set_tracking_space(tracking_space):
 		return ovrTrackingTransform.set_tracking_space(tracking_space);
 
 
+func get_ipd():
+	if (!ovrUtilities):
+		log_error("get_ipd(): no ovrUtilities object.");
+		return 0.065;
+	else:
+		return ovrUtilities.get_ipd();
+
 enum ExtraLatencyMode {
 	VRAPI_EXTRA_LATENCY_MODE_OFF = 0,
 	VRAPI_EXTRA_LATENCY_MODE_ON = 1,
@@ -297,6 +305,7 @@ func initialize():
 		var OvrInitConfig = load("res://addons/godot_ovrmobile/OvrInitConfig.gdns");
 		var OvrPerformance = load("res://addons/godot_ovrmobile/OvrPerformance.gdns");
 		var OvrTrackingTransform = load("res://addons/godot_ovrmobile/OvrTrackingTransform.gdns");
+		var OvrUtilities = load("res://addons/godot_ovrmobile/OvrUtilities.gdns");
 		
 		if (OvrDisplayRefreshRate): ovrDisplayRefreshRate = OvrDisplayRefreshRate.new();
 		else: log_error("Failed to load OvrDisplayRefreshRate.gdns");
@@ -308,6 +317,8 @@ func initialize():
 		else: log_error("Failed to load OvrPerformance.gdns");
 		if (OvrTrackingTransform): ovrTrackingTransform = OvrTrackingTransform.new();
 		else: log_error("Failed to load OvrTrackingTransform.gdns");
+		if (OvrUtilities): ovrUtilities = OvrUtilities.new();
+		else: log_error("Failed to load OvrUtilities.gdns");
 		
 		log_info(str("    Supported display refresh rates: ", get_supported_display_refresh_rates()));
 
