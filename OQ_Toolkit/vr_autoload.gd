@@ -172,6 +172,15 @@ func button_just_released(button_id):
 		return rightController._buttons_just_released[button_id-16];
 
 
+# the settings cache used to refresh the settings after an app pause; these are also the default settings
+# make sure to update _refresh_settings() and the respective setter wrapper methods when this needs to be changed
+var oculus_mobile_settings_cache = {
+	"display_refresh_rate" : 72,
+	"boundary_visible" : false,
+	"tracking_space" : TrackingSpace.VRAPI_TRACKING_SPACE_LOCAL_FLOOR,
+	"default_layer_color_scale" : Color(1.0, 1.0, 1.0, 1.0),
+	"extra_latency_mode" : ExtraLatencyMode.VRAPI_EXTRA_LATENCY_MODE_ON
+}
 
 # wrapper for accessing the VrAPI helper functions that check for availability
 
@@ -186,6 +195,7 @@ func set_display_refresh_rate(value):
 	if (!ovrDisplayRefreshRate):
 		log_error("set_display_refresh_rate(): no ovrDisplayRefreshRate object.");
 	else:
+		oculus_mobile_settings_cache["display_refresh_rate"] = value;
 		ovrDisplayRefreshRate.set_display_refresh_rate(value);
 
 func get_boundary_oriented_bounding_box():
@@ -205,6 +215,7 @@ func request_boundary_visible(val):
 		log_error("request_boundary_visible(): no ovrGuardianSystem object.");
 		return false;
 	else:
+		oculus_mobile_settings_cache["boundary_visible"] = val;
 		return ovrGuardianSystem.request_boundary_visible(val);
 		
 func get_boundary_visible():
@@ -235,6 +246,7 @@ func set_tracking_space(tracking_space):
 		log_error("set_tracking_space(): no ovrTrackingTransform object.");
 		return false;
 	else:
+		oculus_mobile_settings_cache["tracking_space"] = tracking_space;
 		return ovrTrackingTransform.set_tracking_space(tracking_space);
 
 
@@ -244,6 +256,16 @@ func get_ipd():
 		return 0.065;
 	else:
 		return ovrUtilities.get_ipd();
+
+
+func set_default_layer_color_scale(color : Color):
+	if (!ovrUtilities):
+		log_error("get_ipd(): no ovrUtilities object.");
+		return false;
+	else:
+		oculus_mobile_settings_cache["default_layer_color_scale"] = color;
+		return ovrUtilities.set_default_layer_color_scale(color);
+
 
 enum ExtraLatencyMode {
 	VRAPI_EXTRA_LATENCY_MODE_OFF = 0,
@@ -256,6 +278,7 @@ func set_extra_latency_mode(latency_mode):
 		log_error("set_tracking_space(): no ovrPerfromance object.");
 		return false;
 	else:
+		oculus_mobile_settings_cache["extra_latency_mode"] = latency_mode;
 		return ovrPerfromance.set_extra_latency_mode(latency_mode);
 
 var _active_scene_path = null; # this assumes that only a single scene will every be switched
@@ -265,7 +288,7 @@ var scene_switch_root = null;
 # future extend to allow for some transtioning to happen as well as maybe some shader caching
 func switch_scene(scene_path, wait_time = 0.0):
 	if (scene_switch_root == null):
-		log_error("vr.switch_scene(...) called byt no scene_switch_root configured");
+		log_error("vr.switch_scene(...) called but no scene_switch_root configured");
 	
 	if (_active_scene_path == scene_path): return;
 	if (wait_time > 0.0 && _active_scene_path != null):
@@ -286,6 +309,38 @@ func switch_scene(scene_path, wait_time = 0.0):
 	else:
 		vr.log_error("could not load scene '%s'" % scene_path)
 
+
+var _need_settings_refresh = false;
+
+# When the android application gets paused it will destroy the VR context
+# this funciton makes sure that we persist the settings we set via vr. to persist
+# between pause and resume
+func _refresh_settings():
+	vr.log_info("_refresh_settings()");
+	
+	set_display_refresh_rate(oculus_mobile_settings_cache["display_refresh_rate"]);
+	request_boundary_visible(oculus_mobile_settings_cache["boundary_visible"]);
+	set_tracking_space(oculus_mobile_settings_cache["tracking_space"]);
+	set_default_layer_color_scale(oculus_mobile_settings_cache["default_layer_color_scale"]);
+	set_extra_latency_mode(oculus_mobile_settings_cache["extra_latency_mode"]);
+	
+	_need_settings_refresh = false;
+
+
+
+func _notification(what):
+	if (what == NOTIFICATION_APP_PAUSED):
+		pass;
+	if (what == NOTIFICATION_APP_RESUMED):
+		_need_settings_refresh = true;
+		pass;
+
+func _ready():
+	pass
+	
+func _process(dt):
+	if (_need_settings_refresh):
+		_refresh_settings();
 
 func initialize():
 	_init_vr_log();
@@ -321,9 +376,9 @@ func initialize():
 		else: log_error("Failed to load OvrUtilities.gdns");
 		
 		log_info(str("    Supported display refresh rates: ", get_supported_display_refresh_rates()));
-
-		# We default here to extra latency mode on to have some performace headroom
-		set_extra_latency_mode(ExtraLatencyMode.VRAPI_EXTRA_LATENCY_MODE_ON);
+		
+		# this will initialize the default
+		_refresh_settings();
 
 		log_info("  Finished loading OVRMobile Interface.")
 		

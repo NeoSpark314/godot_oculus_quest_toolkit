@@ -91,6 +91,7 @@ common/physics_jitter_fix=0.0
 
 [rendering]
 
+quality/driver/driver_name="GLES2"
 quality/intended_usage/framebuffer_allocation=3
 quality/shadow_atlas/size=2048
 quality/shadows/filter_mode=0
