@@ -93,6 +93,8 @@ common/physics_jitter_fix=0.0
 
 quality/driver/driver_name="GLES2"
 quality/intended_usage/framebuffer_allocation=3
+vram_compression/import_etc=true
+vram_compression/import_etc2=false
 quality/shadow_atlas/size=2048
 quality/shadows/filter_mode=0
 quality/reflections/texture_array_reflections=false

@@ -1,16 +1,55 @@
 extends Node
 
-const UI_PIXELS_TO_METER = 1.0 / 1024;
+const UI_PIXELS_TO_METER = 1.0 / 1024; # defines the (auto) size of UI elements in 3D
 
 var inVR = false;
 
-# Oculus VR Api Classes
-var ovrDisplayRefreshRate = null;
-var ovrGuardianSystem =  null;
-var ovrInitConfig =  null;
-var ovrPerfromance =  null;
-var ovrTrackingTransform =  null;
-var ovrUtilities =  null;
+
+###############################################################################
+# VR logging systems
+###############################################################################
+
+var _log_buffer = [];
+var _log_buffer_index = -1;
+var _log_buffer_count = 0;
+
+
+func _init_vr_log():
+	for i in range(1024):
+		_log_buffer.append([0, "", 0]);
+		
+func _append_to_log(type, message):
+	if _log_buffer_index >= 0 && _log_buffer[_log_buffer_index][1] == message:
+		_log_buffer[_log_buffer_index][2] += 1;
+	else:
+		_log_buffer_index = (_log_buffer_index+1) % _log_buffer.size();
+		_log_buffer[_log_buffer_index][0] = type;
+		_log_buffer[_log_buffer_index][1] = message;
+		_log_buffer[_log_buffer_index][2] = 1;
+		_log_buffer_count = min(_log_buffer_count+1, _log_buffer.size());
+
+func log_info(s):
+	_append_to_log(0, s);
+	print(s);
+
+func log_warning(s):
+	_append_to_log(1, s);
+	print("WARNING: ", s);
+
+func log_error(s):
+	_append_to_log(2, s);
+	print("ERRROR: : ", s);
+
+
+# returns the current player height based on the difference between
+# the height of origin and camera; this assumes that tracking is floor level
+func get_current_player_height():
+	return vrCamera.translation.y - vrOrigin.translation.y;
+
+
+###############################################################################
+# Controller Handling
+###############################################################################
 
 # Global accessors to the tracked vr objects; they will be set by the scripts attached
 # to the OQ_ objects
@@ -97,44 +136,6 @@ enum CONTROLLER_BUTTON {
 }
 
 
-var _log_buffer = [];
-var _log_buffer_index = -1;
-var _log_buffer_count = 0;
-
-
-func _init_vr_log():
-	for i in range(1024):
-		_log_buffer.append([0, "", 0]);
-		
-func _append_to_log(type, message):
-	if _log_buffer_index >= 0 && _log_buffer[_log_buffer_index][1] == message:
-		_log_buffer[_log_buffer_index][2] += 1;
-	else:
-		_log_buffer_index = (_log_buffer_index+1) % _log_buffer.size();
-		_log_buffer[_log_buffer_index][0] = type;
-		_log_buffer[_log_buffer_index][1] = message;
-		_log_buffer[_log_buffer_index][2] = 1;
-		_log_buffer_count = min(_log_buffer_count+1, _log_buffer.size());
-
-func log_info(s):
-	_append_to_log(0, s);
-	print(s);
-
-func log_warning(s):
-	_append_to_log(1, s);
-	print("WARNING: ", s);
-
-func log_error(s):
-	_append_to_log(2, s);
-	print("ERRROR: : ", s);
-
-
-# returns the current player height based on the difference between
-# the height of origin and camera; this assumes that tracking is floor level
-func get_current_player_height():
-	return vrCamera.translation.y - vrOrigin.translation.y;
-
-
 func get_controller_axis(axis_id):
 	if (axis_id == AXIS.None) : return 0.0;
 	if (axis_id < 16):
@@ -170,6 +171,70 @@ func button_just_released(button_id):
 	else: 
 		if (rightController == null): return false;
 		return rightController._buttons_just_released[button_id-16];
+
+
+###############################################################################
+# OVR Settings helpers
+###############################################################################
+
+# Oculus VR Api Classes
+var ovrDisplayRefreshRate = null;
+var ovrGuardianSystem =  null;
+var ovrInitConfig =  null;
+var ovrPerfromance =  null;
+var ovrTrackingTransform =  null;
+var ovrUtilities =  null;
+
+var _need_settings_refresh = false;
+
+
+func _initialize_OVR_API():
+	# load all native interfaces to the vrApi
+	var OvrDisplayRefreshRate = load("res://addons/godot_ovrmobile/OvrDisplayRefreshRate.gdns");
+	var OvrGuardianSystem = load("res://addons/godot_ovrmobile/OvrGuardianSystem.gdns");
+	var OvrInitConfig = load("res://addons/godot_ovrmobile/OvrInitConfig.gdns");
+	var OvrPerformance = load("res://addons/godot_ovrmobile/OvrPerformance.gdns");
+	var OvrTrackingTransform = load("res://addons/godot_ovrmobile/OvrTrackingTransform.gdns");
+	var OvrUtilities = load("res://addons/godot_ovrmobile/OvrUtilities.gdns");
+	
+	if (OvrDisplayRefreshRate): ovrDisplayRefreshRate = OvrDisplayRefreshRate.new();
+	else: log_error("Failed to load OvrDisplayRefreshRate.gdns");
+	if (OvrGuardianSystem): ovrGuardianSystem = OvrGuardianSystem.new();
+	else: log_error("Failed to load OvrGuardianSystem.gdns");
+	if (OvrInitConfig): ovrInitConfig = OvrInitConfig.new();
+	else: log_error("Failed to load OvrInitConfig.gdns");
+	if (OvrPerformance): ovrPerfromance = OvrPerformance.new();
+	else: log_error("Failed to load OvrPerformance.gdns");
+	if (OvrTrackingTransform): ovrTrackingTransform = OvrTrackingTransform.new();
+	else: log_error("Failed to load OvrTrackingTransform.gdns");
+	if (OvrUtilities): ovrUtilities = OvrUtilities.new();
+	else: log_error("Failed to load OvrUtilities.gdns");
+	
+	#log_info(str("    Supported display refresh rates: ", get_supported_display_refresh_rates()));
+	
+
+# When the android application gets paused it will destroy the VR context
+# this funciton makes sure that we persist the settings we set via vr. to persist
+# between pause and resume
+func _refresh_settings():
+	vr.log_info("_refresh_settings()");
+	
+	set_display_refresh_rate(oculus_mobile_settings_cache["display_refresh_rate"]);
+	request_boundary_visible(oculus_mobile_settings_cache["boundary_visible"]);
+	set_tracking_space(oculus_mobile_settings_cache["tracking_space"]);
+	set_default_layer_color_scale(oculus_mobile_settings_cache["default_layer_color_scale"]);
+	set_extra_latency_mode(oculus_mobile_settings_cache["extra_latency_mode"]);
+	
+	_need_settings_refresh = false;
+
+
+
+func _notification(what):
+	if (what == NOTIFICATION_APP_PAUSED):
+		pass;
+	if (what == NOTIFICATION_APP_RESUMED):
+		_need_settings_refresh = true;
+		pass;
 
 
 # the settings cache used to refresh the settings after an app pause; these are also the default settings
@@ -260,7 +325,7 @@ func get_ipd():
 
 func set_default_layer_color_scale(color : Color):
 	if (!ovrUtilities):
-		log_error("get_ipd(): no ovrUtilities object.");
+		#log_error("get_ipd(): no ovrUtilities object."); # no error message here as it is commonly called in process
 		return false;
 	else:
 		oculus_mobile_settings_cache["default_layer_color_scale"] = color;
@@ -281,19 +346,16 @@ func set_extra_latency_mode(latency_mode):
 		oculus_mobile_settings_cache["extra_latency_mode"] = latency_mode;
 		return ovrPerfromance.set_extra_latency_mode(latency_mode);
 
+###############################################################################
+# Scene Switching Helper Logic
+###############################################################################
+
 var _active_scene_path = null; # this assumes that only a single scene will every be switched
 var scene_switch_root = null;
 
 # helper function to switch different scenes; this will be in the
 # future extend to allow for some transtioning to happen as well as maybe some shader caching
-func switch_scene(scene_path, wait_time = 0.0):
-	if (scene_switch_root == null):
-		log_error("vr.switch_scene(...) called but no scene_switch_root configured");
-	
-	if (_active_scene_path == scene_path): return;
-	if (wait_time > 0.0 && _active_scene_path != null):
-		yield(get_tree().create_timer(wait_time), "timeout")
-
+func _perform_switch_scene(scene_path):
 	for s in scene_switch_root.get_children():
 		if (s.has_method("scene_exit")): s.scene_exit();
 		scene_switch_root.remove_child(s);
@@ -310,30 +372,54 @@ func switch_scene(scene_path, wait_time = 0.0):
 		vr.log_error("could not load scene '%s'" % scene_path)
 
 
-var _need_settings_refresh = false;
+var _target_scene_path = null;
+var _scene_switch_fade_out_duration = 0.0;
+var _scene_switch_fade_out_time = 0.0;
+var _scene_switch_fade_in_duration = 0.0;
+var _scene_switch_fade_in_time = 0.0;
+var _switch_performed = false;
 
-# When the android application gets paused it will destroy the VR context
-# this funciton makes sure that we persist the settings we set via vr. to persist
-# between pause and resume
-func _refresh_settings():
-	vr.log_info("_refresh_settings()");
+func switch_scene(scene_path, fade_time = 0.1, wait_time = 0.0):
+	if (wait_time > 0.0 && _active_scene_path != null):
+		yield(get_tree().create_timer(wait_time), "timeout")
+
+	if (scene_switch_root == null):
+		log_error("vr.switch_scene(...) called but no scene_switch_root configured");
+	if (_active_scene_path == scene_path): return;
+	if (fade_time <= 0.0):
+		_perform_switch_scene(scene_path);
+		return;
+	_target_scene_path = scene_path;
 	
-	set_display_refresh_rate(oculus_mobile_settings_cache["display_refresh_rate"]);
-	request_boundary_visible(oculus_mobile_settings_cache["boundary_visible"]);
-	set_tracking_space(oculus_mobile_settings_cache["tracking_space"]);
-	set_default_layer_color_scale(oculus_mobile_settings_cache["default_layer_color_scale"]);
-	set_extra_latency_mode(oculus_mobile_settings_cache["extra_latency_mode"]);
-	
-	_need_settings_refresh = false;
+	_scene_switch_fade_out_duration = fade_time;
+	_scene_switch_fade_in_duration = fade_time;
+	_scene_switch_fade_out_time = 0.0;
+	_scene_switch_fade_in_time = 0.0;
+	_switch_performed = false;
 
+func _check_for_scene_switch_and_fade(dt):
+	# first fade out before switch
+	if (_target_scene_path != null && !_switch_performed):
+		if (_scene_switch_fade_out_time < _scene_switch_fade_out_duration):
+			var c = 1.0 - _scene_switch_fade_out_time / _scene_switch_fade_out_duration;
+			set_default_layer_color_scale(Color(c, c, c, c));
+			_scene_switch_fade_out_time += dt;
+		else: # then swith scene when everything is black
+			set_default_layer_color_scale(Color(0, 0, 0, 0));
+			_perform_switch_scene(_target_scene_path);
+			_switch_performed = true;
+	elif (_target_scene_path != null && _switch_performed):
+		if (_scene_switch_fade_in_time < _scene_switch_fade_in_duration):
+			var c = _scene_switch_fade_in_time / _scene_switch_fade_in_duration;
+			set_default_layer_color_scale(Color(c, c, c, c));
+			_scene_switch_fade_in_time += dt;
+		else: # then swith scene when everything is black
+			set_default_layer_color_scale(Color(1, 1, 1, 1));
+			_target_scene_path = null;
 
-
-func _notification(what):
-	if (what == NOTIFICATION_APP_PAUSED):
-		pass;
-	if (what == NOTIFICATION_APP_RESUMED):
-		_need_settings_refresh = true;
-		pass;
+###############################################################################
+# Main Funcitonality for initialize and process
+###############################################################################
 
 func _ready():
 	pass
@@ -341,6 +427,9 @@ func _ready():
 func _process(dt):
 	if (_need_settings_refresh):
 		_refresh_settings();
+		
+	_check_for_scene_switch_and_fade(dt);
+
 
 func initialize():
 	_init_vr_log();
@@ -353,30 +442,9 @@ func initialize():
 		get_viewport().arvr = true
 		Engine.target_fps = 72 # TODO: only true for Oculus Quest; query the info here
 		inVR = true;
+		
+		_initialize_OVR_API();
 
-		# load all native interfaces to the vrApi
-		var OvrDisplayRefreshRate = load("res://addons/godot_ovrmobile/OvrDisplayRefreshRate.gdns");
-		var OvrGuardianSystem = load("res://addons/godot_ovrmobile/OvrGuardianSystem.gdns");
-		var OvrInitConfig = load("res://addons/godot_ovrmobile/OvrInitConfig.gdns");
-		var OvrPerformance = load("res://addons/godot_ovrmobile/OvrPerformance.gdns");
-		var OvrTrackingTransform = load("res://addons/godot_ovrmobile/OvrTrackingTransform.gdns");
-		var OvrUtilities = load("res://addons/godot_ovrmobile/OvrUtilities.gdns");
-		
-		if (OvrDisplayRefreshRate): ovrDisplayRefreshRate = OvrDisplayRefreshRate.new();
-		else: log_error("Failed to load OvrDisplayRefreshRate.gdns");
-		if (OvrGuardianSystem): ovrGuardianSystem = OvrGuardianSystem.new();
-		else: log_error("Failed to load OvrGuardianSystem.gdns");
-		if (OvrInitConfig): ovrInitConfig = OvrInitConfig.new();
-		else: log_error("Failed to load OvrInitConfig.gdns");
-		if (OvrPerformance): ovrPerfromance = OvrPerformance.new();
-		else: log_error("Failed to load OvrPerformance.gdns");
-		if (OvrTrackingTransform): ovrTrackingTransform = OvrTrackingTransform.new();
-		else: log_error("Failed to load OvrTrackingTransform.gdns");
-		if (OvrUtilities): ovrUtilities = OvrUtilities.new();
-		else: log_error("Failed to load OvrUtilities.gdns");
-		
-		log_info(str("    Supported display refresh rates: ", get_supported_display_refresh_rates()));
-		
 		# this will initialize the default
 		_refresh_settings();
 
