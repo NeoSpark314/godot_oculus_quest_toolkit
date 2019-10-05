@@ -24,7 +24,7 @@ func _ready():
 	vr.scene_switch_root = self;
 
 	# Always advertise Godot a bit in the beggining
-	vr.switch_scene("res://demo_scenes/GodotSplash.tscn", 0.0, 0.0);
+	if (vr.inVR): vr.switch_scene("res://demo_scenes/GodotSplash.tscn", 0.0, 0.0);
 	vr.switch_scene(room_list[current_room], 0.1, 5.0);
 
 	vr.log_info("  Tracking space is: %d" % vr.get_tracking_space());
