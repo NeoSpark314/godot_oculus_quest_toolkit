@@ -224,6 +224,10 @@ func _refresh_settings():
 	set_tracking_space(oculus_mobile_settings_cache["tracking_space"]);
 	set_default_layer_color_scale(oculus_mobile_settings_cache["default_layer_color_scale"]);
 	set_extra_latency_mode(oculus_mobile_settings_cache["extra_latency_mode"]);
+	set_foveation_level(oculus_mobile_settings_cache["foveation_level"]);
+	
+	set_swap_interval(oculus_mobile_settings_cache["swap_interval"]);
+	set_clock_levels(oculus_mobile_settings_cache["clock_levels_cpu"], oculus_mobile_settings_cache["clock_levels_gpu"]);
 	
 	_need_settings_refresh = false;
 
@@ -244,7 +248,11 @@ var oculus_mobile_settings_cache = {
 	"boundary_visible" : false,
 	"tracking_space" : TrackingSpace.VRAPI_TRACKING_SPACE_LOCAL_FLOOR,
 	"default_layer_color_scale" : Color(1.0, 1.0, 1.0, 1.0),
-	"extra_latency_mode" : ExtraLatencyMode.VRAPI_EXTRA_LATENCY_MODE_ON
+	"extra_latency_mode" : ExtraLatencyMode.VRAPI_EXTRA_LATENCY_MODE_ON,
+	"foveation_level" : FoveatedRenderingLevel.Off,
+	"swap_interval" : 1,
+	"clock_levels_cpu" : 2,
+	"clock_levels_gpu" : 2,
 }
 
 # wrapper for accessing the VrAPI helper functions that check for availability
@@ -345,6 +353,41 @@ func set_extra_latency_mode(latency_mode):
 	else:
 		oculus_mobile_settings_cache["extra_latency_mode"] = latency_mode;
 		return ovrPerfromance.set_extra_latency_mode(latency_mode);
+
+
+enum FoveatedRenderingLevel {
+	Off = 0,
+	Low = 1,
+	Medium = 2,
+	High = 3,
+	HighTop = 4  # Quest Only
+}
+
+func set_foveation_level(ffr_level):
+	if (!ovrPerfromance):
+		log_error("set_foveation_level(): no ovrPerfromance object.");
+		return false;
+	else:
+		oculus_mobile_settings_cache["foveation_level"] = ffr_level;
+		return ovrPerfromance.set_foveation_level(ffr_level);
+
+func set_swap_interval(interval):
+	if (!ovrPerfromance):
+		log_error("set_swap_interval(): no ovrPerfromance object.");
+		return false;
+	else:
+		oculus_mobile_settings_cache["swap_interval"] = interval;
+		return ovrPerfromance.set_swap_interval(interval);
+	
+func set_clock_levels(cpu_level, gpu_level):
+	if (!ovrPerfromance):
+		log_error("set_clock_levels(): no ovrPerfromance object.");
+		return false;
+	else:
+		oculus_mobile_settings_cache["clock_levels_cpu"] = cpu_level;
+		oculus_mobile_settings_cache["clock_levels_gpu"] = gpu_level;
+		return ovrPerfromance.set_clock_levels(cpu_level, gpu_level);
+
 
 ###############################################################################
 # Scene Switching Helper Logic
