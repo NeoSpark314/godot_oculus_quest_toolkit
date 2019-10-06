@@ -8,6 +8,9 @@ export var walk_speed = 1.0;
 export var controller_move_speed = 0.002;
 
 export var player_height = 1.8;
+export var duck_multiply = 0.4;
+
+var _current_player_height = 1.8;
 
 # camera relative positioning of controllers
 var left_controller_node = null;
@@ -18,6 +21,7 @@ var info_label;
 const info_text = """VR Simulator Keys:
  mouse right-click: move (camera or controller)
  W A S D: move (camera or controller)
+ SHIFT: duck player
 
  hold CTRL/ALT: enable left/right controller for manipulation
    Keypad 8 4 2 6: analog stick
@@ -68,7 +72,8 @@ func initialize():
 	rect.add_child(info_label);
 	add_child(rect);
 
-	vr.vrCamera.translation.y = player_height;
+	_current_player_height = player_height;
+	vr.vrCamera.translation.y = _current_player_height;
 	_reset_controller_position();
 	initialized = true;
 
@@ -184,6 +189,13 @@ func _input(event):
 	if (event is InputEventKey && event.pressed):
 		if (event.scancode == KEY_R):
 			_reset_controller_position();
+			
+	_current_player_height = player_height;
+	if (Input.is_key_pressed(KEY_SHIFT)):
+		_current_player_height = player_height * duck_multiply;
+
+	vr.vrCamera.translation.y = _current_player_height;
+
 
 	# camera movement on mouse movement
 	if (event is InputEventMouseMotion && Input.is_mouse_button_pressed(2)):
@@ -195,7 +207,8 @@ func _input(event):
 			var pitch = event.relative.y;
 			vr.vrCamera.rotate_y(deg2rad(-yaw));
 			vr.vrCamera.rotate_object_local(Vector3(1,0,0), deg2rad(-pitch));
-			_update_virtual_controller_position();
+
+	_update_virtual_controller_position();
 
 
 func _physics_process(dt):
@@ -203,7 +216,6 @@ func _physics_process(dt):
 	
 	if (!initialized): initialize();
 
-	vr.vrCamera.translation.y = player_height;
 
 	_update_keyboard(dt);
 
