@@ -4,6 +4,8 @@ export var text = "I am a Label\nWith a new line"
 export var margin = 16;
 export var size_scale = 1.0;
 
+#export var line_to_parent = false;
+
 
 
 onready var ui_label : Label = $Viewport/CenterContainer/Label
@@ -14,6 +16,15 @@ var ui_mesh : PlaneMesh = null;
 func _ready():
 	ui_mesh = $MeshInstance.mesh;
 	set_text(text);
+	
+	#if (line_to_parent):
+		#var p = get_parent();
+		#$LineMesh.visible = true;
+		#var center = (global_transform.origin + p.global_transform.origin) * 0.5;
+		#$LineMesh.global_transform.origin = center;
+		#$LineMesh.look_at_from_position()
+		
+		
 	
 
 

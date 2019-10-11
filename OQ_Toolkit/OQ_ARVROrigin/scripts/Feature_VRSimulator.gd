@@ -85,9 +85,9 @@ func _reset_controller_position():
 
 # moves the ARVRController nodes to the simulated position
 func _update_virtual_controller_position():
-	if (vr.leftController):
+	if (vr.leftController && left_controller_node):
 		vr.leftController.global_transform = left_controller_node.global_transform;
-	if (vr.rightController):
+	if (vr.rightController && right_controller_node):
 		vr.rightController.global_transform = right_controller_node.global_transform;
 
 

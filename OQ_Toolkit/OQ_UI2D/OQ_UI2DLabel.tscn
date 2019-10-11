@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://OQ_Toolkit/OQ_UI2D/scripts/OQ_UI2DLabel.gd" type="Script" id=1]
 [ext_resource path="res://OQ_Toolkit/OQ_UI2D/theme/oq_ui2d_standard.theme" type="Theme" id=2]
@@ -16,6 +16,16 @@ albedo_texture = SubResource( 1 )
 resource_local_to_scene = true
 material = SubResource( 2 )
 size = Vector2( 0.2, 0.1 )
+
+[sub_resource type="SpatialMaterial" id=4]
+flags_unshaded = true
+params_cull_mode = 2
+params_billboard_mode = 2
+albedo_color = Color( 0, 0, 0, 1 )
+
+[sub_resource type="QuadMesh" id=5]
+material = SubResource( 4 )
+size = Vector2( 0.01, 1 )
 
 [node name="OQ_UILabel" type="Spatial"]
 script = ExtResource( 1 )
@@ -47,6 +57,12 @@ __meta__ = {
 }
 
 [node name="MeshInstance" type="MeshInstance" parent="."]
-transform = Transform( 1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, 0, 0, 0 )
+transform = Transform( -1, 8.74228e-08, 1.4243e-14, 0, -1.62921e-07, 1, 8.74228e-08, 1, 1.62921e-07, 0, 0, 0 )
 mesh = SubResource( 3 )
+material/0 = null
+
+[node name="LineMesh" type="MeshInstance" parent="."]
+transform = Transform( 0.823077, -0.56793, 0, 0.56793, 0.823077, 0, 0, 0, 1, 0, -0.333345, 0 )
+visible = false
+mesh = SubResource( 5 )
 material/0 = null

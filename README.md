@@ -158,9 +158,14 @@ introduces one physics-frame of delay an will get unstable if there is too much 
 Important Note: At runtime the child Control will be re-parented under the canvas. So if you need to access control nodes from code you need to use `find_node(...)` and can not rely
 on an absolute node path.
 
+**OQ_UI2DLabel_IPD.tscn**: A `OQ_UI2DLabel` with a script attached that checks and displays the current IPD
+
 **OQ_UI2DLabel.tscn**: A world space label to show static text.
 
 **OQ_UI2DLogWindow.tscn**: A world space quad that will show the text log messages that were printed using the `vr.log_info(str)`, `vr.log_warning(str)` and `vr.log_error(str)` functions.
+
+**OQ_UI2DVRSettings.tscn**: A helper dialog that exposes some VR settings for easy change at runtime. The intended use-case is to be able to check the impact of 
+(performance) settings live fixed foveated rendering at runtime. Best attached as a child to a controller to have it available where needed.
 
 ### OQ_Helpers
 **OQ_VisibilityToggle.tscn**: A node that will toggle the visibility of it's child based on a controller button. Use this
