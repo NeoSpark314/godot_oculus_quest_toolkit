@@ -6,6 +6,9 @@ var grab_area : Area = null;
 var held_object = null;
 var held_object_data = {};
 
+var grab_mesh : MeshInstance = null;
+export var reparent_mesh = false;
+
 onready var grabbed_object_script = preload("helper_grabbed_RigidBody.gd");
 
 
@@ -31,10 +34,25 @@ func start_grab_velocity(rigid_body):
 		held_object_data["script"] = held_object.get_script();
 		held_object.set_script(grabbed_object_script);
 		held_object.grab_init(self);
-		print(grabbed_object_script);
+		if (reparent_mesh):
+			for c in held_object.get_children():
+				if (c is MeshInstance):
+					grab_mesh = c;
+					break;
+			if (grab_mesh):
+				print("Found a mesh to grab reparent");
+				held_object.remove_child(grab_mesh);
+				add_child(grab_mesh);
+				grab_mesh.transform = Transform();
 	pass
 
 func release_grab_velocity():
+	if (grab_mesh):
+		remove_child(grab_mesh);
+		held_object.add_child(grab_mesh);
+		grab_mesh.transform = Transform();
+		grab_mesh = null;
+	
 	held_object.grab_release(self);
 	held_object.set_script(held_object_data["script"]);
 	held_object = null;
