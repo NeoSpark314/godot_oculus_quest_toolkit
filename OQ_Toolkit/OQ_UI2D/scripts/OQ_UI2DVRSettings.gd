@@ -26,11 +26,11 @@ func _setup_ui_elements():
 	extra_latency_option_button.select(vr.oculus_mobile_settings_cache["extra_latency_mode"]);
 	
 	tracking_space_option_button = r.find_node("TrackingSpace_OptionButton", true, false);
-	tracking_space_option_button.add_item("LOCAL", vr.TrackingSpace.VRAPI_TRACKING_SPACE_LOCAL);
-	tracking_space_option_button.add_item("LOCAL_FLOOR", vr.TrackingSpace.VRAPI_TRACKING_SPACE_LOCAL_FLOOR);
-	tracking_space_option_button.add_item("LOCAL_TILTED", vr.TrackingSpace.VRAPI_TRACKING_SPACE_LOCAL_TILTED);
-	tracking_space_option_button.add_item("STAGE", vr.TrackingSpace.VRAPI_TRACKING_SPACE_STAGE);
-	tracking_space_option_button.add_item("LOCAL_FIXED_YAW", vr.TrackingSpace.VRAPI_TRACKING_SPACE_LOCAL_FIXED_YAW);
+	tracking_space_option_button.add_item("LOCAL", vr.ovrVrApiTypes.OvrTrackingSpace.VRAPI_TRACKING_SPACE_LOCAL);
+	tracking_space_option_button.add_item("LOCAL_FLOOR", vr.ovrVrApiTypes.OvrTrackingSpace.VRAPI_TRACKING_SPACE_LOCAL_FLOOR);
+	tracking_space_option_button.add_item("LOCAL_TILTED", vr.ovrVrApiTypes.OvrTrackingSpace.VRAPI_TRACKING_SPACE_LOCAL_TILTED);
+	tracking_space_option_button.add_item("STAGE", vr.ovrVrApiTypes.OvrTrackingSpace.VRAPI_TRACKING_SPACE_STAGE);
+	tracking_space_option_button.add_item("LOCAL_FIXED_YAW", vr.ovrVrApiTypes.OvrTrackingSpace.VRAPI_TRACKING_SPACE_LOCAL_FIXED_YAW);
 	tracking_space_option_button.select(vr.oculus_mobile_settings_cache["tracking_space"]);
 	
 	boundary_visible_check_button = r.find_node("BoundaryVisible_CheckButton", true, false);

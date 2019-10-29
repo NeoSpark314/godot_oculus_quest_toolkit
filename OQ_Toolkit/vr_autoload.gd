@@ -179,11 +179,14 @@ func button_just_released(button_id):
 
 # Oculus VR Api Classes
 var ovrDisplayRefreshRate = null;
-var ovrGuardianSystem =  null;
-var ovrInitConfig =  null;
-var ovrPerfromance =  null;
-var ovrTrackingTransform =  null;
-var ovrUtilities =  null;
+var ovrGuardianSystem = null;
+var ovrInitConfig = null;
+var ovrPerfromance = null;
+var ovrTrackingTransform = null;
+var ovrUtilities = null;
+var ovrVrApiProxy = null;
+# for the types we need to assume it is always available
+var ovrVrApiTypes = preload("res://addons/godot_ovrmobile/OvrVrApiTypes.gd").new();
 
 var _need_settings_refresh = false;
 
@@ -196,6 +199,7 @@ func _initialize_OVR_API():
 	var OvrPerformance = load("res://addons/godot_ovrmobile/OvrPerformance.gdns");
 	var OvrTrackingTransform = load("res://addons/godot_ovrmobile/OvrTrackingTransform.gdns");
 	var OvrUtilities = load("res://addons/godot_ovrmobile/OvrUtilities.gdns");
+	var OvrVrApiProxy = load("res://addons/godot_ovrmobile/OvrVrApiProxy.gdns");
 	
 	if (OvrDisplayRefreshRate): ovrDisplayRefreshRate = OvrDisplayRefreshRate.new();
 	else: log_error("Failed to load OvrDisplayRefreshRate.gdns");
@@ -209,6 +213,8 @@ func _initialize_OVR_API():
 	else: log_error("Failed to load OvrTrackingTransform.gdns");
 	if (OvrUtilities): ovrUtilities = OvrUtilities.new();
 	else: log_error("Failed to load OvrUtilities.gdns");
+	if (OvrVrApiProxy): ovrVrApiProxy = OvrVrApiProxy.new();
+	else: log_error("Failed to load OvrVrApiProxy.gdns");
 	
 	#log_info(str("    Supported display refresh rates: ", get_supported_display_refresh_rates()));
 	
@@ -246,9 +252,9 @@ func _notification(what):
 var oculus_mobile_settings_cache = {
 	"display_refresh_rate" : 72,
 	"boundary_visible" : false,
-	"tracking_space" : TrackingSpace.VRAPI_TRACKING_SPACE_LOCAL_FLOOR,
+	"tracking_space" : ovrVrApiTypes.OvrTrackingSpace.VRAPI_TRACKING_SPACE_LOCAL_FLOOR,
 	"default_layer_color_scale" : Color(1.0, 1.0, 1.0, 1.0),
-	"extra_latency_mode" : ExtraLatencyMode.VRAPI_EXTRA_LATENCY_MODE_ON,
+	"extra_latency_mode" : ovrVrApiTypes.OvrExtraLatencyMode.VRAPI_EXTRA_LATENCY_MODE_ON,
 	"foveation_level" : FoveatedRenderingLevel.Off,
 	"swap_interval" : 1,
 	"clock_levels_cpu" : 2,
@@ -305,14 +311,6 @@ func get_tracking_space():
 	else:
 		return ovrTrackingTransform.get_tracking_space();
 		
-enum TrackingSpace {
-	VRAPI_TRACKING_SPACE_LOCAL = 0, # Eye level origin - controlled by system recentering
-	VRAPI_TRACKING_SPACE_LOCAL_FLOOR = 1, # Floor level origin - controlled by system recentering
-	VRAPI_TRACKING_SPACE_LOCAL_TILTED = 2, # Tilted pose for "bed mode" - controlled by system recentering
-	VRAPI_TRACKING_SPACE_STAGE = 3, # Floor level origin - controlled by Guardian setup
-	VRAPI_TRACKING_SPACE_LOCAL_FIXED_YAW = 7
-}
-
 func set_tracking_space(tracking_space):
 	if (!ovrTrackingTransform):
 		log_error("set_tracking_space(): no ovrTrackingTransform object.");
@@ -338,12 +336,6 @@ func set_default_layer_color_scale(color : Color):
 		oculus_mobile_settings_cache["default_layer_color_scale"] = color;
 		return ovrUtilities.set_default_layer_color_scale(color);
 
-
-enum ExtraLatencyMode {
-	VRAPI_EXTRA_LATENCY_MODE_OFF = 0,
-	VRAPI_EXTRA_LATENCY_MODE_ON = 1,
-	VRAPI_EXTRA_LATENCY_MODE_DYNAMIC = 2
-}
 
 func set_extra_latency_mode(latency_mode):
 	if (!ovrPerfromance):
