@@ -1,9 +1,8 @@
 # Godot Oculus Quest Toolkit <!-- omit in toc --> 
-This is an early alpha version of a toolkit for basic VR interactions with the Oculus Quest using the [Godot](https://github.com/godotengine/godot/) 
-game engine in combination with the [Godot Oculus Mobile](https://github.com/GodotVR/godot_oculus_mobile) plugin.
+This is an early alpha version of a toolkit for basic VR interactions with the Oculus Quest using the Godot game engine.
+The toolkit in this repository requires (at the time of writing) a recent version of Godot 3.2 alpha.
+If you have questions or run into problems please open an issue here or contact me at the [official Godot Discord](https://discord.gg/zH7NUgz): @NeoSpark314 or in the #XR channel.
 
-The toolkit in this repository requires (at the time of writing)
-a recent version of Godot 3.2 alpha.
 
 ## Table of contents <!-- omit in toc --> 
 - [Features (so far... early alpha)](#features-so-far-early-alpha)
@@ -36,9 +35,9 @@ a recent version of Godot 3.2 alpha.
 A video of some of the alpha features can be seen [on youtube here](https://youtu.be/-jzkHOum1kU).
 
 ## Running the included demos
-For convenience (at least during Godot 3.2 alpha phase) this repo includes a prebuild 
-version of the oculus quest plugin and 
-an android debug package. The included demo scene is directly exportable without
+For convenience this repo includes already prebuild version of the 
+godot oculus mobile plugin ([Godot Oculus Mobile](https://github.com/GodotVR/godot_oculus_mobile))
+and  an android debug package. The included demo scene is directly exportable without
 any modifications needed.
 You need to use a recent build of Godot 3.2 alpha.  Prebuild alpha versions can be downloaded form [https://hugo.pro/projects/godot-builds/](https://hugo.pro/projects/godot-builds/).
 You then need to have adb and jarsigner setup inside Godot->Editor->Editor Settings->Export->Android ([details can be found here](https://docs.godotengine.org/en/latest/getting_started/workflow/export/exporting_for_android.html)), connect your Quest to your PC and press the deploy button:
@@ -81,7 +80,7 @@ to be used instead of the ARVR base classes. The steps for a simple setup in you
 4. In your main `_ready()` function call
    ```
    func _ready():
-	vr.initialize();;
+	vr.initialize();
     ```
 
 To add now features to the individual nodes the subfolders in the `OQ_Toolkit/` folder contain scripts
@@ -180,7 +179,6 @@ As this is a very early version there are some known issues that are not yet res
 
 - No shader precompilation/caching. This means there will be a **very** noticeable hiccup when new objects/materials are rendered for the first time (like showing the UI pointer or when transitioning scenes). This will be essential to resolve for actual applications!
 - No mip-mapping for UI canvas (thus text looks very bad at some distance)
-- The UI seems to have a wrong gamma applied in the texture
 
 
 ## Planned features
