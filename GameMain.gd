@@ -14,14 +14,14 @@ var current_room = 0;
 
 func _process(dt):
 	if (vr.button_just_released(vr.BUTTON.ENTER)):
-		#current_room = (current_room + 1) % room_list.size();
-		#switchScene(room_list[current_room]);
 		vr.switch_scene(room_list[0]);
 		
 func _ready():
 	vr.initialize();
 	
 	vr.scene_switch_root = self;
+	
+	#vr.switch_scene("res://demo_scenes/experiments/debug/DebugGuardian.tscn"); return;
 
 	# Always advertise Godot a bit in the beggining
 	if (vr.inVR): vr.switch_scene("res://demo_scenes/GodotSplash.tscn", 0.0, 0.0);

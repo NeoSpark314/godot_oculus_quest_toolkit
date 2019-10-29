@@ -4,6 +4,8 @@ export var text = "I am a Label\nWith a new line"
 export var margin = 16;
 export var size_scale = 1.0;
 
+export var billboard = false;
+
 #export var line_to_parent = false;
 
 
@@ -16,6 +18,9 @@ var ui_mesh : PlaneMesh = null;
 func _ready():
 	ui_mesh = $MeshInstance.mesh;
 	set_text(text);
+	
+	if (billboard):
+		$MeshInstance.mesh.surface_get_material(0).set_billboard_mode(SpatialMaterial.BILLBOARD_FIXED_Y);
 	
 	#if (line_to_parent):
 		#var p = get_parent();

@@ -45,6 +45,7 @@ func _ready():
 	# reparent at runtime so we render to the viewport
 	ui_control.get_parent().remove_child(ui_control);
 	viewport.add_child(ui_control);
+	ui_control.visible = true; # set visible here as it might was set invisible for editing multiple controls
 	
 	ui_collisionshape = $UIArea/UICollisionShape
 

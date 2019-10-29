@@ -38,7 +38,7 @@ func log_warning(s):
 
 func log_error(s):
 	_append_to_log(2, s);
-	print("ERRROR: : ", s);
+	print("ERROR: : ", s);
 
 
 # returns the current player height based on the difference between
@@ -277,11 +277,10 @@ func get_boundary_oriented_bounding_box():
 		return [Transform(), Vector3(1.93, 2.5, 2.25)]; # return a default value
 	else:
 		var ret = ovrGuardianSystem.get_boundary_oriented_bounding_box();
-		if (!ret || !(ret is Array) || ret.size() != 2):
+		if ((ret == null) || !(ret is Array) || (ret.size() != 2)):
 			log_error(str("get_boundary_oriented_bounding_box(): invalid return value: ", ret));
+			return [Transform(), Vector3(0, 0, 0)]; # return a default value
 		return ret;
-			
-		
 		
 func request_boundary_visible(val):
 	if (!ovrGuardianSystem):
