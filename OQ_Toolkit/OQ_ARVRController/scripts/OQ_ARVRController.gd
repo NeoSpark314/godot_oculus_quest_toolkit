@@ -52,6 +52,15 @@ func _exit_tree():
 	vr.vrOrigin = null;
 
 
+func get_angular_velocity():
+	return vr.get_controller_angular_velocity(controller_id);
+func get_angular_acceleration():
+	return vr.get_controller_angular_acceleration(controller_id);
+func get_linear_velocity():
+	return vr.get_controller_linear_velocity(controller_id);
+func get_linear_acceleration():
+	return vr.get_controller_linear_acceleration(controller_id);
+
 
 func _ready():
 	pass 

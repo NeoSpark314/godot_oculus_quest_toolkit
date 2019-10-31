@@ -20,3 +20,11 @@ func _exit_tree():
 	vr.vrCamera = null;
 
 
+func get_angular_velocity():
+	return vr.get_head_angular_velocity();
+func get_angular_acceleration():
+	return vr.get_head_angular_acceleration();
+func get_linear_velocity():
+	return vr.get_head_linear_velocity();
+func get_linear_acceleration():
+	return vr.get_head_linear_acceleration();

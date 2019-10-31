@@ -28,8 +28,6 @@ func setup_movement_options_ui():
 	rotation_optionbutton.add_item("Click");
 	rotation_optionbutton.add_item("Smooth");
 
-
-
 func _ready():
 	setup_movement_options_ui();
 	$InfoLabel.set_text(info_text);

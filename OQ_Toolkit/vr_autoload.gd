@@ -320,6 +320,58 @@ func set_tracking_space(tracking_space):
 		return ovrTrackingTransform.set_tracking_space(tracking_space);
 
 
+func get_controller_angular_velocity(controller_id):
+	if (!ovrUtilities):
+		return Vector3(0,0,0); # we could implement a fallback here
+	else:
+		return ovrUtilities.get_controller_angular_velocity(controller_id);
+
+func get_controller_angular_acceleration(controller_id):
+	if (!ovrUtilities):
+		return Vector3(0,0,0); # we could implement a fallback here
+	else:
+		return ovrUtilities.get_controller_angular_acceleration(controller_id);
+	
+func get_controller_linear_velocity(controller_id):
+	if (!ovrUtilities):
+		return Vector3(0,0,0); # we could implement a fallback here
+	else:
+		return ovrUtilities.get_controller_linear_velocity(controller_id);
+
+
+func get_controller_linear_acceleration(controller_id):
+	if (!ovrUtilities):
+		return Vector3(0,0,0); # we could implement a fallback here
+	else:
+		return ovrUtilities.get_controller_linear_acceleration(controller_id);
+
+
+func get_head_angular_velocity():
+	if (!ovrUtilities):
+		return Vector3(0,0,0); # we could implement a fallback here
+	else:
+		return ovrUtilities.get_head_angular_velocity();
+
+func get_head_angular_acceleration():
+	if (!ovrUtilities):
+		return Vector3(0,0,0); # we could implement a fallback here
+	else:
+		return ovrUtilities.get_head_angular_acceleration();
+	
+func get_head_linear_velocity():
+	if (!ovrUtilities):
+		return Vector3(0,0,0); # we could implement a fallback here
+	else:
+		return ovrUtilities.get_head_linear_velocity();
+
+
+func get_head_linear_acceleration():
+	if (!ovrUtilities):
+		return Vector3(0,0,0); # we could implement a fallback here
+	else:
+		return ovrUtilities.get_head_linear_acceleration();
+
+
 func get_ipd():
 	if (!ovrUtilities):
 		log_error("get_ipd(): no ovrUtilities object.");
@@ -463,7 +515,7 @@ func _process(dt):
 		_refresh_settings();
 		
 	_check_for_scene_switch_and_fade(dt);
-
+	
 
 func initialize():
 	_init_vr_log();
