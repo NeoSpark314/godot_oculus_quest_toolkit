@@ -41,9 +41,12 @@ func start_grab_velocity(rigid_body):
 					break;
 			if (grab_mesh):
 				print("Found a mesh to grab reparent");
+				var trafo = grab_mesh.global_transform;
 				held_object.remove_child(grab_mesh);
 				add_child(grab_mesh);
+				# now set the mesh transform to be the same as used for the rigid body
 				grab_mesh.transform = Transform();
+				grab_mesh.transform.basis = held_object.delta_orientation;
 	pass
 
 func release_grab_velocity():

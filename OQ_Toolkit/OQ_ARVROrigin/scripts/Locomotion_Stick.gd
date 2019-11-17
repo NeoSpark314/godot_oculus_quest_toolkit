@@ -4,6 +4,7 @@ extends Spatial
 export var dead_zone = 0.125;
 
 export var move_speed = 1.0;
+
 export(vr.AXIS) var move_left_right = vr.AXIS.LEFT_JOYSTICK_X;
 export(vr.AXIS) var move_forward_back = vr.AXIS.LEFT_JOYSTICK_Y;
 

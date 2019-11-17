@@ -150,14 +150,15 @@ func _update_keyboard(dt):
 	var button_enter =  1 if (Input.is_key_pressed(KEY_KP_0)) else 0;
 	
 	# allow button enter always as it is only on left controller
-	vr.leftController._simulation_buttons_pressed[vr.CONTROLLER_BUTTON.ENTER] = button_enter;
+	if (vr.leftController):
+		vr.leftController._simulation_buttons_pressed[vr.CONTROLLER_BUTTON.ENTER] = button_enter;
 	
 	if (Input.is_mouse_button_pressed(1)):
 		vr.rightController._simulation_buttons_pressed[vr.CONTROLLER_BUTTON.INDEX_TRIGGER] = 1;
 	else:
 		vr.rightController._simulation_buttons_pressed[vr.CONTROLLER_BUTTON.INDEX_TRIGGER] = 0;
 	
-	if (_is_interact_left()):
+	if (_is_interact_left() && vr.leftController):
 		vr.leftController._simulation_joystick_axis[vr.CONTROLLER_AXIS.JOYSTICK_X] = stick_x;
 		vr.leftController._simulation_joystick_axis[vr.CONTROLLER_AXIS.JOYSTICK_Y] = stick_y;
 		
@@ -166,7 +167,7 @@ func _update_keyboard(dt):
 		vr.leftController._simulation_buttons_pressed[vr.CONTROLLER_BUTTON.YB] = button_YB;
 		vr.leftController._simulation_buttons_pressed[vr.CONTROLLER_BUTTON.XA] = button_XA;
 		
-	if (_is_interact_right()):
+	if (_is_interact_right() && vr.rightController):
 		vr.rightController._simulation_joystick_axis[vr.CONTROLLER_AXIS.JOYSTICK_X] = stick_x;
 		vr.rightController._simulation_joystick_axis[vr.CONTROLLER_AXIS.JOYSTICK_Y] = stick_y;
 
