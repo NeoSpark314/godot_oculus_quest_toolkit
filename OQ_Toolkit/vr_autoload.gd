@@ -4,7 +4,6 @@ const UI_PIXELS_TO_METER = 1.0 / 1024; # defines the (auto) size of UI elements 
 
 var inVR = false;
 
-
 ###############################################################################
 # VR logging systems
 ###############################################################################
@@ -12,7 +11,6 @@ var inVR = false;
 var _log_buffer = [];
 var _log_buffer_index = -1;
 var _log_buffer_count = 0;
-
 
 func _init_vr_log():
 	for i in range(1024):

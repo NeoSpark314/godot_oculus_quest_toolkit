@@ -8,7 +8,6 @@ var is_just_grabbing = false;
 var grab_position = Vector3();
 var delta_position = Vector3();
 
-
 export(vr.CONTROLLER_BUTTON) var grab_button = vr.CONTROLLER_BUTTON.GRIP_TRIGGER;
 
 func _ready():

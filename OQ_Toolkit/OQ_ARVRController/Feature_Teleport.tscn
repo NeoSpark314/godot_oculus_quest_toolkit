@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://OQ_Toolkit/OQ_ARVRController/scripts/Feature_Teleport.gd" type="Script" id=1]
+
+[sub_resource type="PlaneMesh" id=1]
+size = Vector2( 0.1, 2 )
+subdivide_depth = 32
+
+[node name="Feature_Teleport" type="Spatial"]
+script = ExtResource( 1 )
+
+[node name="TeleportVisualization" type="Spatial" parent="."]
+
+[node name="Beam" type="MeshInstance" parent="TeleportVisualization"]
+mesh = SubResource( 1 )
+material/0 = null
