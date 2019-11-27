@@ -2,7 +2,6 @@
 
 [ext_resource path="res://OQ_Toolkit/OQ_UI2D/theme/Roboto-Medium.ttf" type="DynamicFontData" id=1]
 
-
 [resource]
 size = 28
 font_data = ExtResource( 1 )

@@ -2,7 +2,7 @@ extends Spatial
 
 enum CollisionType {
 	FIXED_GROUND,
-	#RAYCAST,
+	RAYCAST,
 	#CAPSULE, # not yet implemented...
 }
 
@@ -13,6 +13,8 @@ export var ground_height := 0.0;
 export var gravity := 9.81;
 
 export var epsilon := 0.001;
+
+export var force_up = false;
 
 export(CollisionType) var collision_type = CollisionType.FIXED_GROUND;
 
@@ -56,9 +58,29 @@ func _physics_process(dt):
 		var from = head_position;
 		var to = from - Vector3(0.0, max_player_height, 0.0);
 		var result = space_state.intersect_ray(from, to);
-		#TODO: implement
+		
+		var dist = 0.0;
+		
+		on_ground = false;
+		max_fall_distance = max_player_height;
+		
 		if (result):
-			print(result);
+			var hitPoint = result.position;
+			dist = head_position.y - hitPoint.y;
+			if (dist > player_height):
+				on_ground = false;
+				max_fall_distance = dist-player_height;
+			else:
+				on_ground = true;
+				max_fall_distance = 0.0;
+				if (force_up && (dist < player_height - epsilon)):
+					vr.vrOrigin.translation.y += (player_height - dist);
+
+		
+		
+		#TODO: implement
+		#if (result):
+		#	print(result);
 			
 	if (!on_ground):
 		fall_speed += gravity * dt;

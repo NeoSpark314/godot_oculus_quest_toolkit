@@ -153,10 +153,11 @@ func _update_keyboard(dt):
 	if (vr.leftController):
 		vr.leftController._simulation_buttons_pressed[vr.CONTROLLER_BUTTON.ENTER] = button_enter;
 	
-	if (Input.is_mouse_button_pressed(1)):
-		vr.rightController._simulation_buttons_pressed[vr.CONTROLLER_BUTTON.INDEX_TRIGGER] = 1;
-	else:
-		vr.rightController._simulation_buttons_pressed[vr.CONTROLLER_BUTTON.INDEX_TRIGGER] = 0;
+	if (vr.rightController):
+		if (Input.is_mouse_button_pressed(1)):
+			vr.rightController._simulation_buttons_pressed[vr.CONTROLLER_BUTTON.INDEX_TRIGGER] = 1;
+		else:
+			vr.rightController._simulation_buttons_pressed[vr.CONTROLLER_BUTTON.INDEX_TRIGGER] = 0;
 	
 	if (_is_interact_left() && vr.leftController):
 		vr.leftController._simulation_joystick_axis[vr.CONTROLLER_AXIS.JOYSTICK_X] = stick_x;
