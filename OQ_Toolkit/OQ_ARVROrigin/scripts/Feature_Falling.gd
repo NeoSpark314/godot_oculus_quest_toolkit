@@ -57,31 +57,30 @@ func _physics_process(dt):
 		var space_state = get_world().direct_space_state
 		var from = head_position;
 		var to = from - Vector3(0.0, max_player_height, 0.0);
-		var result = space_state.intersect_ray(from, to);
+		var hit_result = space_state.intersect_ray(from, to);
 		
-		var dist = 0.0;
+		#vr.show_dbg_info("rayCastInfo", "player_height = %f foot_height = %f" % [player_height, foot_height]);
 		
 		on_ground = false;
 		max_fall_distance = max_player_height;
 		
-		if (result):
-			var hitPoint = result.position;
-			dist = head_position.y - hitPoint.y;
-			if (dist > player_height):
+		if (hit_result):
+			var hit_point = hit_result.position;
+			var hit_dist = head_position.y - hit_point.y;
+			if (hit_dist > player_height + epsilon):
 				on_ground = false;
-				max_fall_distance = dist-player_height;
+				max_fall_distance = hit_dist - player_height;
+				#vr.show_dbg_info("dbgFalling", "fallingHit: dist = %f; player_height = %f" % [hit_dist, player_height]);
 			else:
+				#vr.show_dbg_info("dbgFalling", "onGround: dist = %f; player_height = %f" % [hit_dist, player_height]);
 				on_ground = true;
 				max_fall_distance = 0.0;
-				if (force_up && (dist < player_height - epsilon)):
-					vr.vrOrigin.translation.y += (player_height - dist);
+				if (force_up && (hit_dist < player_height - epsilon)):
+					vr.vrOrigin.translation.y += (player_height - hit_dist);
+		else:
+			#vr.show_dbg_info("dbgFalling", "fallingNoHit: player_height = %f" % [player_height]);
+			pass;
 
-		
-		
-		#TODO: implement
-		#if (result):
-		#	print(result);
-			
 	if (!on_ground):
 		fall_speed += gravity * dt;
 		vr.vrOrigin.translation.y -= min(max_fall_distance, fall_speed * dt);

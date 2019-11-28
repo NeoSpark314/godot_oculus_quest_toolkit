@@ -37,12 +37,41 @@ func log_warning(s):
 func log_error(s):
 	_append_to_log(2, s);
 	print("ERROR: : ", s);
+	
+	
+var _label_scene = preload("OQ_UI2D/OQ_UI2DLabel.tscn");
+var _dbg_labels = {};
+
+
+func _reorder_dbg_labels():
+	# reorder all available labels
+	var offset = 0.0;
+	for labels in _dbg_labels.values():
+		labels.translation = Vector3(0.1, 0.1 - offset, -0.75);
+		offset += 0.08;
+
+
+# this funciton attaches a UI label to the camera to show debug information
+func show_dbg_info(key, value):
+	if (!_dbg_labels.has(key)):
+		var l = _label_scene.instance();
+		_dbg_labels[key] = l;
+		vrCamera.add_child(l);
+		_reorder_dbg_labels();
+	_dbg_labels[key].set_text(value);
+	
+func remove_dbg_info(key):
+	if (!_dbg_labels.has(key)): return;
+	vrCamera.remove_child(_dbg_labels[key]);
+	_dbg_labels[key].queue_free();
+	_dbg_labels.erase(key);
+	_reorder_dbg_labels();
 
 
 # returns the current player height based on the difference between
 # the height of origin and camera; this assumes that tracking is floor level
 func get_current_player_height():
-	return vrCamera.translation.y - vrOrigin.translation.y;
+	return vrCamera.global_transform.origin.y - vrOrigin.global_transform.origin.y;
 
 
 ###############################################################################
