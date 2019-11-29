@@ -1,5 +1,7 @@
 extends Spatial
 
+export var active = true;
+
 var grab_left = null;
 var grab_right = null;
 
@@ -24,6 +26,8 @@ func start_grab():
 
 
 func _process(dt):
+	if (!active): return;
+
 	if (grab_left.is_just_grabbing):
 		#last_grab = active_grab;
 		active_grab = grab_left;

@@ -162,7 +162,6 @@ enum CONTROLLER_BUTTON {
 	INDEX_TRIGGER = 15, # index trigger pressed over threshold
 }
 
-
 func get_controller_axis(axis_id):
 	if (axis_id == AXIS.None) : return 0.0;
 	if (axis_id < 16):

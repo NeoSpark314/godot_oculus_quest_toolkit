@@ -16,6 +16,7 @@ func _ready():
 		vr.log_error(" in Feature_StaticGrab: parent not ARVRController.");
 	grab_area = $GrabArea;
 	
+	
 func _process(delta):
 	if (controller._button_just_pressed(grab_button)):
 		for b in grab_area.get_overlapping_bodies():
@@ -29,3 +30,5 @@ func _process(delta):
 		is_grabbing = false;
 	elif (is_grabbing):
 		delta_position = vr.vrOrigin.global_transform.basis.xform(controller.translation - grab_position);
+
+
