@@ -13,9 +13,6 @@
 [ext_resource path="res://OQ_Toolkit/OQ_ARVRController/Feature_UIRayCast.tscn" type="PackedScene" id=11]
 [ext_resource path="res://OQ_Toolkit/OQ_ARVROrigin/Feature_VRSimulator.tscn" type="PackedScene" id=12]
 
-
-
-
 [node name="TestRoom" type="Spatial"]
 script = ExtResource( 2 )
 
