@@ -523,21 +523,25 @@ func initialize():
 	var interface_count = ARVRServer.get_interface_count()
 	log_info("Initializing VR:")
 	log_info("  Interfaces count: %d" % interface_count)
-	var arvr_interface = ARVRServer.find_interface("OVRMobile")
-	if arvr_interface and arvr_interface.initialize():
+	
+	var arvr_ovr_mobile_interface = ARVRServer.find_interface("OVRMobile")
+	var arvr_open_vr_interface = ARVRServer.find_interface("OpenVR")
+	
+	if arvr_ovr_mobile_interface and arvr_ovr_mobile_interface.initialize():
 		get_viewport().arvr = true
 		Engine.target_fps = 72 # TODO: only true for Oculus Quest; query the info here
 		inVR = true;
-		
 		_initialize_OVR_API();
-
 		# this will initialize the default
 		_refresh_settings();
-
-		log_info("  Finished loading OVRMobile Interface.")
-		
+		log_info("  Loaded OVRMobile Interface.")
 		# TODO: set physics FPS here too instead of in the project settings
 		return true;
+	elif arvr_open_vr_interface and arvr_open_vr_interface.initialize():
+		get_viewport().arvr = true
+		Engine.target_fps = 90 
+		OS.vsync_enabled = false
+		inVR = true;
 	else:
 		inVR = false;
 		log_error("Failed to enable OVRMobile VR Interface")
