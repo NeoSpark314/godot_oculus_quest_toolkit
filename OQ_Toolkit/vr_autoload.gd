@@ -539,9 +539,10 @@ func initialize():
 		return true;
 	elif arvr_open_vr_interface and arvr_open_vr_interface.initialize():
 		get_viewport().arvr = true
-		Engine.target_fps = 90 
+		Engine.target_fps = 90 # TODO: this is headset dependent => figure out how to get this info at runtime
 		OS.vsync_enabled = false
 		inVR = true;
+		log_info("  Loaded OpenVR Interface.")
 	else:
 		inVR = false;
 		log_error("Failed to enable OVRMobile VR Interface")
