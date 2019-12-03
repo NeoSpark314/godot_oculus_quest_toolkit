@@ -5,6 +5,11 @@ export var dead_zone = 0.125;
 
 export var move_speed = 1.0;
 
+export var enable_vignette = false;
+
+#onready var movement_vignette_quad = $MovementVignetteQuad;
+onready var movement_vignette_quad = $ColorRect;
+
 export(vr.AXIS) var move_left_right = vr.AXIS.LEFT_JOYSTICK_X;
 export(vr.AXIS) var move_forward_back = vr.AXIS.LEFT_JOYSTICK_Y;
 
@@ -22,6 +27,9 @@ export(vr.AXIS) var turn_left_right = vr.AXIS.RIGHT_JOYSTICK_X;
 func _ready():
 	if (not get_parent() is ARVROrigin):
 		vr.log_error("Feature_StickMovement: parent is not ARVROrigin");
+		
+	remove_child(movement_vignette_quad);
+	get_node("/root").add_child(movement_vignette_quad.get_parent());
 
 
 
@@ -30,7 +38,10 @@ func move(dt):
 	var dy = vr.get_controller_axis(move_forward_back);
 	
 	if (dx*dx + dy*dy <= dead_zone*dead_zone):
+		#if (enable_vignette) : movement_vignette_quad.visible = true;
 		return;
+		
+	#if (enable_vignette) : movement_vignette_quad.visible = true;
 		
 	var view_dir = -vr.vrCamera.global_transform.basis.z;
 	var strafe_dir = vr.vrCamera.global_transform.basis.x;
@@ -56,7 +67,9 @@ func turn(dt):
 	if (last_click_rotate): # reset to false only when stick is moved in deadzone; but with epsilon
 		last_click_rotate = (abs(dlr) > dead_zone * dead_zone_epsilon); 
 
-	if (abs(dlr) <= dead_zone): return;
+	if (abs(dlr) <= dead_zone): 
+		#if (enable_vignette) : movement_vignette_quad.visible = true;
+		return;
 
 	var origHeadPos = vr.vrCamera.global_transform.origin;
 	
@@ -68,6 +81,7 @@ func turn(dt):
 			
 	# smooth turning
 	elif (turn_type == TurnType.SMOOTH):
+		#if (enable_vignette) : movement_vignette_quad.visible = true;
 		vr.vrOrigin.rotate_y(deg2rad(dlr * smooth_turn_speed * dt));
 
 	# reposition vrOrigin for in place rotation

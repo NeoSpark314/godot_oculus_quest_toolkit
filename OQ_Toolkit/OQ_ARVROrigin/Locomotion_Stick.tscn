@@ -1,6 +1,75 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://OQ_Toolkit/OQ_ARVROrigin/scripts/Locomotion_Stick.gd" type="Script" id=1]
 
+[sub_resource type="Shader" id=2]
+code = "shader_type spatial;
+render_mode cull_disabled, unshaded, depth_draw_never, depth_test_disable; // unshaded to get the unmodified color out into the texture
+
+varying vec2 uv;
+
+uniform float r0 = 0.4;
+uniform float r1 = 0.6;
+uniform vec3 color = vec3(0.0, 0.0, 0.0);
+
+void vertex() {
+  POSITION = vec4(VERTEX, 1.0); // we render a screen space quad with this shader; so no transform
+  uv = VERTEX.xy;
+}
+
+
+void fragment() {
+	float l = length(uv);
+	float v = smoothstep(r0, r1, l);
+	ALBEDO.rgb = color;
+	ALPHA = v;
+}
+"
+
+[sub_resource type="ShaderMaterial" id=3]
+shader = SubResource( 2 )
+shader_param/r0 = 0.4
+shader_param/r1 = 0.6
+shader_param/color = Vector3( 0, 0, 0 )
+
+[sub_resource type="QuadMesh" id=1]
+material = SubResource( 3 )
+size = Vector2( 2, 2 )
+
+[sub_resource type="Shader" id=4]
+code = "shader_type canvas_item;
+
+uniform float r0 = 0.4;
+uniform float r1 = 0.6;
+uniform vec3 color = vec3(0.0, 0.0, 0.0);
+
+void fragment() {
+	//PROJECTION_MATRIX
+	float l = length(UV - vec2(0.5, 0.5));
+	float v = smoothstep(r0, r1, l);
+	COLOR.rgb = vec3(1.0, 0.0, 0.0);//vec3(v);
+	//ALPHA = v;
+}
+"
+
+[sub_resource type="ShaderMaterial" id=5]
+shader = SubResource( 4 )
+shader_param/r0 = 0.4
+shader_param/r1 = 0.6
+shader_param/color = Vector3( 0, 0, 0 )
+
 [node name="Locomotion_Stick" type="Spatial"]
 script = ExtResource( 1 )
+
+[node name="MovementVignetteQuad" type="MeshInstance" parent="."]
+visible = false
+mesh = SubResource( 1 )
+material/0 = null
+
+[node name="ColorRect" type="ColorRect" parent="."]
+material = SubResource( 5 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}

@@ -177,6 +177,7 @@ __meta__ = {
 ui_raycast_visible_button = -1
 
 [node name="Locomotion_Stick" parent="OQ_ARVROrigin" instance=ExtResource( 11 )]
+enable_vignette = true
 
 [node name="OQ_UI2DLogWindow" parent="." instance=ExtResource( 17 )]
 transform = Transform( -4, 0, -8.74228e-08, 1.74846e-07, 3.4641, -0.5, 3.02841e-07, -2, -0.866025, 0, 3, 2 )
@@ -411,7 +412,7 @@ mesh = SubResource( 1 )
 material/0 = SubResource( 4 )
 
 [node name="InfoLabel" parent="." instance=ExtResource( 3 )]
-transform = Transform( -2, 0, -3.25841e-07, 0, 2, 0, 6.51683e-07, 0, -1, -0.408255, 2.03673, -1.48423 )
+transform = Transform( 2, 0, 4.13264e-07, 0, 2, 0, -8.26529e-07, 0, 1, -0.408255, 2.03673, -1.48423 )
 text = "Blub"
 
 [node name="OQ_UI2DCanvas_LevelSelector" parent="." instance=ExtResource( 10 )]
@@ -456,7 +457,7 @@ __meta__ = {
 }
 
 [node name="OQ_UI2DLabel_IPD" parent="." instance=ExtResource( 18 )]
-transform = Transform( -0.499697, 0, -0.8662, 0, 1, 0, 0.8662, 0, -0.499697, -1.30431, 1.61034, -0.686107 )
+transform = Transform( 0.499697, 0, 0.8662, 0, 1, 0, -0.8662, 0, 0.499697, -1.29015, 1.60767, -0.684684 )
 
 [node name="OQ_UI2DVRSettings" parent="." instance=ExtResource( 15 )]
 transform = Transform( 3, 0, 0, 0, 3, 0, 0, 0, 1, 0.732496, 1.73966, -1.24014 )
