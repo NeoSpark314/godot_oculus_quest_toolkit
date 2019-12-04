@@ -23,6 +23,7 @@ func _ready():
 	
 	#vr.switch_scene("res://demo_scenes/experiments/debug/DebugGrab.tscn"); return;
 	#vr.switch_scene("res://demo_scenes/experiments/debug/DebugFalling.tscn"); return;
+	#vr.switch_scene("res://demo_scenes/experiments/debug/DebugVignette.tscn"); return;
 	#vr.switch_scene("res://demo_scenes/experiments/TestWalkInPlace.tscn"); return;
 
 	# Always advertise Godot a bit in the beggining

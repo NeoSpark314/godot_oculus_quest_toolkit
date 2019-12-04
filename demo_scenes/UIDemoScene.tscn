@@ -186,6 +186,7 @@ transform = Transform( -4, 0, -8.74228e-08, 1.74846e-07, 3.4641, -0.5, 3.02841e-
 transform = Transform( 0.665606, 0, -0.942996, 0, 2, 0, 1.88599, 0, 0.332803, 1.85032, 1.7519, -0.245856 )
 
 [node name="Control" type="ReferenceRect" parent="TestUI"]
+visible = false
 margin_right = 768.0
 margin_bottom = 768.0
 theme = ExtResource( 5 )
@@ -299,6 +300,7 @@ color = Color( 0.192157, 0.411765, 0.141176, 1 )
 transform = Transform( -8.74228e-08, 0, 1, 0, 2, 0, -2, 0, -4.37114e-08, -2, 1.5, -0.246 )
 
 [node name="Control" type="ReferenceRect" parent="OQ_UI2DCanvas_MovementOptions"]
+visible = false
 margin_right = 512.0
 margin_bottom = 512.0
 theme = ExtResource( 5 )
@@ -419,6 +421,7 @@ text = "Blub"
 transform = Transform( 1.67744, -0.544566, 0.471608, 0, 1.73205, 0.5, -1.08913, -0.838718, 0.726351, -1.0728, 1.17961, -1.37952 )
 
 [node name="ReferenceRect" type="ReferenceRect" parent="OQ_UI2DCanvas_LevelSelector"]
+visible = false
 margin_right = 512.0
 margin_bottom = 128.0
 theme = ExtResource( 5 )

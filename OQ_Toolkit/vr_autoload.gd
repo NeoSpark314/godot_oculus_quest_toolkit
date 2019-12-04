@@ -17,6 +17,8 @@ func _init_vr_log():
 		_log_buffer.append([0, "", 0]);
 		
 func _append_to_log(type, message):
+	if (_log_buffer.size() == 0): _init_vr_log();
+	
 	if _log_buffer_index >= 0 && _log_buffer[_log_buffer_index][1] == message:
 		_log_buffer[_log_buffer_index][2] += 1;
 	else:

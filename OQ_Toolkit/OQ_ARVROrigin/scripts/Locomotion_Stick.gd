@@ -6,9 +6,11 @@ export var dead_zone = 0.125;
 export var move_speed = 1.0;
 
 export var enable_vignette = false;
+export var vignette_radius_0 = 0.5;
+export var vignette_radius_1 = 0.8;
+export var vignette_color = Color(0.0,0.0,0.0,1.0);
 
-#onready var movement_vignette_quad = $MovementVignetteQuad;
-onready var movement_vignette_quad = $ColorRect;
+onready var movement_vignette_rect = $MovementVignette_ColorRect;
 
 export(vr.AXIS) var move_left_right = vr.AXIS.LEFT_JOYSTICK_X;
 export(vr.AXIS) var move_forward_back = vr.AXIS.LEFT_JOYSTICK_Y;
@@ -27,10 +29,10 @@ export(vr.AXIS) var turn_left_right = vr.AXIS.RIGHT_JOYSTICK_X;
 func _ready():
 	if (not get_parent() is ARVROrigin):
 		vr.log_error("Feature_StickMovement: parent is not ARVROrigin");
-		
-	remove_child(movement_vignette_quad);
-	get_node("/root").add_child(movement_vignette_quad.get_parent());
 
+	movement_vignette_rect.material.set_shader_param("r0", vignette_radius_0);
+	movement_vignette_rect.material.set_shader_param("r1", vignette_radius_1);
+	movement_vignette_rect.material.set_shader_param("color", vignette_color);
 
 
 func move(dt):
@@ -38,10 +40,9 @@ func move(dt):
 	var dy = vr.get_controller_axis(move_forward_back);
 	
 	if (dx*dx + dy*dy <= dead_zone*dead_zone):
-		#if (enable_vignette) : movement_vignette_quad.visible = true;
 		return;
 		
-	#if (enable_vignette) : movement_vignette_quad.visible = true;
+	if (enable_vignette) : movement_vignette_rect.visible = true;
 		
 	var view_dir = -vr.vrCamera.global_transform.basis.z;
 	var strafe_dir = vr.vrCamera.global_transform.basis.x;
@@ -68,7 +69,6 @@ func turn(dt):
 		last_click_rotate = (abs(dlr) > dead_zone * dead_zone_epsilon); 
 
 	if (abs(dlr) <= dead_zone): 
-		#if (enable_vignette) : movement_vignette_quad.visible = true;
 		return;
 
 	var origHeadPos = vr.vrCamera.global_transform.origin;
@@ -81,7 +81,7 @@ func turn(dt):
 			
 	# smooth turning
 	elif (turn_type == TurnType.SMOOTH):
-		#if (enable_vignette) : movement_vignette_quad.visible = true;
+		if (enable_vignette) : movement_vignette_rect.visible = true;
 		vr.vrOrigin.rotate_y(deg2rad(dlr * smooth_turn_speed * dt));
 
 	# reposition vrOrigin for in place rotation
@@ -90,7 +90,8 @@ func turn(dt):
 
 
 func _process(dt):
-	if (vr.vrOrigin.is_fixed): 
+	if (enable_vignette) : movement_vignette_rect.visible = false;
+	if (vr.vrOrigin && vr.vrOrigin.is_fixed): 
 		return;
 	
 	move(dt);
