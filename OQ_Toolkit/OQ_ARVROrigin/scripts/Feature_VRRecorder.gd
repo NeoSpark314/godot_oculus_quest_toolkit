@@ -48,6 +48,7 @@ func start_recording(rec_template = null):
 			"right_controller_angular_velocity" : [],
 			"right_controller_angular_acceleration" : [],
 		}
+	vr.log_info("Started recording into: " + str(_r));
 
 
 func _rec_vector3(t : Array, v : Vector3):

@@ -17,4 +17,3 @@
 [node name="OQ_RightController" parent="OQ_ARVROrigin" instance=ExtResource( 1 )]
 
 [node name="Locomotion_Stick" parent="OQ_ARVROrigin" instance=ExtResource( 5 )]
-enable_vignette = true

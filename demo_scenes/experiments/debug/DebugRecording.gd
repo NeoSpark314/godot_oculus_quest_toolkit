@@ -3,10 +3,10 @@ extends Spatial
 
 onready var rec = $OQ_ARVROrigin/Feature_VRRecorder;
 var output_filename = "test.oqrec";
-var record = false; # true => record; false => playback
+var record = true; # true => record; false => playback
 
 func _notification(what):
-	if what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST:
+	if what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST || what == MainLoop.NOTIFICATION_WM_GO_BACK_REQUEST:
 		if (record): rec.stop_and_save_recording(output_filename);
 
 
