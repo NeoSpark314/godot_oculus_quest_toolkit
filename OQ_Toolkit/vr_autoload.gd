@@ -531,18 +531,20 @@ func _check_for_scene_switch_and_fade(dt):
 			set_default_layer_color_scale(Color(1, 1, 1, 1));
 			_target_scene_path = null;
 
+
 ###############################################################################
 # Main Funcitonality for initialize and process
 ###############################################################################
 
 func _ready():
-	pass
+	pass;
 	
 func _process(dt):
 	if (_need_settings_refresh):
 		_refresh_settings();
 		
 	_check_for_scene_switch_and_fade(dt);
+	
 	
 
 func initialize():
