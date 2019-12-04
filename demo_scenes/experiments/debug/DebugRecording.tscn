@@ -30,6 +30,7 @@ script = ExtResource( 6 )
 [node name="Locomotion_Stick" parent="OQ_ARVROrigin" instance=ExtResource( 5 )]
 
 [node name="Feature_VRSimulator" parent="OQ_ARVROrigin" instance=ExtResource( 10 )]
+active = false
 
 [node name="Feature_VRRecorder" parent="OQ_ARVROrigin" instance=ExtResource( 11 )]
 

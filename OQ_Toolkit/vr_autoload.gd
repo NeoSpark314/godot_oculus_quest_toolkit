@@ -348,54 +348,69 @@ func set_tracking_space(tracking_space):
 		return ovrTrackingTransform.set_tracking_space(tracking_space);
 
 
+# these variables are currently only used by the recording playback
+# order is [head, controller_id 1, controller_id 2]
+var _sim_angular_velocity = [Vector3(0,0,0), Vector3(0,0,0), Vector3(0,0,0)];
+var _sim_angular_acceleration = [Vector3(0,0,0), Vector3(0,0,0), Vector3(0,0,0)];
+var _sim_linear_velocity = [Vector3(0,0,0), Vector3(0,0,0), Vector3(0,0,0)];
+var _sim_linear_acceleration = [Vector3(0,0,0), Vector3(0,0,0), Vector3(0,0,0)];
+
 func get_controller_angular_velocity(controller_id):
 	if (!ovrUtilities):
-		return Vector3(0,0,0); # we could implement a fallback here
+		#return Vector3(0,0,0); # we could implement a fallback here
+		return _sim_angular_velocity[controller_id];
 	else:
 		return ovrUtilities.get_controller_angular_velocity(controller_id);
 
 func get_controller_angular_acceleration(controller_id):
 	if (!ovrUtilities):
-		return Vector3(0,0,0); # we could implement a fallback here
+		#return Vector3(0,0,0); # we could implement a fallback here
+		return _sim_angular_acceleration[controller_id];
 	else:
 		return ovrUtilities.get_controller_angular_acceleration(controller_id);
 	
 func get_controller_linear_velocity(controller_id):
 	if (!ovrUtilities):
-		return Vector3(0,0,0); # we could implement a fallback here
+		#return Vector3(0,0,0); # we could implement a fallback here
+		return _sim_linear_velocity[controller_id];
 	else:
 		return ovrUtilities.get_controller_linear_velocity(controller_id);
 
 
 func get_controller_linear_acceleration(controller_id):
 	if (!ovrUtilities):
-		return Vector3(0,0,0); # we could implement a fallback here
+		#return Vector3(0,0,0); # we could implement a fallback here
+		return _sim_linear_acceleration[controller_id];
 	else:
 		return ovrUtilities.get_controller_linear_acceleration(controller_id);
 
 
 func get_head_angular_velocity():
 	if (!ovrUtilities):
-		return Vector3(0,0,0); # we could implement a fallback here
+		#return Vector3(0,0,0); # we could implement a fallback here
+		return _sim_angular_velocity[0];
 	else:
 		return ovrUtilities.get_head_angular_velocity();
 
 func get_head_angular_acceleration():
 	if (!ovrUtilities):
-		return Vector3(0,0,0); # we could implement a fallback here
+		#return Vector3(0,0,0); # we could implement a fallback here
+		return _sim_angular_acceleration[0];
 	else:
 		return ovrUtilities.get_head_angular_acceleration();
 	
 func get_head_linear_velocity():
 	if (!ovrUtilities):
-		return Vector3(0,0,0); # we could implement a fallback here
+		#return Vector3(0,0,0); # we could implement a fallback here
+		return _sim_linear_velocity[0];
 	else:
 		return ovrUtilities.get_head_linear_velocity();
 
 
 func get_head_linear_acceleration():
 	if (!ovrUtilities):
-		return Vector3(0,0,0); # we could implement a fallback here
+		#return Vector3(0,0,0); # we could implement a fallback here
+		return _sim_linear_acceleration[0];
 	else:
 		return ovrUtilities.get_head_linear_acceleration();
 
@@ -544,8 +559,7 @@ func _process(dt):
 		_refresh_settings();
 		
 	_check_for_scene_switch_and_fade(dt);
-	
-	
+
 
 func initialize():
 	_init_vr_log();

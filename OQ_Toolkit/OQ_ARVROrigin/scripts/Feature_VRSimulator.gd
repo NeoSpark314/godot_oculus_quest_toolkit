@@ -2,6 +2,8 @@
 # via keyboard for desktop debugging and basic tests
 extends Spatial
 
+export var active = true;
+
 export var walk_speed = 1.0;
 
 
@@ -185,7 +187,7 @@ func _update_keyboard(dt):
 
 
 func _input(event):
-	if vr.inVR: return;
+	if vr.inVR || !active: return;
 
 	# basic keyboard events
 	if (event is InputEventKey && event.pressed):
@@ -214,7 +216,7 @@ func _input(event):
 
 
 func _physics_process(dt):
-	if vr.inVR: return;
+	if vr.inVR || !active: return;
 	
 	if (!initialized): initialize();
 
