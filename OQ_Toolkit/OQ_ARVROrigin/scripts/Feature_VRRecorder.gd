@@ -32,6 +32,8 @@ var _record_active = false; # actively recording
 var _playback_active = false; # actively playing back a recording
 var _playback_frame = 0;
 
+var _num_recorded_frames = 0;
+
 
 func _notification(what):
 	if (!active): return;
@@ -122,7 +124,13 @@ func start_recording(rec_template = null):
 			_r["left_controller_angular_acceleration"] = [];
 			_r["right_controller_linear_acceleration"] = [];
 			_r["right_controller_angular_acceleration"] = [];
-			
+	
+	# remember the start time of the recording
+	var d = OS.get_datetime();
+	_r["start_time"] = 	"%d.%02d.%02d_%02d.%02d.%02d"  % [d.year, d.month, d.day, d.hour, d.minute, d.second];
+	_r["target_fps"] = Engine.target_fps;
+	_num_recorded_frames = 0;
+	
 	vr.log_info("Started recording into: " + str(_r));
 
 
@@ -150,6 +158,7 @@ func _rec_buttons(t : Array, controller):
 	
 
 func _record():
+	_num_recorded_frames = _num_recorded_frames + 1;
 	# Head
 	if (_r.has("head_position")):
 		_rec_vector3(_r.head_position, vr.vrCamera.global_transform.origin);
@@ -280,6 +289,9 @@ func stop_and_save_recording(filename = null):
 	if (_r == null):
 		vr.log_error("No recording to save.");
 		return;
+	
+	_r["num_frames"] = _num_recorded_frames;
+	
 	var d = OS.get_datetime();
 	if (filename == null || filename == ""):
 		filename = "recording_%d.%02d.%02d_%02d.%02d.%02d.oqrec"  % [d.year, d.month, d.day, d.hour, d.minute, d.second];
@@ -298,7 +310,7 @@ func load_and_play_recording(recording_file_name):
 	var err = file.open(recording_file_name, file.READ);
 	if (err == OK):
 		_r = JSON.parse(file.get_as_text()).result;
-		var num_frames = _r.head_position.size() / 3;
+		var num_frames = _r.num_frames;
 			
 		vr.log_info("Loaded a recording with " + str(num_frames) + " frames");
 		for k in _r.keys():
