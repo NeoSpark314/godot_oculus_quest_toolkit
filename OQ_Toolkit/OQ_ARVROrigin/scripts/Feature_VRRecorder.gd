@@ -7,47 +7,122 @@
 #       because else it will overwrite the button presses on playback
 extends Spatial
 
-var _r = null;
-var _record_active = false;
-var _playback_active = false;
-var _playback_position = 0;
+
+export var active = true;
+
+export var auto_record_device = true;
+export var auto_play_desktop = true;
+export var loop_playback = true;
+
+export(String, FILE) var rec_filename = "recording.oqrec";
+
+export var rec_head_position = true;
+export var rec_head_orientation = true;
+export var rec_head_velocity = false;
+export var rec_head_acceleration = false;
+export var rec_controller_position = true;
+export var rec_controller_orientation = true;
+export var rec_controller_buttons = true;
+export var rec_controller_axis = true;
+export var rec_controller_velocity = false;
+export var rec_controller_acceleration = false;
+
+var _r = null; # this is the actual recording dictionary (either during recording or during playback)
+var _record_active = false; # actively recording
+var _playback_active = false; # actively playing back a recording
+var _playback_frame = 0;
+
+
+func _notification(what):
+	if (!active): return;
+	if what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST || what == MainLoop.NOTIFICATION_WM_GO_BACK_REQUEST:
+		if (auto_record_device && vr.inVR): stop_and_save_recording(rec_filename);
+
+
+func _ready():
+	if (!active): return;
+	
+	if (auto_record_device):
+		if (vr.inVR): start_recording();
+	
+	if (auto_play_desktop):
+		if (!vr.inVR): load_and_play_recording(rec_filename);
+		
+
+var _potential_simulator_node = null;
+
+func stop_playback():
+	_playback_active = false;
+	
+	# if there was an active simulator node on playback start we have it remembered in this
+	# variable and reset it again to active on animation stop
+	if (_potential_simulator_node != null): 
+		_potential_simulator_node.active = true;
+
+	
+func start_playback():
+	_playback_frame = 0;
+	_playback_active = true;
+	
+	# small check if there is an active VRsimulator as this will overwrite playback vars like buttons
+	# only works when it was not renamed... but better than nothing
+	_potential_simulator_node = get_tree().get_root().find_node("Feature_VRSimulator", true, false);
+	if (_potential_simulator_node != null && _potential_simulator_node.active):
+		vr.log_warning("Active Feature_VRSimulator in tree; deactivating it to not interfere with recording playback");
+		_potential_simulator_node.active = false;
+	else:
+		_potential_simulator_node = null; # inactive so no need to remember
+		
+		
 
 func _process(dt):
 	if (_record_active): _record();
 	if (_playback_active): _play_back();
 
 
+# You can give a rec_template from code (an array of strings) on what to record
+# else the default configuration set via the exported variables will be used
 func start_recording(rec_template = null):
 	_record_active = true;
 	if (rec_template != null):
 		for k in rec_template:
 			_r[k] = [];
 	else:
-		# default recording structure
-		_r = {
-			"head_position" : [],  # Vec3
-			"head_orientation" : [], # Quat
-			"head_linear_velocity" : [],
-			"head_linear_acceleration" : [],
-			"head_angular_velocity" : [],
-			"head_angular_acceleration" : [],
-			"left_controller_position" : [],
-			"left_controller_orientation" : [],
-			"left_controller_buttons" : [],
-			"left_controller_axis" : [],
-			"left_controller_linear_velocity" : [],
-			"left_controller_linear_acceleration" : [],
-			"left_controller_angular_velocity" : [],
-			"left_controller_angular_acceleration" : [],
-			"right_controller_position" : [],
-			"right_controller_orientation" : [],
-			"right_controller_buttons" : [],
-			"right_controller_axis" : [],
-			"right_controller_linear_velocity" : [],
-			"right_controller_linear_acceleration" : [],
-			"right_controller_angular_velocity" : [],
-			"right_controller_angular_acceleration" : [],
-		}
+		# default recording structure based on node settings
+		_r = {}
+		if (rec_head_position): 
+			_r["head_position"] = [];
+		if (rec_head_orientation): 
+			_r["head_orientation"] = [];
+		if (rec_head_velocity): 
+			_r["head_linear_velocity"] = [];
+			_r["head_angular_velocity"] = [];
+		if (rec_head_acceleration): 
+			_r["head_linear_acceleration"] = [];
+			_r["head_angular_acceleration"] = [];
+		if (rec_controller_position): 
+			_r["left_controller_position"] = [];
+			_r["right_controller_position"] = [];
+		if (rec_controller_orientation): 
+			_r["left_controller_orientation"] = [];
+			_r["right_controller_orientation"] = [];
+		if (rec_controller_buttons): 
+			_r["left_controller_buttons"] = [];
+			_r["right_controller_buttons"] = [];
+		if (rec_controller_axis): 
+			_r["left_controller_axis"] = [];
+			_r["right_controller_axis"] = [];
+		if (rec_controller_velocity): 
+			_r["left_controller_linear_velocity"] = [];
+			_r["left_controller_angular_velocity"] = [];
+			_r["right_controller_linear_velocity"] = [];
+			_r["right_controller_angular_velocity"] = [];
+		if (rec_controller_acceleration):
+			_r["left_controller_linear_acceleration"] = [];
+			_r["left_controller_angular_acceleration"] = [];
+			_r["right_controller_linear_acceleration"] = [];
+			_r["right_controller_angular_acceleration"] = [];
+			
 	vr.log_info("Started recording into: " + str(_r));
 
 
@@ -129,21 +204,21 @@ func _record():
 func _set_pos(t : Spatial, key):
 	if (!_r.has(key)): return;
 	var p = _r[key];
-	var i = _playback_position * 3;
+	var i = _playback_frame * 3;
 	var pos = Vector3(p[i+0],p[i+1],p[i+2]);
 	t.global_transform.origin = pos;
 
 func _set_orientation(t : Spatial, key):
 	if (!_r.has(key)): return;
 	var o = _r[key];
-	var i = _playback_position * 3;
+	var i = _playback_frame * 3;
 	var orientation = Basis(Vector3(o[i+0],o[i+1],o[i+2]));
 	t.global_transform.basis = orientation;
 	
 func _set_buttons(controller, key):
 	if (!_r.has(key)): return;
 	var buttonArray = _r[key];
-	var value = int(buttonArray[_playback_position]);
+	var value = int(buttonArray[_playback_frame]);
 	# on playback we set the simulation buttons
 	var b2 = controller._simulation_buttons_pressed;
 	for i in range(0, 16):
@@ -153,15 +228,17 @@ func _set_buttons(controller, key):
 func _set_axis(controller, key):
 	if (!_r.has(key)): return;
 	var a = _r[key];
-	var idx = _playback_position * 4;
+	var idx = _playback_frame * 4;
 	for i in range(0, 4):
 		controller._simulation_joystick_axis[i] = a[i + idx];
 	
 func _get_vec3_or_0(key):
 	if (!_r.has(key)): return Vector3(0,0,0);
-	var i = _playback_position * 3;
+	var i = _playback_frame * 3;
 	var p = _r[key];
 	return Vector3(p[i+0],p[i+1],p[i+2]);
+	
+	
 	
 
 func _play_back():
@@ -192,7 +269,10 @@ func _play_back():
 	vr._sim_angular_acceleration[1] = _get_vec3_or_0("left_controller_angular_acceleration");
 	vr._sim_angular_acceleration[2] = _get_vec3_or_0("right_controller_angular_acceleration");
 
-	_playback_position = (_playback_position + 1) % (_r.head_position.size()/3);
+	
+	_playback_frame = (_playback_frame + 1) % (_r.head_position.size()/3);
+	
+	if (!loop_playback && _playback_frame == 0): stop_playback();
 	
 
 func stop_and_save_recording(filename = null):
@@ -201,22 +281,23 @@ func stop_and_save_recording(filename = null):
 		vr.log_error("No recording to save.");
 		return;
 	var d = OS.get_datetime();
-	if (filename == null):
+	if (filename == null || filename == ""):
 		filename = "recording_%d.%02d.%02d_%02d.%02d.%02d.oqrec"  % [d.year, d.month, d.day, d.hour, d.minute, d.second];
 	
 	var save_rec = File.new()
-	save_rec.open("user://" + filename, File.WRITE)
-	save_rec.store_line(to_json(_r))
-	save_rec.close()
-	vr.log_info("Saved recording to " + OS.get_user_data_dir() + "/" + filename);
+	var err = save_rec.open("user://" + filename, File.WRITE)
+	if (err == OK):
+		save_rec.store_line(to_json(_r))
+		save_rec.close()
+		vr.log_info("Saved recording to " + OS.get_user_data_dir() + "/" + filename);
+	else:
+		vr.log_error("Failed to save recording to "+ OS.get_user_data_dir() + "/" + filename + " ERR=" + str(err));
 	
 func load_and_play_recording(recording_file_name):
 	var file = File.new();
 	var err = file.open(recording_file_name, file.READ);
 	if (err == OK):
 		_r = JSON.parse(file.get_as_text()).result;
-		_playback_position = 0;
-		_playback_active = true;
 		var num_frames = _r.head_position.size() / 3;
 			
 		vr.log_info("Loaded a recording with " + str(num_frames) + " frames");
@@ -225,5 +306,7 @@ func load_and_play_recording(recording_file_name):
 			# Do some basic sanity checking of the data here to avoid surprises
 			if (check_val != num_frames && check_val != num_frames * 3 && check_val != num_frames * 4):
 				vr.log_error("Error in recording: %s has wrong number of elements: %d" % [k, _r[k].size()]);
+				
+		start_playback();
 	else:
-		vr.log_error("Failed to load_and_playback_r " + recording_file_name + ": " + str(err));
+		vr.log_error("Failed to load_and_playback_recording " + recording_file_name + ": " + str(err));

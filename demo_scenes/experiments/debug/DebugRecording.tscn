@@ -32,5 +32,7 @@ script = ExtResource( 6 )
 [node name="Feature_VRSimulator" parent="OQ_ARVROrigin" instance=ExtResource( 10 )]
 
 [node name="Feature_VRRecorder" parent="OQ_ARVROrigin" instance=ExtResource( 11 )]
+auto_play_desktop = false
+loop_playback = false
 
 [node name="GrabAndThrowRoom" parent="." instance=ExtResource( 9 )]

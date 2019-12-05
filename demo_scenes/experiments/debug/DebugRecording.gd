@@ -3,7 +3,7 @@ extends Spatial
 
 onready var rec = $OQ_ARVROrigin/Feature_VRRecorder;
 var output_filename = "test.oqrec";
-var record = true; # true => record; false => playback
+var record = false; # true => record; false => playback
 
 func _notification(what):
 	if what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST || what == MainLoop.NOTIFICATION_WM_GO_BACK_REQUEST:
@@ -12,6 +12,8 @@ func _notification(what):
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	record = !rec.auto_play_desktop;
+	
 	if (record): rec.start_recording();
 	else:
 		rec.load_and_play_recording(OS.get_user_data_dir() + "/" + output_filename);
