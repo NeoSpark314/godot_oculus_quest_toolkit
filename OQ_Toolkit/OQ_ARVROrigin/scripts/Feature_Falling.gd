@@ -13,6 +13,7 @@ export var gravity := 9.81;
 export var epsilon := 0.001;
 
 export var force_move_up = false;
+export var move_up_speed = 0.0; # 0.0 == instance move up
 export var max_raycast_distance = 128.0; 
 export var fall_without_hit = false;
 
@@ -82,7 +83,11 @@ func _physics_process(dt):
 				on_ground = true;
 				max_fall_distance = 0.0;
 				if (force_move_up && (hit_dist < player_height - epsilon)):
-					vr.vrOrigin.translation.y += (player_height - hit_dist);
+					if (move_up_speed == 0.0):
+						vr.vrOrigin.translation.y += (player_height - hit_dist);
+					else:
+						vr.vrOrigin.translation.y += min(move_up_speed* dt, player_height - hit_dist);
+						
 		else:
 			#vr.show_dbg_info("dbgFalling", "fallingNoHit: player_height = %f" % [player_height]);
 			pass;
