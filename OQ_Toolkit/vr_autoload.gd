@@ -144,6 +144,7 @@ enum BUTTON {
 	RIGHT_INDEX_TRIGGER = 15 + 16, # index trigger pressed over threshold
 }
 
+
 # Button list mapping to both controllers (needed for actions assigned to specific controllers instead of global)
 enum CONTROLLER_BUTTON {
 	None = -1,

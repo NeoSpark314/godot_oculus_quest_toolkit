@@ -14,7 +14,14 @@ export var auto_record_device = true;
 export var auto_play_desktop = true;
 export var loop_playback = true;
 
-export(String, FILE) var rec_filename = "recording.oqrec";
+export(String, FILE) var rec_filename = "recording";
+export var append_number = true;
+export var append_date = false;
+export var start_rec_via_key = true;
+
+export(vr.BUTTON) var start_first_button = vr.BUTTON.A;
+export(vr.BUTTON) var start_second_button = vr.BUTTON.X;
+
 
 export var rec_head_position = true;
 export var rec_head_orientation = true;
@@ -34,6 +41,8 @@ var _playback_frame = 0;
 
 var _num_recorded_frames = 0;
 
+var _recording_number = 0; # to count if we save multiple recordings from a single session
+
 
 func _notification(what):
 	if (!active): return;
@@ -47,7 +56,7 @@ func _ready():
 	if (auto_record_device):
 		if (vr.inVR): start_recording();
 	
-	if (auto_play_desktop):
+	if (auto_play_desktop && ! _playback_active):
 		if (!vr.inVR): load_and_play_recording(rec_filename);
 		
 
@@ -76,8 +85,16 @@ func start_playback():
 		_potential_simulator_node = null; # inactive so no need to remember
 		
 		
-
 func _process(dt):
+	if (!active): return;
+	
+	if (start_rec_via_key && !_playback_active):
+		if (vr.button_pressed(start_first_button) && vr.button_just_pressed(start_second_button)):
+			if (!_record_active):
+				start_recording();
+			else:
+				stop_and_save_recording();
+	
 	if (_record_active): _record();
 	if (_playback_active): _play_back();
 
@@ -132,6 +149,7 @@ func start_recording(rec_template = null):
 	_num_recorded_frames = 0;
 	
 	vr.log_info("Started recording into: " + str(_r));
+	vr.show_dbg_info("Feature_VRRecorder", "Recording %d active" % _recording_number);
 
 
 func _rec_vector3(t : Array, v : Vector3):
@@ -251,17 +269,19 @@ func _get_vec3_or_0(key):
 	
 
 func _play_back():
+	if (!_playback_active): return;
+	
 	_set_pos(vr.vrCamera, "head_position");
 	_set_orientation(vr.vrCamera, "head_orientation");
-	
+
 	_set_pos(vr.leftController, "left_controller_position");
 	_set_orientation(vr.leftController, "left_controller_orientation");
 	_set_pos(vr.rightController, "right_controller_position");
 	_set_orientation(vr.rightController, "right_controller_orientation");
-	
+
 	_set_buttons(vr.leftController, "left_controller_buttons");
 	_set_buttons(vr.rightController, "right_controller_buttons");
-	
+
 	_set_axis(vr.leftController, "left_controller_axis")
 	_set_axis(vr.rightController, "right_controller_axis")
 	
@@ -286,6 +306,8 @@ func _play_back():
 
 func stop_and_save_recording(filename = null):
 	_record_active = false;
+	vr.remove_dbg_info("Feature_VRRecorder");
+
 	if (_r == null):
 		vr.log_error("No recording to save.");
 		return;
@@ -295,6 +317,16 @@ func stop_and_save_recording(filename = null):
 	var d = OS.get_datetime();
 	if (filename == null || filename == ""):
 		filename = "recording_%d.%02d.%02d_%02d.%02d.%02d.oqrec"  % [d.year, d.month, d.day, d.hour, d.minute, d.second];
+	else:
+		if (append_number):
+			filename += "_%03d_" % _recording_number;
+			_recording_number += 1;
+		if (append_date):
+			filename += "_%d.%02d.%02d_%02d.%02d.%02d.oqrec"  % [d.year, d.month, d.day, d.hour, d.minute, d.second]
+		#if (!())
+		
+		if (filename.right(filename.length() - 6) != ".oqrec"):
+			filename += ".oqrec";
 	
 	var save_rec = File.new()
 	var err = save_rec.open("user://" + filename, File.WRITE)
@@ -306,18 +338,24 @@ func stop_and_save_recording(filename = null):
 		vr.log_error("Failed to save recording to "+ OS.get_user_data_dir() + "/" + filename + " ERR=" + str(err));
 	
 func load_and_play_recording(recording_file_name):
+	if (recording_file_name.right(recording_file_name.length() - 6) != ".oqrec"):
+		recording_file_name += ".oqrec";
+		
 	var file = File.new();
 	var err = file.open(recording_file_name, file.READ);
+	if (err != OK):
+		err = file.open("user://" + recording_file_name, file.READ);
 	if (err == OK):
 		_r = JSON.parse(file.get_as_text()).result;
 		var num_frames = _r.num_frames;
 			
 		vr.log_info("Loaded a recording with " + str(num_frames) + " frames");
 		for k in _r.keys():
-			var check_val = _r[k].size();
-			# Do some basic sanity checking of the data here to avoid surprises
-			if (check_val != num_frames && check_val != num_frames * 3 && check_val != num_frames * 4):
-				vr.log_error("Error in recording: %s has wrong number of elements: %d" % [k, _r[k].size()]);
+			if _r[k] is Array:
+				var check_val = _r[k].size();
+				# Do some basic sanity checking of the data here to avoid surprises
+				if (check_val != num_frames && check_val != num_frames * 3 && check_val != num_frames * 4):
+					vr.log_error("Error in recording: %s has wrong number of elements: %d" % [k, _r[k].size()]);
 				
 		start_playback();
 	else:
