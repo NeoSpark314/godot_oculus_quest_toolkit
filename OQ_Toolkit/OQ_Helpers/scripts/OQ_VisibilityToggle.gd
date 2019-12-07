@@ -7,6 +7,7 @@ export(vr.BUTTON) var toggle_button = vr.BUTTON.Y;
 # have it hidden on actual start
 export var invisible_on_start = false;
 
+
 var cycle_through_children = false; #Not yet implemented
 
 func set_visibility_and_process(v):

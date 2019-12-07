@@ -7,13 +7,14 @@
 #       because else it will overwrite the button presses on playback
 extends Spatial
 
-
 export var active = true;
 
-export var auto_record_device = true;
 export var auto_play_desktop = true;
 export var loop_playback = true;
+export(String, FILE) var playback_filename = "recording.oqrec";
 
+
+export var auto_record_device = false;
 export(String, FILE) var rec_filename = "recording";
 export var append_number = true;
 export var append_date = false;
@@ -21,7 +22,6 @@ export var start_rec_via_key = true;
 
 export(vr.BUTTON) var start_first_button = vr.BUTTON.A;
 export(vr.BUTTON) var start_second_button = vr.BUTTON.X;
-
 
 export var rec_head_position = true;
 export var rec_head_orientation = true;
@@ -57,7 +57,7 @@ func _ready():
 		if (vr.inVR): start_recording();
 	
 	if (auto_play_desktop && ! _playback_active):
-		if (!vr.inVR): load_and_play_recording(rec_filename);
+		if (!vr.inVR): load_and_play_recording(playback_filename);
 		
 
 var _potential_simulator_node = null;
@@ -93,7 +93,7 @@ func _process(dt):
 			if (!_record_active):
 				start_recording();
 			else:
-				stop_and_save_recording();
+				stop_and_save_recording(rec_filename);
 	
 	if (_record_active): _record();
 	if (_playback_active): _play_back();
@@ -179,9 +179,9 @@ func _record():
 	_num_recorded_frames = _num_recorded_frames + 1;
 	# Head
 	if (_r.has("head_position")):
-		_rec_vector3(_r.head_position, vr.vrCamera.global_transform.origin);
+		_rec_vector3(_r.head_position, vr.vrCamera.transform.origin);
 	if (_r.has("head_orientation")):
-		_rec_orientation(_r.head_orientation, vr.vrCamera.global_transform.basis);
+		_rec_orientation(_r.head_orientation, vr.vrCamera.transform.basis);
 	if (_r.has("head_linear_velocity")):
 		_rec_vector3(_r.head_linear_velocity, vr.get_head_linear_velocity());
 	if (_r.has("head_linear_acceleration")):
@@ -193,9 +193,9 @@ func _record():
 	
 	# Left Controller
 	if (_r.has("left_controller_position")):
-		_rec_vector3(_r.left_controller_position, vr.leftController.global_transform.origin);
+		_rec_vector3(_r.left_controller_position, vr.leftController.transform.origin);
 	if (_r.has("left_controller_orientation")):
-		_rec_orientation(_r.left_controller_orientation, vr.leftController.global_transform.basis);
+		_rec_orientation(_r.left_controller_orientation, vr.leftController.transform.basis);
 	if (_r.has("left_controller_buttons")):
 		_rec_buttons(_r.left_controller_buttons, vr.leftController);
 	if (_r.has("left_controller_axis")):
@@ -211,9 +211,9 @@ func _record():
 	
 	# Right Controller
 	if (_r.has("right_controller_position")):
-		_rec_vector3(_r.right_controller_position, vr.rightController.global_transform.origin);
+		_rec_vector3(_r.right_controller_position, vr.rightController.transform.origin);
 	if (_r.has("right_controller_orientation")):
-		_rec_orientation(_r.right_controller_orientation, vr.rightController.global_transform.basis);
+		_rec_orientation(_r.right_controller_orientation, vr.rightController.transform.basis);
 	if (_r.has("right_controller_buttons")):
 		_rec_buttons(_r.right_controller_buttons, vr.rightController);
 	if (_r.has("right_controller_axis")):
@@ -233,14 +233,14 @@ func _set_pos(t : Spatial, key):
 	var p = _r[key];
 	var i = _playback_frame * 3;
 	var pos = Vector3(p[i+0],p[i+1],p[i+2]);
-	t.global_transform.origin = pos;
+	t.transform.origin = pos;
 
 func _set_orientation(t : Spatial, key):
 	if (!_r.has(key)): return;
 	var o = _r[key];
 	var i = _playback_frame * 3;
 	var orientation = Basis(Vector3(o[i+0],o[i+1],o[i+2]));
-	t.global_transform.basis = orientation;
+	t.transform.basis = orientation;
 	
 func _set_buttons(controller, key):
 	if (!_r.has(key)): return;

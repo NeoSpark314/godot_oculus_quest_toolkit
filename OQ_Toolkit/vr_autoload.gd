@@ -41,7 +41,7 @@ func log_error(s):
 	print("ERROR: : ", s);
 	
 	
-var _label_scene = preload("OQ_UI2D/OQ_UI2DLabel.tscn");
+var _label_scene = null;
 var _dbg_labels = {};
 
 
@@ -56,6 +56,9 @@ func _reorder_dbg_labels():
 # this funciton attaches a UI label to the camera to show debug information
 func show_dbg_info(key, value):
 	if (!_dbg_labels.has(key)):
+		# we could not preload the scene as it depends on the vr. singleton which
+		# somehow prevented parsing...
+		if (_label_scene == null): _label_scene = load("OQ_UI2D/OQ_UI2DLabel.tscn");
 		var l = _label_scene.instance();
 		_dbg_labels[key] = l;
 		vrCamera.add_child(l);
@@ -215,7 +218,7 @@ var ovrTrackingTransform = null;
 var ovrUtilities = null;
 var ovrVrApiProxy = null;
 # for the types we need to assume it is always available
-var ovrVrApiTypes = preload("res://addons/godot_ovrmobile/OvrVrApiTypes.gd").new();
+var ovrVrApiTypes = load("res://addons/godot_ovrmobile/OvrVrApiTypes.gd").new();
 
 var _need_settings_refresh = false;
 
@@ -246,13 +249,13 @@ func _initialize_OVR_API():
 	else: log_error("Failed to load OvrVrApiProxy.gdns");
 	
 	#log_info(str("    Supported display refresh rates: ", get_supported_display_refresh_rates()));
-	
+
 
 # When the android application gets paused it will destroy the VR context
 # this funciton makes sure that we persist the settings we set via vr. to persist
 # between pause and resume
 func _refresh_settings():
-	vr.log_info("_refresh_settings()");
+	log_info("_refresh_settings()");
 	
 	set_display_refresh_rate(oculus_mobile_settings_cache["display_refresh_rate"]);
 	request_boundary_visible(oculus_mobile_settings_cache["boundary_visible"]);
@@ -265,7 +268,6 @@ func _refresh_settings():
 	set_clock_levels(oculus_mobile_settings_cache["clock_levels_cpu"], oculus_mobile_settings_cache["clock_levels_gpu"]);
 	
 	_need_settings_refresh = false;
-
 
 
 func _notification(what):
@@ -331,7 +333,6 @@ func get_boundary_visible():
 		return false;
 	else:
 		return ovrGuardianSystem.get_boundary_visible();
-
 
 func get_tracking_space():
 	if (!ovrTrackingTransform):
@@ -495,11 +496,11 @@ func _perform_switch_scene(scene_path):
 	if (next_scene_resource):
 		_active_scene_path = scene_path;
 		var next_scene = next_scene_resource.instance();
-		vr.log_info("    switiching to scene '%s'" % scene_path)
+		log_info("    switiching to scene '%s'" % scene_path)
 		scene_switch_root.add_child(next_scene);
 		if (next_scene.has_method("scene_enter")): next_scene.scene_enter();
 	else:
-		vr.log_error("could not load scene '%s'" % scene_path)
+		log_error("could not load scene '%s'" % scene_path)
 
 
 var _target_scene_path = null;
