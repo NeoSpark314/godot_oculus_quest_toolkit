@@ -177,7 +177,7 @@ __meta__ = {
 ui_raycast_visible_button = -1
 
 [node name="Locomotion_Stick" parent="OQ_ARVROrigin" instance=ExtResource( 11 )]
-enable_vignette = true
+enable_vignette = false
 
 [node name="OQ_UI2DLogWindow" parent="." instance=ExtResource( 17 )]
 transform = Transform( -4, 0, -8.74228e-08, 1.74846e-07, 3.4641, -0.5, 3.02841e-07, -2, -0.866025, 0, 3, 2 )
