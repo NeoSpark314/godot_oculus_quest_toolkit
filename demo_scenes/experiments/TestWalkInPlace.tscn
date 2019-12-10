@@ -1,0 +1,47 @@
+[gd_scene load_steps=12 format=2]
+
+[ext_resource path="res://demo_scenes/data/models_3d/GrabAndThrowRoom/Untitled.png" type="Texture" id=1]
+[ext_resource path="res://OQ_Toolkit/OQ_ARVRCamera.tscn" type="PackedScene" id=2]
+[ext_resource path="res://OQ_Toolkit/OQ_ARVROrigin.tscn" type="PackedScene" id=3]
+[ext_resource path="res://OQ_Toolkit/OQ_ARVRController/Feature_ControllerModel_Left.tscn" type="PackedScene" id=4]
+[ext_resource path="res://OQ_Toolkit/OQ_ARVROrigin/Feature_VRRecorder.tscn" type="PackedScene" id=5]
+[ext_resource path="res://OQ_Toolkit/OQ_RightController.tscn" type="PackedScene" id=6]
+[ext_resource path="res://OQ_Toolkit/OQ_LeftController.tscn" type="PackedScene" id=7]
+[ext_resource path="res://OQ_Toolkit/OQ_ARVRController/Feature_ControllerModel_Right.tscn" type="PackedScene" id=8]
+[ext_resource path="res://OQ_Toolkit/OQ_ARVROrigin/Feature_VRSimulator.tscn" type="PackedScene" id=9]
+
+[sub_resource type="PlaneMesh" id=1]
+size = Vector2( 32, 32 )
+
+[sub_resource type="SpatialMaterial" id=2]
+albedo_texture = ExtResource( 1 )
+uv1_triplanar = true
+
+[node name="TestWalkInPlace" type="Spatial"]
+
+[node name="OQ_ARVROrigin" parent="." instance=ExtResource( 3 )]
+
+[node name="OQ_ARVRCamera" parent="OQ_ARVROrigin" instance=ExtResource( 2 )]
+
+[node name="OQ_LeftController" parent="OQ_ARVROrigin" instance=ExtResource( 7 )]
+
+[node name="Feature_ControllerModel_Left" parent="OQ_ARVROrigin/OQ_LeftController" instance=ExtResource( 4 )]
+
+[node name="OQ_RightController" parent="OQ_ARVROrigin" instance=ExtResource( 6 )]
+
+[node name="Feature_ControllerModel_Right" parent="OQ_ARVROrigin/OQ_RightController" instance=ExtResource( 8 )]
+
+[node name="Feature_VRSimulator" parent="OQ_ARVROrigin" instance=ExtResource( 9 )]
+
+[node name="Feature_VRRecorder" parent="OQ_ARVROrigin" instance=ExtResource( 5 )]
+auto_play_desktop = false
+playback_filename = "walkInPlace_recording"
+rec_filename = "walkInPlace_recording"
+rec_controller_position = false
+rec_controller_orientation = false
+rec_controller_buttons = false
+rec_controller_axis = false
+
+[node name="MeshInstance" type="MeshInstance" parent="."]
+mesh = SubResource( 1 )
+material/0 = SubResource( 2 )

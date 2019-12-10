@@ -90,7 +90,7 @@ func turn(dt):
 
 
 func _process(dt):
-	if (enable_vignette) : movement_vignette_rect.visible = false;
+	#if (enable_vignette) : movement_vignette_rect.visible = false;
 	if (vr.vrOrigin && vr.vrOrigin.is_fixed): 
 		return;
 	

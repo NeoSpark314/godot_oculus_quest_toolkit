@@ -3,16 +3,17 @@
 importer="texture"
 type="StreamTexture"
 path.s3tc="res://.import/godot_splash_512.png-13f9fa0a27fba044c612778c1d2a33ae.s3tc.stex"
+path.etc2="res://.import/godot_splash_512.png-13f9fa0a27fba044c612778c1d2a33ae.etc2.stex"
 path.etc="res://.import/godot_splash_512.png-13f9fa0a27fba044c612778c1d2a33ae.etc.stex"
 metadata={
-"imported_formats": [ "s3tc", "etc" ],
+"imported_formats": [ "s3tc", "etc2", "etc" ],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://OQ_Toolkit/OQ_UI2D/theme/godot_splash_512.png"
-dest_files=[ "res://.import/godot_splash_512.png-13f9fa0a27fba044c612778c1d2a33ae.s3tc.stex", "res://.import/godot_splash_512.png-13f9fa0a27fba044c612778c1d2a33ae.etc.stex" ]
+dest_files=[ "res://.import/godot_splash_512.png-13f9fa0a27fba044c612778c1d2a33ae.s3tc.stex", "res://.import/godot_splash_512.png-13f9fa0a27fba044c612778c1d2a33ae.etc2.stex", "res://.import/godot_splash_512.png-13f9fa0a27fba044c612778c1d2a33ae.etc.stex" ]
 
 [params]
 

@@ -58,7 +58,7 @@ func show_dbg_info(key, value):
 	if (!_dbg_labels.has(key)):
 		# we could not preload the scene as it depends on the vr. singleton which
 		# somehow prevented parsing...
-		if (_label_scene == null): _label_scene = load("OQ_UI2D/OQ_UI2DLabel.tscn");
+		if (_label_scene == null): _label_scene = load("res://OQ_Toolkit/OQ_UI2D/OQ_UI2DLabel.tscn");
 		var l = _label_scene.instance();
 		_dbg_labels[key] = l;
 		vrCamera.add_child(l);
