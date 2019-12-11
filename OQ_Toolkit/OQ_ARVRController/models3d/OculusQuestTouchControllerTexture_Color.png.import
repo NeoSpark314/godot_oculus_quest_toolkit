@@ -3,17 +3,16 @@
 importer="texture"
 type="StreamTexture"
 path.s3tc="res://.import/OculusQuestTouchControllerTexture_Color.png-50b970087254ba4407e4489b8d7b9761.s3tc.stex"
-path.etc2="res://.import/OculusQuestTouchControllerTexture_Color.png-50b970087254ba4407e4489b8d7b9761.etc2.stex"
 path.etc="res://.import/OculusQuestTouchControllerTexture_Color.png-50b970087254ba4407e4489b8d7b9761.etc.stex"
 metadata={
-"imported_formats": [ "s3tc", "etc2", "etc" ],
+"imported_formats": [ "s3tc", "etc" ],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://OQ_Toolkit/OQ_ARVRController/models3d/OculusQuestTouchControllerTexture_Color.png"
-dest_files=[ "res://.import/OculusQuestTouchControllerTexture_Color.png-50b970087254ba4407e4489b8d7b9761.s3tc.stex", "res://.import/OculusQuestTouchControllerTexture_Color.png-50b970087254ba4407e4489b8d7b9761.etc2.stex", "res://.import/OculusQuestTouchControllerTexture_Color.png-50b970087254ba4407e4489b8d7b9761.etc.stex" ]
+dest_files=[ "res://.import/OculusQuestTouchControllerTexture_Color.png-50b970087254ba4407e4489b8d7b9761.s3tc.stex", "res://.import/OculusQuestTouchControllerTexture_Color.png-50b970087254ba4407e4489b8d7b9761.etc.stex" ]
 
 [params]
 

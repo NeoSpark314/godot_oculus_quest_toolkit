@@ -25,7 +25,7 @@ script = ExtResource( 6 )
 [node name="OQ_ARVROrigin" parent="." instance=ExtResource( 3 )]
 
 [node name="Feature_VRRecorder" parent="OQ_ARVROrigin" instance=ExtResource( 11 )]
-playback_filename = "res://src_data/oqrec_captures/test2recording_000_.oqrec"
+playback_filename = "res://src_data/walkInPlace_recording_000_8steps.oqrec"
 
 [node name="OQ_ARVRCamera" parent="OQ_ARVROrigin" instance=ExtResource( 4 )]
 

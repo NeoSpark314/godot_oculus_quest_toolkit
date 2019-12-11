@@ -103,5 +103,6 @@ quality/shading/force_vertex_shading.mobile=false
 quality/shading/force_lambert_over_burley=true
 quality/shading/force_blinn_over_ggx.mobile=false
 environment/default_clear_color=Color( 0, 0, 0, 1 )
+quality/filters/msaa=6
 quality/depth/hdr=false
 environment/default_environment="res://default_env.tres"
