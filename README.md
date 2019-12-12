@@ -14,6 +14,7 @@ If you have questions or run into problems please open an issue here or contact 
 - Several utilities to accelerate prototyping and debugging (Log, Labels, ...)
 
 [![Feature Images](doc/images/feature_overview.jpg?raw=true)](https://youtu.be/-jzkHOum1kU)
+![Medieval City Test Scene](doc/images/medieval_city_screenshot.jpg?raw=true)
 
 A video of some of the early alpha features can be seen [on youtube here](https://youtu.be/-jzkHOum1kU).
 
