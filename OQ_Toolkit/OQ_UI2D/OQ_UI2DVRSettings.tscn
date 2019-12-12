@@ -10,6 +10,7 @@ script = ExtResource( 3 )
 [node name="OQ_UI2DCanvas" parent="." instance=ExtResource( 2 )]
 
 [node name="ReferenceRect" type="ReferenceRect" parent="OQ_UI2DCanvas"]
+visible = false
 margin_right = 512.0
 margin_bottom = 512.0
 theme = ExtResource( 1 )

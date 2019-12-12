@@ -33,6 +33,8 @@ func _ready():
 	movement_vignette_rect.material.set_shader_param("r0", vignette_radius_0);
 	movement_vignette_rect.material.set_shader_param("r1", vignette_radius_1);
 	movement_vignette_rect.material.set_shader_param("color", vignette_color);
+	
+	movement_vignette_rect.visible = false;
 
 
 func move(dt):
@@ -90,7 +92,7 @@ func turn(dt):
 
 
 func _process(dt):
-	#if (enable_vignette) : movement_vignette_rect.visible = false;
+	if (enable_vignette) : movement_vignette_rect.visible = false;
 	if (vr.vrOrigin && vr.vrOrigin.is_fixed): 
 		return;
 	

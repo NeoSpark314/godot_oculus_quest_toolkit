@@ -17,6 +17,7 @@
 extends Spatial
 
 export var active = true;
+export var active_in_desktop = false; # turn this on if you work for example with the VRRecorder feature
 
 const _height_ringbuffer_size = 5; # 5 seems fine in most of the cases so far; but maybe 7 could also work
 var _height_ringbuffer_pos = 0;
@@ -115,6 +116,7 @@ func _move(dt):
 
 func _process(dt):
 	if (!active): return;
+	if (!vr.inVR && !active_in_desktop): return;
 	
 	var headset_height = vr.get_current_player_height();
 	var corrected_height = _get_viewdir_corrected_height(headset_height, -vr.vrCamera.transform.basis.z.y);

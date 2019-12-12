@@ -58,3 +58,7 @@ func _on_ButtonPhysics_pressed():
 
 func _on_ButtonClimbing_pressed():
 	vr.switch_scene("res://demo_scenes/ClimbingScene.tscn");
+
+
+func _on_ButtonWalkInPlace_pressed():
+	vr.switch_scene("res://demo_scenes/WalkInPlaceDemoScene.tscn");

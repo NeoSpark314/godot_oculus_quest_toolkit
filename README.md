@@ -5,15 +5,17 @@ If you have questions or run into problems please open an issue here or contact 
 
 ## Features (so far... early alpha)
 - Touch controller button handling and controller models
-- Joystick locomotion and rotation
-- 2D UI canvas with controller interaction
-- Simple climbing
-- Rigid body grab
 - VR Simulator and VR Recorder (for easier testing on desktop)
+- Joystick locomotion and rotation (smooth and step)
+- Walk in Place detection
+- 2D UI canvas with controller interaction
+- Falling and Climbing logic
+- Rigid body grab
+- Several utilities to accelerate prototyping and debugging (Log, Labels, ...)
 
 [![Feature Images](doc/images/feature_overview.jpg?raw=true)](https://youtu.be/-jzkHOum1kU)
 
-A video of some of the alpha features can be seen [on youtube here](https://youtu.be/-jzkHOum1kU).
+A video of some of the early alpha features can be seen [on youtube here](https://youtu.be/-jzkHOum1kU).
 
 # Documentation
 The documentation is in the [project wiki](https://github.com/NeoSpark314/godot_oculus_quest_toolkit/wiki). It includes
@@ -39,6 +41,10 @@ There are a lot of potential extensions and missing features. Some of the things
   - interaction trigger
 - Improvements to the labeling system
 - Physics interactors (levers, rotators, buttons, maybe doors)
+
+# Credits
+- The Medieval Town scene was created by fangzhangmnm: [Sketchfab Page](https://sketchfab.com/3d-models/medieval-town-a174a1449da345b8ab51308032587e71); released under [CC Attribution] (https://creativecommons.org/licenses/by/4.0/). The lightmap applied to the scene was baked in Blender.
+
 
 # Licensing
 The Godot Oculus Quest Toolkit and the demo scenes in this repository are licensed under an MIT License. The Oculus Touch controller 3d models and the Oculus Mobile SDK contained in this repository are copyright Oculus, see http://oculus.com for license information.

@@ -3,17 +3,16 @@
 importer="texture"
 type="StreamTexture"
 path.s3tc="res://.import/Untitled.png-9322c438873b4f803703a3f1978ffe7e.s3tc.stex"
-path.etc2="res://.import/Untitled.png-9322c438873b4f803703a3f1978ffe7e.etc2.stex"
 path.etc="res://.import/Untitled.png-9322c438873b4f803703a3f1978ffe7e.etc.stex"
 metadata={
-"imported_formats": [ "s3tc", "etc2", "etc" ],
+"imported_formats": [ "s3tc", "etc" ],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://demo_scenes/data/models_3d/TableTennis/Untitled.png"
-dest_files=[ "res://.import/Untitled.png-9322c438873b4f803703a3f1978ffe7e.s3tc.stex", "res://.import/Untitled.png-9322c438873b4f803703a3f1978ffe7e.etc2.stex", "res://.import/Untitled.png-9322c438873b4f803703a3f1978ffe7e.etc.stex" ]
+dest_files=[ "res://.import/Untitled.png-9322c438873b4f803703a3f1978ffe7e.s3tc.stex", "res://.import/Untitled.png-9322c438873b4f803703a3f1978ffe7e.etc.stex" ]
 
 [params]
 

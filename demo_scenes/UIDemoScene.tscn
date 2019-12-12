@@ -57,6 +57,7 @@ invisible_on_start = true
 transform = Transform( 0.796625, 0, 0.604474, 0, 1, 0, -0.604474, 0, 0.796625, -0.0757154, 0.186514, -0.0449487 )
 
 [node name="ReferenceRect" type="ReferenceRect" parent="OQ_ARVROrigin/OQ_LeftController/OQ_VisibilityToggle/OQ_UI2DCanvas_NumButtons"]
+visible = false
 margin_right = 256.0
 margin_bottom = 256.0
 theme = ExtResource( 5 )
@@ -421,8 +422,7 @@ text = "Blub"
 transform = Transform( 1.67744, -0.544566, 0.471608, 0, 1.73205, 0.5, -1.08913, -0.838718, 0.726351, -1.0728, 1.17961, -1.37952 )
 
 [node name="ReferenceRect" type="ReferenceRect" parent="OQ_UI2DCanvas_LevelSelector"]
-visible = false
-margin_right = 512.0
+margin_right = 544.0
 margin_bottom = 128.0
 theme = ExtResource( 5 )
 __meta__ = {
@@ -430,7 +430,7 @@ __meta__ = {
 }
 
 [node name="LevelSelectTitleLabel" type="Label" parent="OQ_UI2DCanvas_LevelSelector/ReferenceRect"]
-margin_right = 512.0
+margin_right = 544.0
 margin_bottom = 48.0
 text = "Demo Room Selector"
 align = 1
@@ -459,6 +459,16 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="ButtonWalkInPlace" type="Button" parent="OQ_UI2DCanvas_LevelSelector/ReferenceRect"]
+margin_left = 336.0
+margin_top = 64.0
+margin_right = 528.0
+margin_bottom = 112.0
+text = "WalkInPlace"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="OQ_UI2DLabel_IPD" parent="." instance=ExtResource( 18 )]
 transform = Transform( 0.499697, 0, 0.8662, 0, 1, 0, -0.8662, 0, 0.499697, -1.29015, 1.60767, -0.684684 )
 
@@ -470,3 +480,4 @@ transform = Transform( 3, 0, 0, 0, 3, 0, 0, 0, 1, 0.732496, 1.73966, -1.24014 )
 [connection signal="item_selected" from="OQ_UI2DCanvas_MovementOptions/Control/RotationOptionButton" to="." method="_on_RotationOptionButton_item_selected"]
 [connection signal="pressed" from="OQ_UI2DCanvas_LevelSelector/ReferenceRect/ButtonPhysics" to="." method="_on_ButtonPhysics_pressed"]
 [connection signal="pressed" from="OQ_UI2DCanvas_LevelSelector/ReferenceRect/ButtonClimbing" to="." method="_on_ButtonClimbing_pressed"]
+[connection signal="pressed" from="OQ_UI2DCanvas_LevelSelector/ReferenceRect/ButtonWalkInPlace" to="." method="_on_ButtonWalkInPlace_pressed"]
