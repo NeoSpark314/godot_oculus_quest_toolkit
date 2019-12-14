@@ -1,5 +1,6 @@
 extends Spatial
 
+export var active = true;
 
 export var dead_zone = 0.125;
 
@@ -93,6 +94,7 @@ func turn(dt):
 
 func _process(dt):
 	if (enable_vignette) : movement_vignette_rect.visible = false;
+	if (!active): return;
 	if (vr.vrOrigin && vr.vrOrigin.is_fixed): 
 		return;
 	
