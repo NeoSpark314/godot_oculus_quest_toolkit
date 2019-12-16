@@ -30,6 +30,8 @@ const _variance_height_detect_threshold = 0.0005;
 
 var _current_height_estimate = 0.0;
 
+var step_just_detected = false;
+
 
 func _ready():
 	if (not get_parent() is ARVROrigin):
@@ -124,8 +126,10 @@ func _process(dt):
 	
 	if (_detect_step() == 1):
 		_step_time = step_duration;
+		step_just_detected = true;
 	else:
 		_step_time -= dt;
+		step_just_detected = false;
 		
 	if (_step_time > 0.0):
 		_move(dt);

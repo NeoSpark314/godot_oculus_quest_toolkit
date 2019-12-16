@@ -38,6 +38,7 @@ var _r = null; # this is the actual recording dictionary (either during recordin
 var _record_active = false; # actively recording
 var _playback_active = false; # actively playing back a recording
 var _playback_frame = 0;
+var _old_in_vr = false;
 
 var _num_recorded_frames = 0;
 
@@ -63,6 +64,7 @@ func _ready():
 var _potential_simulator_node = null;
 
 func stop_playback():
+	vr.inVR = _old_in_vr;
 	_playback_active = false;
 	
 	# if there was an active simulator node on playback start we have it remembered in this
@@ -72,17 +74,19 @@ func stop_playback():
 
 	
 func start_playback():
+	_old_in_vr = vr.inVR;
 	_playback_frame = 0;
 	_playback_active = true;
-	
+
 	# small check if there is an active VRsimulator as this will overwrite playback vars like buttons
 	# only works when it was not renamed... but better than nothing
-	_potential_simulator_node = get_tree().get_root().find_node("Feature_VRSimulator", true, false);
-	if (_potential_simulator_node != null && _potential_simulator_node.active):
-		vr.log_warning("Active Feature_VRSimulator in tree; deactivating it to not interfere with recording playback");
-		_potential_simulator_node.active = false;
-	else:
-		_potential_simulator_node = null; # inactive so no need to remember
+	# this is probably only needed when vr.inVR is false as else it will be ignored anyway
+#	_potential_simulator_node = get_tree().get_root().find_node("Feature_VRSimulator", true, false);
+#	if (_potential_simulator_node != null && _potential_simulator_node.active):
+#		vr.log_warning("Active Feature_VRSimulator in tree; deactivating it to not interfere with recording playback");
+#		_potential_simulator_node.active = false;
+#	else:
+#		_potential_simulator_node = null; # inactive so no need to remember
 		
 		
 func _process(dt):
@@ -270,6 +274,9 @@ func _get_vec3_or_0(key):
 
 func _play_back():
 	if (!_playback_active): return;
+	
+	vr.inVR = true; 
+
 	
 	_set_pos(vr.vrCamera, "head_position");
 	_set_orientation(vr.vrCamera, "head_orientation");
