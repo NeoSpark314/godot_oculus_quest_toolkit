@@ -17,7 +17,7 @@ func _ready():
 	grab_area = $GrabArea;
 	
 	
-func _process(delta):
+func _process(_dt):
 	if (controller._button_just_pressed(grab_button)):
 		for b in grab_area.get_overlapping_bodies():
 			is_grabbing = true;

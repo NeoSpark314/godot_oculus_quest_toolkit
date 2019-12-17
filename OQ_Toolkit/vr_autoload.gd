@@ -4,6 +4,11 @@ const UI_PIXELS_TO_METER = 1.0 / 1024; # defines the (auto) size of UI elements 
 
 var inVR = false;
 
+# we use this to be position indepented of the OQ_Toolkit directory
+# so make sure to always use this if instancing nodes/features via code
+onready var oq_base_dir = self.get_script().get_path().get_base_dir();
+
+
 ###############################################################################
 # VR logging systems
 ###############################################################################
@@ -13,7 +18,7 @@ var _log_buffer_index = -1;
 var _log_buffer_count = 0;
 
 func _init_vr_log():
-	for i in range(1024):
+	for _i in range(1024):
 		_log_buffer.append([0, "", 0]);
 		
 func _append_to_log(type, message):
@@ -52,13 +57,12 @@ func _reorder_dbg_labels():
 		labels.translation = Vector3(0.1, 0.1 - offset, -0.75);
 		offset += 0.08;
 
-
 # this funciton attaches a UI label to the camera to show debug information
 func show_dbg_info(key, value):
 	if (!_dbg_labels.has(key)):
 		# we could not preload the scene as it depends on the vr. singleton which
 		# somehow prevented parsing...
-		if (_label_scene == null): _label_scene = load("res://OQ_Toolkit/OQ_UI2D/OQ_UI2DLabel.tscn");
+		if (_label_scene == null): _label_scene = load(oq_base_dir + "/OQ_UI2D/OQ_UI2DLabel.tscn");
 		var l = _label_scene.instance();
 		_dbg_labels[key] = l;
 		vrCamera.add_child(l);

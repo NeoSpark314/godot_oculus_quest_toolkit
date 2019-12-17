@@ -43,7 +43,7 @@ func set_text(t):
 	ui_container.set_size(res);
 	ui_viewport.set_size(res);
 	
-	var aspect = res.x / res.y;
+	#var aspect = res.x / res.y;
 	
 	ui_mesh.size.x = size_scale * res.x * vr.UI_PIXELS_TO_METER;
 	ui_mesh.size.y = size_scale * res.y * vr.UI_PIXELS_TO_METER;

@@ -89,7 +89,7 @@ func start_playback():
 #		_potential_simulator_node = null; # inactive so no need to remember
 		
 		
-func _process(dt):
+func _process(_dt):
 	if (!active): return;
 	
 	if (start_rec_via_key && !_playback_active):
@@ -306,7 +306,7 @@ func _play_back():
 	vr._sim_angular_acceleration[2] = _get_vec3_or_0("right_controller_angular_acceleration");
 
 	
-	_playback_frame = (_playback_frame + 1) % (_r.head_position.size()/3);
+	_playback_frame = (_playback_frame + 1) % _r.num_frames;
 	
 	if (!loop_playback && _playback_frame == 0): stop_playback();
 	
@@ -354,6 +354,7 @@ func load_and_play_recording(recording_file_name):
 		err = file.open("user://" + recording_file_name, file.READ);
 	if (err == OK):
 		_r = JSON.parse(file.get_as_text()).result;
+		_r.num_frames = int(_r.num_frames);
 		var num_frames = _r.num_frames;
 			
 		vr.log_info("Loaded a recording with " + str(num_frames) + " frames");

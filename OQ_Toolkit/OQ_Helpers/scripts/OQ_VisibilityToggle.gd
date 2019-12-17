@@ -14,7 +14,7 @@ func set_visibility_and_process(v):
 	visible = v;
 
 
-func _process(dt):
+func _process(_dt):
 	if (vr.button_just_pressed(toggle_button)):
 		if (!cycle_through_children):
 			set_visibility_and_process(!visible);

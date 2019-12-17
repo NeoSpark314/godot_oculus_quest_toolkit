@@ -8,15 +8,16 @@ func _enter_tree():
 	if (!vr):
 		vr.log_error("in OQ_ARVROrigin._enter_tree(): no vr singleton");
 		return;
-	if (vr.vrOrigin):
+	if (vr.vrOrigin != null):
 		vr.log_warning("in OQ_ARVROrigin._enter_tree(): origin already set; overwrting it");
 	vr.vrOrigin = self;
+
 
 func _exit_tree():
 	if (!vr):
 		vr.log_error("in OQ_ARVROrigin._exit_tree(): no vr singleton");
 		return;
-	if (vr.vrOrigin != self):
+	if (vr.vrOrigin != null && vr.vrOrigin != self): # not sure why it can be null here on exit...
 		vr.log_error("in OQ_ARVROrigin._exit_tree(): different vrOrigin");
 		return;
 	vr.vrOrigin = null;

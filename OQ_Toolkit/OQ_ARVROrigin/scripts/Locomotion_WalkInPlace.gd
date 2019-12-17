@@ -68,7 +68,7 @@ func _get_viewdir_corrected_height(h, viewdir_y):
 func _detect_step():
 	var min_value = _get_buffered_height(0);
 	var average = min_value;
-	var max_diff = 0.0;
+	#var max_diff = 0.0;
 		
 	var min_val_pos = 0;
 	for i in range(1, _height_ringbuffer_size):

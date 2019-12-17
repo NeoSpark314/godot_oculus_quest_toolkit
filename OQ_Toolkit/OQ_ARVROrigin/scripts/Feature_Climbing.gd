@@ -25,7 +25,7 @@ func start_grab():
 	vr.log_info(str("Start Grab at ", active_grab.grab_position));
 
 
-func _process(dt):
+func _process(_dt):
 	if (!active): return;
 
 	if (grab_left.is_just_grabbing):

@@ -28,7 +28,7 @@ func update_log():
 	var sb = scroll.get_v_scrollbar();
 	sb.value = sb.max_value; # autoscroll to the last line of the log buffer
 
-func _process(dt):
+func _process(_dt):
 	if (vr._log_buffer_index != last_log_pos):
 		update_log();
 		last_log_pos = vr._log_buffer_index;

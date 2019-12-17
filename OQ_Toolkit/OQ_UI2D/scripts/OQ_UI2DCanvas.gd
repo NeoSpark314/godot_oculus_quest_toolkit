@@ -50,7 +50,7 @@ func _ready():
 	ui_collisionshape = $UIArea/UICollisionShape
 
 
-func _process(dt):
+func _process(_dt):
 	if !Engine.editor_hint: # not in edtior
 		# if we are invisible we need to disable the collision shape to avoid interaction with the UIRayCast
 		if (!is_visible_in_tree()): 
