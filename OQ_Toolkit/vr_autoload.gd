@@ -78,6 +78,12 @@ func remove_dbg_info(key):
 func get_current_player_height():
 	return vrCamera.global_transform.origin.y - vrOrigin.global_transform.origin.y;
 
+###############################################################################
+# Some generic useful helper functions
+###############################################################################
+
+func randomArrayElement(rng, array):
+	return array[rng.randi_range(0, array.size()-1)];
 
 ###############################################################################
 # Controller Handling
@@ -566,31 +572,34 @@ func _process(dt):
 func initialize():
 	_init_vr_log();
 	
-	var interface_count = ARVRServer.get_interface_count()
-	log_info("Initializing VR:")
-	log_info("  Interfaces count: %d" % interface_count)
+	log_info("Initializing VR");
+	log_info("  Available Interfaces are %s: " % str(ARVRServer.get_interfaces()));
 	
 	var arvr_ovr_mobile_interface = ARVRServer.find_interface("OVRMobile")
 	var arvr_open_vr_interface = ARVRServer.find_interface("OpenVR")
 	
-	if arvr_ovr_mobile_interface and arvr_ovr_mobile_interface.initialize():
-		get_viewport().arvr = true
-		Engine.target_fps = 72 # TODO: only true for Oculus Quest; query the info here
-		inVR = true;
-		_initialize_OVR_API();
-		# this will initialize the default
-		_refresh_settings();
-		log_info("  Loaded OVRMobile Interface.")
-		# TODO: set physics FPS here too instead of in the project settings
-		return true;
-	elif arvr_open_vr_interface and arvr_open_vr_interface.initialize():
-		get_viewport().arvr = true
-		Engine.target_fps = 90 # TODO: this is headset dependent => figure out how to get this info at runtime
-		OS.vsync_enabled = false
-		inVR = true;
-		log_info("  Loaded OpenVR Interface.")
+	if arvr_ovr_mobile_interface:
+		log_info("  Found OVRMobile Interface.");
+		if arvr_ovr_mobile_interface.initialize():
+			get_viewport().arvr = true;
+			Engine.target_fps = 72; # TODO: only true for Oculus Quest; query the info here
+			inVR = true;
+			_initialize_OVR_API();
+			# this will initialize the default
+			_refresh_settings();
+			log_info("  Success initializing OVRMobile Interface.");
+			# TODO: set physics FPS here too instead of in the project settings
+			return true;
+	elif arvr_open_vr_interface:
+		log_info("  Found OpenVR Interface.");
+		if arvr_open_vr_interface.initialize():
+			get_viewport().arvr = true;
+			Engine.target_fps = 90 # TODO: this is headset dependent => figure out how to get this info at runtime
+			OS.vsync_enabled = false;
+			inVR = true;
+			log_info("  Success initializing OpenVR Interface.");
 	else:
 		inVR = false;
-		log_error("Failed to enable OVRMobile VR Interface")
+		log_warning("No compatible ARVR Interface could be found.");
 		return false;
 
