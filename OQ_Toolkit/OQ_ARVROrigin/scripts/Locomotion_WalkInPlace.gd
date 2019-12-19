@@ -19,18 +19,28 @@ extends Spatial
 export var active = true;
 export var active_in_desktop = false; # turn this on if you work for example with the VRRecorder feature
 
-const _height_ringbuffer_size = 5; # 5 seems fine in most of the cases so far; but maybe 7 could also work
+const _height_ringbuffer_size = 15; # full ring buffer; lower latency can be achieved by accessing only a subset
 var _height_ringbuffer_pos = 0;
 var _height_ringbuffer = Array()
+
+const _num_steps_for_step_estimate = 5;
+const _num_steps_for_height_estimate = 15; 
+
+
 #const _step_local_detect_threshold = 0.003; # local difference
 const _step_height_min_detect_threshold = 0.02; # This might need some tweaking now to avoid missed steps
 const _step_height_max_detect_threshold = 0.1; # This might need some tweaking now to avoid missed steps
 
-const _variance_height_detect_threshold = 0.0005;
+const _variance_height_detect_threshold = 0.001;
+
+var _last_step_time_s = 0.0; # time elapsed after the last step was detected
+const _fastest_step_s = 10.0/72.0; # faster then this will not detect a new step
+const _slowest_step_s = 30.0/72.0; # slower than this will not detect a high point step
 
 var _current_height_estimate = 0.0;
 
 var step_just_detected = false;
+var step_high_just_detected = false;
 
 
 func _ready():
@@ -50,10 +60,12 @@ func _store_height_in_buffer(y):
 	_height_ringbuffer_pos = (_height_ringbuffer_pos + 1) % _height_ringbuffer_size;
  
 func _get_buffered_height(i):
-	return _height_ringbuffer[(_height_ringbuffer_pos + i) % _height_ringbuffer_size];
+	return _height_ringbuffer[(_height_ringbuffer_pos - i + _height_ringbuffer_size) % _height_ringbuffer_size];
 
-
-const Cup = -0.06;
+# theses constansts were manually tweaked inside the jupyter notebook
+# they reflect the correction needed for the quest on my head; more test data would be needed
+# how well they fit to other peoples necks and movement
+const Cup = -0.06;    
 const Cdown = -0.177;
 
 # this is required to adjust for the different headset height based on if the user is looking up, down or straight
@@ -64,47 +76,78 @@ func _get_viewdir_corrected_height(h, viewdir_y):
 		return h + Cdown * viewdir_y;
 
 
+enum {
+	NO_STEP,
+	DOWN_STEP,
+	HIGH_STEP,
+}
 
-func _detect_step():
+
+var _time_since_last_step = 0.0;
+
+func _detect_step(dt):
 	var min_value = _get_buffered_height(0);
+	var max_value = min_value;
 	var average = min_value;
-	#var max_diff = 0.0;
-		
+	
+	_time_since_last_step += dt;
+
+
+	# find min and max for step detection
 	var min_val_pos = 0;
-	for i in range(1, _height_ringbuffer_size):
+	var max_val_pos = 0;
+	for i in range(1, _num_steps_for_step_estimate):
 		var val = _get_buffered_height(i);
-		average += val;
 		if (val < min_value):
 			min_value = val;
 			min_val_pos = i;
+		if (val > max_value):
+			max_value = val;
+			max_val_pos = i;
 
-	average = average / _height_ringbuffer_size;
-	
+	# compute average and variance for current height estimation
+	for i in range(1, _num_steps_for_height_estimate):
+		var val = _get_buffered_height(i);
+		average += val;
+	average = average / _num_steps_for_height_estimate;
 	var variance = 0.0;
-	for i in range(0, _height_ringbuffer_size):
+	for i in range(0, _num_steps_for_height_estimate):
 		var val = _get_buffered_height(i);
 		variance = variance + abs(average - val);
-	variance = variance / _height_ringbuffer_size;
+	variance = variance / _num_steps_for_height_estimate;
 	
 	# if there is not much variation in the last _height_ringbuffer_size values we take the average as our current heigh
 	# assuming that we are not in a step process then
 	if (variance <= _variance_height_detect_threshold):
 		_current_height_estimate = average;
+		
+	
+	var dist_max = max_value - _current_height_estimate;
+	
+	if (max_val_pos == _num_steps_for_step_estimate / 2 
+		and dist_max > _step_height_min_detect_threshold
+		and dist_max < _step_height_max_detect_threshold
+		and _time_since_last_step <= _slowest_step_s
+		#and (_get_buffered_height(0) - min_value) > _step_local_detect_threshold # this can avoid some local mis predicitons
+		): 
+		return HIGH_STEP;
 	
 	# this is now the actual step detection based on that the center value of the ring buffer is the actual minimum (the turning point)
 	# and also the defined thresholds to minimize false detections as much as possible
-	var dist = _current_height_estimate - min_value;
-	if (min_val_pos == _height_ringbuffer_size / 2 
-		and dist > _step_height_min_detect_threshold
-		and dist < _step_height_max_detect_threshold
+	var dist_min = _current_height_estimate - min_value;
+	if (min_val_pos == _num_steps_for_step_estimate / 2 
+		and dist_min > _step_height_min_detect_threshold
+		and dist_min < _step_height_max_detect_threshold
+		and _time_since_last_step >= _fastest_step_s
 		#and (_get_buffered_height(0) - min_value) > _step_local_detect_threshold # this can avoid some local mis predicitons
 		): 
-		return 1;
-	else: 
-		return 0;
-		
+		_time_since_last_step = 0.0;
+		return DOWN_STEP;
 
-const step_duration = 40.0 / 72.0; # I had ~ 30 frames between steps...
+	return NO_STEP;
+
+
+const step_duration = 15.0 / 72.0; # I had ~ 30 frames between steps...
 var _step_time = 0.0;
 var step_speed = 1.4;
 
@@ -124,12 +167,18 @@ func _process(dt):
 	var corrected_height = _get_viewdir_corrected_height(headset_height, -vr.vrCamera.transform.basis.z.y);
 	_store_height_in_buffer(corrected_height);
 	
-	if (_detect_step() == 1):
+	var step = _detect_step(dt);
+	step_just_detected = false;
+	step_high_just_detected = false;
+	
+	if (step == DOWN_STEP):
 		_step_time = step_duration;
 		step_just_detected = true;
+	elif (step == HIGH_STEP):
+		_step_time = step_duration;
+		step_high_just_detected = true;
 	else:
 		_step_time -= dt;
-		step_just_detected = false;
 		
 	if (_step_time > 0.0):
 		_move(dt);
