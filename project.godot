@@ -8,9 +8,14 @@
 
 config_version=4
 
-_global_script_classes=[  ]
+_global_script_classes=[ {
+"base": "Spatial",
+"class": "ButtonPressable",
+"language": "GDScript",
+"path": "res://OQ_Toolkit/OQ_Buttons/scripts/OQ_ButtonPressable.gd"
+} ]
 _global_script_class_icons={
-
+"ButtonPressable": ""
 }
 
 [application]
@@ -103,6 +108,6 @@ quality/shading/force_vertex_shading.mobile=false
 quality/shading/force_lambert_over_burley=true
 quality/shading/force_blinn_over_ggx.mobile=false
 environment/default_clear_color=Color( 0, 0, 0, 1 )
-quality/filters/msaa=6
+quality/filters/msaa=2
 quality/depth/hdr=false
 environment/default_environment="res://default_env.tres"
