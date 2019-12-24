@@ -1,3 +1,6 @@
+# Note: this is not needed on oculus quest as there we can query
+# the controller velocity directly from the API which is exposed via
+# vr.get_controller_linear_velocity(controller_id)
 extends Spatial
 
 var controller_velocity = Vector3(0, 0, 0)

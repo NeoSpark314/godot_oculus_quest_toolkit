@@ -6,6 +6,7 @@ export(vr.CONTROLLER_BUTTON) var ui_raycast_visible_button := vr.CONTROLLER_BUTT
 export(vr.CONTROLLER_BUTTON) var ui_raycast_click_button := vr.CONTROLLER_BUTTON.INDEX_TRIGGER;
 
 var controller : ARVRController = null;
+onready var ui_position : Spatial = $RayCastPosition;
 onready var ui_raycast : RayCast = $RayCastPosition/RayCast;
 onready var ui_raycast_mesh : MeshInstance = $RayCastPosition/RayCastMesh;
 onready var ui_raycast_hitmarker : MeshInstance = $RayCastPosition/RayCastHitMarker;
@@ -13,6 +14,14 @@ onready var ui_raycast_hitmarker : MeshInstance = $RayCastPosition/RayCastHitMar
 
 func _update_raycasts():
 	ui_raycast_hitmarker.visible = false;
+	
+	# woraround for now until there is a more standardized way to know the controller
+	# orientation
+	if (controller.is_hand):
+		ui_position.transform.basis = Basis(Vector3(deg2rad(-90),0,0));
+	else:
+		ui_position.transform.basis = Basis();
+		
 	
 	# show only when trigger is touched
 	if (ui_raycast_visible_button == vr.CONTROLLER_BUTTON.None ||

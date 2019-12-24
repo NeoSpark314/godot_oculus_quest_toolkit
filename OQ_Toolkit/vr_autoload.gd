@@ -226,6 +226,7 @@ var ovrInitConfig = null;
 var ovrPerfromance = null;
 var ovrTrackingTransform = null;
 var ovrUtilities = null;
+var ovrHandTracking = null;
 var ovrVrApiProxy = null;
 # for the types we need to assume it is always available
 var ovrVrApiTypes = load("res://addons/godot_ovrmobile/OvrVrApiTypes.gd").new();
@@ -241,6 +242,7 @@ func _initialize_OVR_API():
 	var OvrPerformance = load("res://addons/godot_ovrmobile/OvrPerformance.gdns");
 	var OvrTrackingTransform = load("res://addons/godot_ovrmobile/OvrTrackingTransform.gdns");
 	var OvrUtilities = load("res://addons/godot_ovrmobile/OvrUtilities.gdns");
+	var OvrHandTracking = load("res://addons/godot_ovrmobile/OvrHandTracking.gdns");
 	var OvrVrApiProxy = load("res://addons/godot_ovrmobile/OvrVrApiProxy.gdns");
 	
 	if (OvrDisplayRefreshRate): ovrDisplayRefreshRate = OvrDisplayRefreshRate.new();
@@ -255,6 +257,8 @@ func _initialize_OVR_API():
 	else: log_error("Failed to load OvrTrackingTransform.gdns");
 	if (OvrUtilities): ovrUtilities = OvrUtilities.new();
 	else: log_error("Failed to load OvrUtilities.gdns");
+	if (OvrHandTracking): ovrHandTracking = OvrHandTracking.new();
+	else: log_error("Failed to load OvrHandTracking.gdns");
 	if (OvrVrApiProxy): ovrVrApiProxy = OvrVrApiProxy.new();
 	else: log_error("Failed to load OvrVrApiProxy.gdns");
 	

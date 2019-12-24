@@ -176,6 +176,7 @@ __meta__ = {
 
 [node name="Feature_UIRayCast" parent="OQ_ARVROrigin/OQ_RightController" instance=ExtResource( 12 )]
 ui_raycast_visible_button = -1
+ui_raycast_click_button = 7
 
 [node name="Locomotion_Stick" parent="OQ_ARVROrigin" instance=ExtResource( 11 )]
 enable_vignette = false

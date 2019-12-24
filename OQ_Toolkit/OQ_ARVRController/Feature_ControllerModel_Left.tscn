@@ -2,8 +2,6 @@
 
 [ext_resource path="res://OQ_Toolkit/OQ_ARVRController/models3d/OculusQuestTouchController_Left.gltf" type="PackedScene" id=1]
 
-
-
 [node name="Feature_ControllerModel_Left" type="Spatial"]
 
 [node name="OculusQuestTouchController_Left" parent="." instance=ExtResource( 1 )]

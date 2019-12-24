@@ -13,7 +13,8 @@ var room_list = [
 var current_room = 0;
 
 func _process(dt):
-	if (vr.button_just_released(vr.BUTTON.ENTER)):
+	if (vr.button_just_released(vr.BUTTON.ENTER) ||
+		(vr.leftController && vr.leftController.is_hand && vr.button_just_released(vr.BUTTON.X))):
 		vr.switch_scene(room_list[0]);
 		
 func _ready():
@@ -21,7 +22,8 @@ func _ready():
 	
 	vr.scene_switch_root = self;
 	
-	vr.switch_scene("res://demo_scenes/experiments/debug/DebugGrab.tscn"); return;
+	#vr.switch_scene("res://demo_scenes/experiments/debug/DebugGrab.tscn"); return;
+	#vr.switch_scene("res://demo_scenes/experiments/debug/DebugHand.tscn"); return;
 	#vr.switch_scene("res://demo_scenes/experiments/debug/DebugFalling.tscn"); return;
 	#vr.switch_scene("res://demo_scenes/experiments/debug/DebugVignette.tscn"); return;
 	#vr.switch_scene("res://demo_scenes/experiments/debug/DebugRecording.tscn"); return;

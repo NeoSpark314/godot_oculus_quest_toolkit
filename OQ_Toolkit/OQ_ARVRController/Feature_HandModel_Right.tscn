@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://OQ_Toolkit/OQ_ARVRController/models3d/OculusQuestHand_Right.gltf" type="PackedScene" id=1]
+[ext_resource path="res://OQ_Toolkit/OQ_ARVRController/scripts/Feature_HandModel.gd" type="Script" id=2]
+
+[node name="Feature_HandModel_Right" type="Spatial"]
+script = ExtResource( 2 )
+
+[node name="OculusQuestHand_Right" parent="." instance=ExtResource( 1 )]
