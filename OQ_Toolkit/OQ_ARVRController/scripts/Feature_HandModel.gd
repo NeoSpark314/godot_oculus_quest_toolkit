@@ -1,3 +1,6 @@
+# Feature_HandModel_[Left|Right]
+# This script contains the logic to update the hand model pose from the VrApi
+# and also contains some helper functions
 extends Spatial
 
 var hand : ARVRController = null;
@@ -7,9 +10,61 @@ var skel : Skeleton = null;
 # this array is used to get the orientations from the sdk each frame (an array of Quat)
 var _vrapi_bone_orientations = [];
 
-# remap the bone ids from the hand model to the bone orientations we get from the vrapi
-const _hand_bone_mappings = [0, 23,  1, 2, 3, 4,  6, 7, 8,  10, 11, 12,  14, 15, 16, 18, 19, 20, 21];
+enum ovrHandFingers {
+	Thumb		= 0,
+	Index		= 1,
+	Middle		= 2,
+	Ring		= 3,
+	Pinky		= 4,
+	Max,
+	EnumSize = 0x7fffffff
+};
 
+enum ovrHandBone {
+	Invalid						= -1,
+	WristRoot 					= 0,	# root frame of the hand, where the wrist is located
+	ForearmStub					= 1,	# frame for user's forearm
+	Thumb0						= 2,	# thumb trapezium bone
+	Thumb1						= 3,	# thumb metacarpal bone
+	Thumb2						= 4,	# thumb proximal phalange bone
+	Thumb3						= 5,	# thumb distal phalange bone
+	Index1						= 6,	# index proximal phalange bone
+	Index2						= 7,	# index intermediate phalange bone
+	Index3						= 8,	# index distal phalange bone
+	Middle1						= 9,	# middle proximal phalange bone
+	Middle2						= 10,	# middle intermediate phalange bone
+	Middle3						= 11,	# middle distal phalange bone
+	Ring1						= 12,	# ring proximal phalange bone
+	Ring2						= 13,	# ring intermediate phalange bone
+	Ring3						= 14,	# ring distal phalange bone
+	Pinky0						= 15,	# pinky metacarpal bone
+	Pinky1						= 16,	# pinky proximal phalange bone
+	Pinky2						= 17,	# pinky intermediate phalange bone
+	Pinky3						= 18,	# pinky distal phalange bone
+	MaxSkinnable				= 19,
+
+	# Bone tips are position only. They are not used for skinning but useful for hit-testing.
+	# NOTE: ThumbTip == MaxSkinnable since the extended tips need to be contiguous
+	ThumbTip					= 19 + 0,	# tip of the thumb
+	IndexTip					= 19 + 1,	# tip of the index finger
+	MiddleTip					= 19 + 2,	# tip of the middle finger
+	RingTip						= 19 + 3,	# tip of the ring finger
+	PinkyTip					= 19 + 4,	# tip of the pinky
+	Max 						= 19 + 5,
+	EnumSize 					= 0x7fff
+};
+
+const _ovrHandFingers_Bone1Start = [ovrHandBone.Thumb1, ovrHandBone.Index1, ovrHandBone.Middle1, ovrHandBone.Ring1,ovrHandBone.Pinky1];
+
+
+# we need to remap the bone ids from the hand model to the bone orientations we get from the vrapi and the inverse
+# This is only for the actual bones and skips the tips (vrapi 19-23) as they do not need to be updated I think
+const _vrapi2hand_bone_map = [0, 23,  1, 2, 3, 4,  6, 7, 8,  10, 11, 12,  14, 15, 16, 18, 19, 20, 21];
+# inverse mapping to get from the godot hand bone ids to the vrapi bone ids
+const _hand2vrapi_bone_map = [0, 2, 3, 4, 5,19, 6, 7, 8, 20,  9, 10, 11, 21, 12, 13, 14, 22, 15, 16, 17, 18, 23, 1];
+
+# we need the inverse neutral pose to compute the estimates for gesture detection
+var _vrapi_inverse_neutral_pose = []; # this is filled when clearing the rest pose
 
 # This is a test pose for the left hand used only on desktop so the hand has a proper position
 const test_pose_left_ThumbsUp = [Quat(0, 0, 0, 1), Quat(0, 0, 0, 1), Quat(0.321311, 0.450518, -0.055395, 0.831098),
@@ -40,28 +95,112 @@ func _ready():
 	_clear_bone_rest(skel);
 	
 	# apply a start pose
-	for i in range(0, _hand_bone_mappings.size()):
-		skel.set_bone_pose(_hand_bone_mappings[i], Transform(test_pose_left_ThumbsUp[i]));
+	#for i in range(0, _vrapi2hand_bone_map.size()):
+	#	skel.set_bone_pose(_vrapi2hand_bone_map[i], Transform(test_pose_left_ThumbsUp[i]));
 
+
+func _get_bone_angle_diff(ovrHandBone_id):
+	var quat_diff = _vrapi_bone_orientations[ovrHandBone_id] * _vrapi_inverse_neutral_pose[ovrHandBone_id];
+	var a = acos(clamp(quat_diff.w, -1.0, 1.0));
+	return rad2deg(a);
+
+# For simple gesture detection we can just look at the state of the fingers
+# and distinguish between bent and straight
+enum SimpleFingerState {
+	Bent = 0,
+	Straight = 1,
+	Inbetween = 2,
+}
+
+# this is a very basic heuristic to detect if a finger is straight or not.
+# It is a bit unprecise on the thumb and pinky but overall is enough for very simple
+# gesture detection; it uses the accumulated angle of the 3 bones in each finger
+func get_finger_state_estimate(finger):
+	var angle = 0.0;
+	angle += _get_bone_angle_diff(_ovrHandFingers_Bone1Start[finger]+0);
+	angle += _get_bone_angle_diff(_ovrHandFingers_Bone1Start[finger]+1);
+	angle += _get_bone_angle_diff(_ovrHandFingers_Bone1Start[finger]+2);
+	
+	# !!TODO: thresholds need some finetuning here
+	if (finger == ovrHandFingers.Thumb):
+		if (angle <= 30): return SimpleFingerState.Straight;
+		if (angle >= 35): return SimpleFingerState.Bent; # very low threshold here...
+	elif (finger == ovrHandFingers.Pinky):
+		if (angle <= 40): return SimpleFingerState.Straight;
+		if (angle >= 60): return SimpleFingerState.Bent;
+	else:
+		if (angle <= 35): return SimpleFingerState.Straight;
+		if (angle >= 75): return SimpleFingerState.Bent;
+	return SimpleFingerState.Inbetween;
+
+# for now we put the gestures in a dicitonary and use deciaml values as key
+# this is a bit clunky and will change in the future with a more elegant solution I hope
+# (but it allows to add gestures at runtime by adding them to this dicitonary :-)
+var SimpleGestures = {
+	00000 : "Fist",
+	00001 : "One",
+	00011 : "Two",
+	00111 : "Three",
+	01111 : "Four",
+	11111 : "Five",
+	00010 : "Point",
+	00100 : "FYou",
+	00110 : "V",
+	10010 : "Rock",
+	10011 : "Spiderman",
+}
+
+# this will compute the finger state and check if the gesture is in the SimpleGestures
+# dictionary. If it is not found it returns the empty string
+func detect_simple_gesture():
+	var m = 1;
+	var gesture = 0;
+	for i in range(0, 5):
+		var finger_state = get_finger_state_estimate(i);
+		gesture += m * finger_state;
+		m *= 10; # ??? No idea what I'm thinking here to solve it this way... needs some less stupid solution in the future
+	
+	if SimpleGestures.has(int(gesture)):
+		return SimpleGestures[int(gesture)];
+
+	return "";
+
+
+func _debug_show_finger_estimate():
+	vr.show_dbg_info(name, "Thumb: %d, Index: %d, Middle: %d, Ring: %d, Pinky: %d" % [
+		get_finger_state_estimate(ovrHandFingers.Thumb),
+		get_finger_state_estimate(ovrHandFingers.Index),
+		get_finger_state_estimate(ovrHandFingers.Middle),
+		get_finger_state_estimate(ovrHandFingers.Ring),
+		get_finger_state_estimate(ovrHandFingers.Pinky),
+		]);
 
 func _process(_dt):
 	if (vr.inVR):
 		_update_hand_model(hand, model, skel);
-
-
 
 # the rotations we get from the OVR sdk are absolute and not relative
 # to the rest pose we have in the model; so we clear them here to be
 # able to use set pose
 # This is more like a workaround then a clean solution but allows to use 
 # the hand model from the sample without major modifications
-func _clear_bone_rest(skel):
+func _clear_bone_rest(skel : Skeleton):
+	_vrapi_inverse_neutral_pose.resize(skel.get_bone_count());
 	for i in range(0, skel.get_bone_count()):
 		var bone_rest = skel.get_bone_rest(i);
-		bone_rest.basis = Basis();
-		skel.set_bone_rest(i, bone_rest);
+		
+		skel.set_bone_pose(i, Transform(bone_rest.basis)); # use the loaded rest as start pose
+		
+		_vrapi_inverse_neutral_pose[_hand2vrapi_bone_map[i]] = bone_rest.basis.get_rotation_quat().inverse();
+		
+		# we fill this array here also with the rest pose so on Desktop we still have a valid array
+		_vrapi_bone_orientations[_hand2vrapi_bone_map[i]]  = bone_rest.basis.get_rotation_quat();
+		
+		bone_rest.basis = Basis(); # clear the rotation of the rest pose
+		skel.set_bone_rest(i, bone_rest); # and set this as the rest pose for the skeleton
 
 
+# Query the VrApi hand pose state and update the hand model bone pose
 func _update_hand_model(hand: ARVRController, model : Spatial, skel: Skeleton):
 	# we check to level visibility here for the node to not update
 	# when the application (or the OQ_XXXController) set it invisible
@@ -73,8 +212,8 @@ func _update_hand_model(hand: ARVRController, model : Spatial, skel: Skeleton):
 		var confidence = vr.ovrHandTracking.get_hand_pose(hand.controller_id, _vrapi_bone_orientations);
 		if (confidence > 0.0):
 			model.visible = true;
-			for i in range(0, _hand_bone_mappings.size()):
-				skel.set_bone_pose(_hand_bone_mappings[i], Transform(_vrapi_bone_orientations[i]));
+			for i in range(0, _vrapi2hand_bone_map.size()):
+				skel.set_bone_pose(_vrapi2hand_bone_map[i], Transform(_vrapi_bone_orientations[i]));
 		else:
 			model.visible = false;
 		return true;

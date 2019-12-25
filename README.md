@@ -5,6 +5,7 @@ If you have questions or run into problems please open an issue here or contact 
 
 ## Features (so far... early alpha)
 - Touch controller button handling and controller models
+- Hand Tracking support with included hand models and basic gesture detection
 - VR Simulator and VR Recorder (for easier testing on desktop)
 - Joystick locomotion and rotation (smooth and step)
 - Walk in Place detection
@@ -15,6 +16,7 @@ If you have questions or run into problems please open an issue here or contact 
 
 [![Feature Images](doc/images/feature_overview.jpg?raw=true)](https://youtu.be/-jzkHOum1kU)
 ![Medieval City Test Scene](doc/images/medieval_city_screenshot.jpg?raw=true)
+![Simple Hand Gestures](doc/images/hand_gestures.jpg?raw=true)
 
 A video of some of the early alpha features can be seen [on youtube here](https://youtu.be/-jzkHOum1kU).
 
@@ -48,5 +50,5 @@ There are a lot of potential extensions and missing features. Some of the things
 
 
 # Licensing
-The Godot Oculus Quest Toolkit and the demo scenes in this repository are licensed under an MIT License. The Oculus Touch controller 3d models and the Oculus Mobile SDK contained in this repository are copyright Oculus, see http://oculus.com for license information.
+The Godot Oculus Quest Toolkit and the demo scenes in this repository are licensed under an MIT License. The Oculus Touch controller 3d models the hand model and the Oculus Mobile SDK contained in this repository are copyright Oculus, see http://oculus.com for license information.
 The Roboto font used is licensed under an Apache License and available at https://github.com/google/roboto.

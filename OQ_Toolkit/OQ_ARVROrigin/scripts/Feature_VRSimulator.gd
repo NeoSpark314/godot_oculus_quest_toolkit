@@ -138,18 +138,18 @@ func _update_keyboard(dt):
 	var stick_x = 0.0
 	var stick_y = 0.0
 	
-	if (Input.is_key_pressed(KEY_KP_4) || Input.is_key_pressed(KEY_KP_4)): stick_x = -1.0;
-	if (Input.is_key_pressed(KEY_KP_6)): stick_x = 1.0;
-	if (Input.is_key_pressed(KEY_KP_8)): stick_y = 1.0;
-	if (Input.is_key_pressed(KEY_KP_2)): stick_y = -1.0;
+	if (Input.is_key_pressed(KEY_KP_4) || Input.is_key_pressed(KEY_4)): stick_x = -1.0;
+	if (Input.is_key_pressed(KEY_KP_6) || Input.is_key_pressed(KEY_6)): stick_x = 1.0;
+	if (Input.is_key_pressed(KEY_KP_8) || Input.is_key_pressed(KEY_8)): stick_y = 1.0;
+	if (Input.is_key_pressed(KEY_KP_2) || Input.is_key_pressed(KEY_2)): stick_y = -1.0;
 	
 	#var button_grip_trigger = 1 if (Input.is_mouse_button_pressed(1)) else 0;
 	var button_grip_trigger = 1 if (Input.is_key_pressed(KEY_E)) else 0;
 	var button_index_trigger = 1 if (Input.is_key_pressed(KEY_Q)) else 0;
-	var button_YB = 1 if (Input.is_key_pressed(KEY_KP_7)) else 0;
-	var button_XA = 1 if (Input.is_key_pressed(KEY_KP_1)) else 0;
+	var button_YB = 1 if (Input.is_key_pressed(KEY_KP_7) || Input.is_key_pressed(KEY_7)) else 0;
+	var button_XA = 1 if (Input.is_key_pressed(KEY_KP_1) || Input.is_key_pressed(KEY_1)) else 0;
 	
-	var button_enter =  1 if (Input.is_key_pressed(KEY_KP_0)) else 0;
+	var button_enter =  1 if (Input.is_key_pressed(KEY_KP_0) || Input.is_key_pressed(KEY_0)) else 0;
 	
 	# allow button enter always as it is only on left controller
 	if (vr.leftController):

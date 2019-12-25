@@ -510,7 +510,7 @@ func _perform_switch_scene(scene_path):
 	if (next_scene_resource):
 		_active_scene_path = scene_path;
 		var next_scene = next_scene_resource.instance();
-		log_info("    switiching to scene '%s'" % scene_path)
+		log_info("    switching to scene '%s'" % scene_path)
 		scene_switch_root.add_child(next_scene);
 		if (next_scene.has_method("scene_enter")): next_scene.scene_enter();
 	else:

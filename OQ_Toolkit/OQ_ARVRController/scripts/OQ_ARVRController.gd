@@ -81,6 +81,13 @@ var _last_controller_name = null;
 var _controller_model : Spatial = null;
 var _hand_model : Spatial = null;
 
+func get_hand_model():
+	if (!is_hand):
+		vr.log_warning("get_hand_model called on " + name + " but no hand tracking enabled.");
+	if (_hand_model == null):
+		vr.log_warning("get_hand_model called but no hand model found.");
+	return _hand_model;
+	
 func _auto_update_controller_model():
 	var controller_name = get_controller_name();
 	

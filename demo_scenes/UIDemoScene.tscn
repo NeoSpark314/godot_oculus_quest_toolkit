@@ -411,20 +411,20 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="MeshInstance" type="MeshInstance" parent="."]
+[node name="Ground" type="MeshInstance" parent="."]
 mesh = SubResource( 1 )
 material/0 = SubResource( 4 )
 
 [node name="InfoLabel" parent="." instance=ExtResource( 3 )]
-transform = Transform( 2, 0, 4.13264e-07, 0, 2, 0, -8.26529e-07, 0, 1, -0.408255, 2.03673, -1.48423 )
+transform = Transform( 1.64014, 0, 0.572261, 0, 2, 0, -1.14452, 0, 0.820072, -0.98408, 2.03673, -1.58457 )
 text = "Blub"
 
 [node name="OQ_UI2DCanvas_LevelSelector" parent="." instance=ExtResource( 10 )]
-transform = Transform( 1.67744, -0.544566, 0.471608, 0, 1.73205, 0.5, -1.08913, -0.838718, 0.726351, -1.0728, 1.17961, -1.37952 )
+transform = Transform( 1.67744, -0.544566, 0.471608, 0, 1.73205, 0.5, -1.08913, -0.838718, 0.726351, -0.915071, 1.17961, -1.52167 )
 
 [node name="ReferenceRect" type="ReferenceRect" parent="OQ_UI2DCanvas_LevelSelector"]
 margin_right = 544.0
-margin_bottom = 128.0
+margin_bottom = 192.0
 theme = ExtResource( 5 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -446,6 +446,16 @@ margin_top = 64.0
 margin_right = 160.0
 margin_bottom = 112.0
 text = "Physics"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HandTracking" type="Button" parent="OQ_UI2DCanvas_LevelSelector/ReferenceRect"]
+margin_left = 16.0
+margin_top = 128.0
+margin_right = 224.0
+margin_bottom = 176.0
+text = "HandTracking"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -480,5 +490,6 @@ transform = Transform( 3, 0, 0, 0, 3, 0, 0, 0, 1, 0.732496, 1.73966, -1.24014 )
 [connection signal="value_changed" from="OQ_UI2DCanvas_MovementOptions/Control/ClickTurnAngleSpinBox" to="." method="_on_ClickTurnAngleSpinBox_value_changed"]
 [connection signal="item_selected" from="OQ_UI2DCanvas_MovementOptions/Control/RotationOptionButton" to="." method="_on_RotationOptionButton_item_selected"]
 [connection signal="pressed" from="OQ_UI2DCanvas_LevelSelector/ReferenceRect/ButtonPhysics" to="." method="_on_ButtonPhysics_pressed"]
+[connection signal="pressed" from="OQ_UI2DCanvas_LevelSelector/ReferenceRect/HandTracking" to="." method="_on_HandTracking_pressed"]
 [connection signal="pressed" from="OQ_UI2DCanvas_LevelSelector/ReferenceRect/ButtonClimbing" to="." method="_on_ButtonClimbing_pressed"]
 [connection signal="pressed" from="OQ_UI2DCanvas_LevelSelector/ReferenceRect/ButtonWalkInPlace" to="." method="_on_ButtonWalkInPlace_pressed"]

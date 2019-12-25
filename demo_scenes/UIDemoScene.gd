@@ -3,14 +3,15 @@ extends Spatial
 onready var locomotion_stick = $OQ_ARVROrigin/Locomotion_Stick;
 
 # Some introductory text shown on an info label
-var info_text = """Info Label:
+var info_text = """Welcome to the Godot Oculus Quest Toolkit Demo!
 
 This is the UI test room.
-Press Y to toggle the hand UI test.
-Behind you is a big console window.
-The Movement ui changes your movement parameter
+ - Press A to select menu items.
+ - Press Y to toggle the hand UI test.
+ - Behind you is a big console window.
 
-You can press the menu button to return here.
+You can press the menu button (or left pinch middle)
+to return here.
 """
 
 
@@ -62,3 +63,7 @@ func _on_ButtonClimbing_pressed():
 
 func _on_ButtonWalkInPlace_pressed():
 	vr.switch_scene("res://demo_scenes/WalkInPlaceDemoScene.tscn");
+
+
+func _on_HandTracking_pressed():
+	vr.switch_scene("res://demo_scenes/HandTrackingDemoScene.tscn");
