@@ -7,8 +7,12 @@ var controller : ARVRController = null;
 # to check if it actually can be grabbed. All other objects are ignored
 export var check_parent_can_static_grab = false;
 
+signal oq_static_grab_started;
+signal oq_static_grab_ended;
+
 var is_grabbing = false;
 var is_just_grabbing = false;
+var grabbed_object = null;
 var grab_position = Vector3();
 var delta_position = Vector3();
 
@@ -23,24 +27,30 @@ func _ready():
 	
 func _process(_dt):
 	if (controller._button_just_pressed(grab_button)):
-		for b in grab_area.get_overlapping_bodies():
+		var overlapping_bodies = grab_area.get_overlapping_bodies();
+		for b in overlapping_bodies:
 			
 			if (check_parent_can_static_grab):
 				var p = b.get_parent();
 				if (p && p.has_method("oq_can_static_grab")):
-					if (!p.oq_can_static_grab(b, grab_area, controller)): continue;
+					if (!p.oq_can_static_grab(b, grab_area, controller, overlapping_bodies)): continue;
 				else:
 					continue;
 			
 			is_grabbing = true;
 			is_just_grabbing = true;
 			grab_position = controller.translation; # we need the local translation here as we will move the origin
+			grabbed_object = b;
+			emit_signal("oq_static_grab_started", grabbed_object, controller)
 			break;
 	else:
 		is_just_grabbing = false;
 	
 	if (!controller._button_pressed(grab_button)):
-		is_grabbing = false;
+		if (is_grabbing):
+			emit_signal("oq_static_grab_ended", grabbed_object, controller)
+			grabbed_object = null;
+			is_grabbing = false;
 	elif (is_grabbing):
 		delta_position = vr.vrOrigin.global_transform.basis.xform(controller.translation - grab_position);
 

@@ -7,6 +7,8 @@ var target_node = null;
 var delta_orientation = Basis();
 var delta_position = Vector3();
 
+var last_reported_collision_pos : Vector3 = Vector3(0,0,0);
+
 
 func grab_init(node):
 	target_node = node;
@@ -51,4 +53,6 @@ func _integrate_forces(state):
 	position_follow(state, get_global_transform().origin, target_position);
 	orientation_follow(state, get_global_transform().basis, target_basis);
 	
-
+	if (state.get_contact_count() > 0):
+		last_reported_collision_pos = state.get_contact_local_position(0);
+		#last_reported_collision_normal = state.get_contact_local_normal(0);

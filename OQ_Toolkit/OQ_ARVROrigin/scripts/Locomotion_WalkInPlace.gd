@@ -27,7 +27,7 @@ const _num_steps_for_step_estimate = 5;
 const _num_steps_for_height_estimate = 15; 
 
 
-#const _step_local_detect_threshold = 0.003; # local difference
+const _step_local_detect_threshold = 0.04; # local difference
 const _step_height_min_detect_threshold = 0.02; # This might need some tweaking now to avoid missed steps
 const _step_height_max_detect_threshold = 0.1; # This might need some tweaking now to avoid missed steps
 
@@ -130,6 +130,7 @@ func _detect_step(dt):
 		and _time_since_last_step <= _slowest_step_s
 		#and (_get_buffered_height(0) - min_value) > _step_local_detect_threshold # this can avoid some local mis predicitons
 		): 
+		print("high");
 		return HIGH_STEP;
 	
 	# this is now the actual step detection based on that the center value of the ring buffer is the actual minimum (the turning point)
@@ -139,15 +140,16 @@ func _detect_step(dt):
 		and dist_min > _step_height_min_detect_threshold
 		and dist_min < _step_height_max_detect_threshold
 		and _time_since_last_step >= _fastest_step_s
-		#and (_get_buffered_height(0) - min_value) > _step_local_detect_threshold # this can avoid some local mis predicitons
+		and (_get_buffered_height(0) - min_value) > _step_local_detect_threshold # this can avoid some local mis predicitons
 		): 
 		_time_since_last_step = 0.0;
+		print("down");
 		return DOWN_STEP;
 
 	return NO_STEP;
 
 
-const step_duration = 15.0 / 72.0; # I had ~ 30 frames between steps...
+const step_duration = 20.0 / 72.0; # I had ~ 30 frames between steps...
 var _step_time = 0.0;
 var step_speed = 1.4;
 

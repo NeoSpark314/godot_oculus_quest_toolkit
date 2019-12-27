@@ -12,7 +12,8 @@ export var active = true;
 export var auto_play_desktop = true;
 export var loop_playback = true;
 export(String, FILE) var playback_filename = "recording.oqrec";
-
+export var playback_start_frame = 0;
+export var playback_end_frame = -1;
 
 export var auto_record_device = false;
 export(String, FILE) var rec_filename = "recording";
@@ -41,6 +42,7 @@ var _playback_frame = 0;
 var _old_in_vr = false;
 
 var _num_recorded_frames = 0;
+
 
 var _recording_number = 0; # to count if we save multiple recordings from a single session
 
@@ -75,7 +77,7 @@ func stop_playback():
 	
 func start_playback():
 	_old_in_vr = vr.inVR;
-	_playback_frame = 0;
+	_playback_frame = playback_start_frame % _r.num_frames;
 	_playback_active = true;
 
 	# small check if there is an active VRsimulator as this will overwrite playback vars like buttons
@@ -308,7 +310,12 @@ func _play_back():
 	
 	_playback_frame = (_playback_frame + 1) % _r.num_frames;
 	
-	if (!loop_playback && _playback_frame == 0): stop_playback();
+	if (playback_end_frame > 0 && _playback_frame == playback_end_frame):
+		if (!loop_playback): stop_playback();
+		else: _playback_frame = playback_start_frame % _r.num_frames
+	elif (!loop_playback && _playback_frame == 0): stop_playback();
+	
+	
 	
 
 func stop_and_save_recording(filename = null):
