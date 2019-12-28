@@ -20,6 +20,8 @@ export var fall_without_hit : bool = false;
 
 export(CollisionType) var collision_type = CollisionType.FIXED_GROUND;
 
+var move_checker = null;
+
 
 var on_ground = true;
 
@@ -85,11 +87,17 @@ func _physics_process(dt):
 				on_ground = true;
 				max_fall_distance = 0.0;
 				if (force_move_up && (hit_dist < player_height - epsilon)):
+					var move = Vector3(0,0,0);
 					if (move_up_speed == 0.0):
-						vr.vrOrigin.translation.y += (player_height - hit_dist);
+						move.y = (player_height - hit_dist);
 					else:
-						vr.vrOrigin.translation.y += min(move_up_speed* dt, player_height - hit_dist);
-						
+						move.y += min(move_up_speed* dt, player_height - hit_dist);
+					
+					if (move_checker):
+						move = move_checker.oq_feature_falling_check_move_up(move);
+					
+					vr.vrOrigin.translation += move;
+					
 		else:
 			#vr.show_dbg_info("dbgFalling", "fallingNoHit: player_height = %f" % [player_height]);
 			pass;

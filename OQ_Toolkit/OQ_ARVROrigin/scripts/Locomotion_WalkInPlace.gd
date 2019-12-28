@@ -42,6 +42,9 @@ var _current_height_estimate = 0.0;
 var step_just_detected = false;
 var step_high_just_detected = false;
 
+# external object that can be set to check if walkinplace can actually move
+var move_checker = null;
+
 
 func _ready():
 	if (not get_parent() is ARVROrigin):
@@ -130,7 +133,7 @@ func _detect_step(dt):
 		and _time_since_last_step <= _slowest_step_s
 		#and (_get_buffered_height(0) - min_value) > _step_local_detect_threshold # this can avoid some local mis predicitons
 		): 
-		print("high");
+		#print("high");
 		return HIGH_STEP;
 	
 	# this is now the actual step detection based on that the center value of the ring buffer is the actual minimum (the turning point)
@@ -143,7 +146,7 @@ func _detect_step(dt):
 		and (_get_buffered_height(0) - min_value) > _step_local_detect_threshold # this can avoid some local mis predicitons
 		): 
 		_time_since_last_step = 0.0;
-		print("down");
+		#print("down");
 		return DOWN_STEP;
 
 	return NO_STEP;
@@ -158,7 +161,12 @@ func _move(dt):
 	var view_dir = -vr.vrCamera.global_transform.basis.z;
 	view_dir.y = 0.0;
 	view_dir = view_dir.normalized();
-	vr.vrOrigin.translation += view_dir * step_speed* dt;
+	
+	var actual_translation = view_dir * step_speed* dt;
+	if (move_checker):
+		actual_translation = move_checker.oq_walk_in_place_check_move(actual_translation);
+	
+	vr.vrOrigin.translation += actual_translation;
 
 
 func _process(dt):

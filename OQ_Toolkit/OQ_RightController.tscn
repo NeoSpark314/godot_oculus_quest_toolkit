@@ -6,3 +6,6 @@
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 1.5, -0.5 )
 controller_id = 2
 script = ExtResource( 1 )
+
+[node name="PalmMarker" type="Spatial" parent="."]
+transform = Transform( -1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )

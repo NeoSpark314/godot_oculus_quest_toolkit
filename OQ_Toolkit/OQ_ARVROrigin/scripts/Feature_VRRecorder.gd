@@ -373,5 +373,6 @@ func load_and_play_recording(recording_file_name):
 					vr.log_error("Error in recording: %s has wrong number of elements: %d" % [k, _r[k].size()]);
 				
 		start_playback();
+		file.close();
 	else:
 		vr.log_error("Failed to load_and_playback_recording " + recording_file_name + ": " + str(err));

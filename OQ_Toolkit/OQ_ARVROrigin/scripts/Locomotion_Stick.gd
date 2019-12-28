@@ -26,6 +26,7 @@ export var smooth_turn_speed = 90.0;
 export var click_turn_angle = 45.0; 
 export(vr.AXIS) var turn_left_right = vr.AXIS.RIGHT_JOYSTICK_X;
 
+var move_checker = null;
 
 func _ready():
 	if (not get_parent() is ARVROrigin):
@@ -57,8 +58,12 @@ func move(dt):
 
 	var move = Vector2(dx, dy).normalized() * move_speed;
 	
-	vr.vrOrigin.translation += view_dir * move.y * dt;
-	vr.vrOrigin.translation += strafe_dir * move.x * dt;
+	var actual_move = (view_dir * move.y + strafe_dir * move.x) * dt;
+	
+	if (move_checker):
+		actual_move = move_checker.oq_locomotion_stick_check_move(actual_move);
+
+	vr.vrOrigin.translation += actual_move;
 
 var last_click_rotate = false;
 

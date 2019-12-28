@@ -11,6 +11,9 @@ export var hand_pinch_to_button = true;
 
 var is_hand = false; # this will be updated in the autoload_model
 
+# this is a helper to get the orientation of the palm as it is mirrored for the right hand
+onready var palm_position = $PalmMarker; 
+
 # used for the vr simulation
 var _simulation_buttons_pressed       = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
 
