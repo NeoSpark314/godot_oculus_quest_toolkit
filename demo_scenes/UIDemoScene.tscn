@@ -179,6 +179,7 @@ ui_raycast_visible_button = -1
 ui_raycast_click_button = 7
 
 [node name="Locomotion_Stick" parent="OQ_ARVROrigin" instance=ExtResource( 11 )]
+move_speed = 1.0
 enable_vignette = false
 
 [node name="OQ_UI2DLogWindow" parent="." instance=ExtResource( 17 )]

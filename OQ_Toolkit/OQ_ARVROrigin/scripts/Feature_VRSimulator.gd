@@ -18,11 +18,17 @@ var _current_player_height = 1.8;
 var left_controller_node = null;
 var right_controller_node = null;
 
-var info_label;
+var _fly_mode = false;
+
+export var info_label_visible = true;
+
+var info_label = null;
+var info_rect = null;
 
 const info_text = """VR Simulator Keys:
  mouse right-click: move (camera or controller)
  W A S D: move (camera or controller)
+ space:  fly mode (moves origin up)
  SHIFT: duck player
 
  hold CTRL/ALT: enable left/right controller for manipulation
@@ -67,12 +73,12 @@ func initialize():
 	info_label.margin_right = m;
 	info_label.margin_top = m;
 	info_label.margin_bottom = m;
-	var rect = ColorRect.new();
+	info_rect = ColorRect.new();
 	
-	rect.color = Color(0, 0, 0, 0.7);
-	rect.rect_size = info_label.get_minimum_size(); #Vector2(128, 128);
-	rect.add_child(info_label);
-	add_child(rect);
+	info_rect.color = Color(0, 0, 0, 0.7);
+	info_rect.rect_size = info_label.get_minimum_size(); #Vector2(128, 128);
+	info_rect.add_child(info_label);
+	add_child(info_rect);
 
 	_current_player_height = player_height;
 	vr.vrCamera.translation.y = _current_player_height;
@@ -111,6 +117,8 @@ func _interact_move_controller(dir):
 
 
 func _update_keyboard(dt):
+	
+	_fly_mode = Input.is_key_pressed(KEY_SPACE);
 
 	var dir = Vector3(0,0,0);
 	if (Input.is_key_pressed(KEY_W)):
@@ -129,10 +137,13 @@ func _update_keyboard(dt):
 			_interact_move_controller(dir * dt);
 	else:
 		dir = vr.vrCamera.transform.basis.xform((dir));
-		dir.y = 0.0;
-		if (dir.length_squared() > 0.01):
-			vr.vrCamera.translation = vr.vrCamera.translation + dir.normalized() * dt  * walk_speed;
-			_update_virtual_controller_position();
+		if (_fly_mode): 
+			vr.vrOrigin.translation = vr.vrOrigin.translation + dir.normalized() * dt  * walk_speed;
+		else:
+			dir.y = 0.0;
+			if (dir.length_squared() > 0.01):
+				vr.vrCamera.translation = vr.vrCamera.translation + dir.normalized() * dt  * walk_speed;
+				_update_virtual_controller_position();
 			
 	# Num pad for controller keys:
 	var stick_x = 0.0
@@ -220,6 +231,7 @@ func _physics_process(dt):
 	
 	if (!initialized): initialize();
 
+	info_rect.visible = info_label_visible;
 
 	_update_keyboard(dt);
 

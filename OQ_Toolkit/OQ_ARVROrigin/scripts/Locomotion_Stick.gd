@@ -96,8 +96,10 @@ func turn(dt):
 	vr.vrOrigin.global_transform.origin +=  origHeadPos - vr.vrCamera.global_transform.origin;
 	vr.vrOrigin.global_transform = vr.vrOrigin.global_transform.orthonormalized();
 
-
-func _process(dt):
+# NOTE: we do this in physics_process so after moving the origin
+#       the controllers are still rendered in the right position; but we have to keep in mind that this
+#       will be tied to the physics framerate then
+func _physics_process(dt):
 	if (enable_vignette) : movement_vignette_rect.visible = false;
 	if (!active): return;
 	if (vr.vrOrigin && vr.vrOrigin.is_fixed): 

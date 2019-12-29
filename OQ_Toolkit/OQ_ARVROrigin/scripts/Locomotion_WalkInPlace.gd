@@ -31,6 +31,9 @@ const _step_local_detect_threshold = 0.04; # local difference
 const _step_height_min_detect_threshold = 0.02; # This might need some tweaking now to avoid missed steps
 const _step_height_max_detect_threshold = 0.1; # This might need some tweaking now to avoid missed steps
 
+const _step_up_min_detect_threshold = 0.005; # This might need some tweaking now to avoid missed steps
+const _step_up_max_detect_threshold = 0.1; # This might need some tweaking now to avoid missed steps
+
 const _variance_height_detect_threshold = 0.001;
 
 var _last_step_time_s = 0.0; # time elapsed after the last step was detected
@@ -128,8 +131,8 @@ func _detect_step(dt):
 	var dist_max = max_value - _current_height_estimate;
 	
 	if (max_val_pos == _num_steps_for_step_estimate / 2 
-		and dist_max > _step_height_min_detect_threshold
-		and dist_max < _step_height_max_detect_threshold
+		and dist_max > _step_up_min_detect_threshold
+		and dist_max < _step_up_max_detect_threshold
 		and _time_since_last_step <= _slowest_step_s
 		#and (_get_buffered_height(0) - min_value) > _step_local_detect_threshold # this can avoid some local mis predicitons
 		): 
@@ -162,18 +165,21 @@ func _move(dt):
 	view_dir.y = 0.0;
 	view_dir = view_dir.normalized();
 	
+	
 	var actual_translation = view_dir * step_speed* dt;
 	if (move_checker):
 		actual_translation = move_checker.oq_walk_in_place_check_move(actual_translation);
 	
 	vr.vrOrigin.translation += actual_translation;
 
-
+# NOTE: this needs to be in the _process as all the values are tied to the actual display framerate of 72hz
+#       at the moment
 func _process(dt):
 	if (!active): return;
 	if (!vr.inVR && !active_in_desktop): return;
 	
 	var headset_height = vr.get_current_player_height();
+	
 	var corrected_height = _get_viewdir_corrected_height(headset_height, -vr.vrCamera.transform.basis.z.y);
 	_store_height_in_buffer(corrected_height);
 	
@@ -189,7 +195,14 @@ func _process(dt):
 		step_high_just_detected = true;
 	else:
 		_step_time -= dt;
-		
+	
+
 	if (_step_time > 0.0):
 		_move(dt);
+		#vr.show_dbg_info("WalkInPlace2", "Moving");
+	else:
+		#vr.show_dbg_info("WalkInPlace2", "Standing")
+		pass
+
+
 
