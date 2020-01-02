@@ -3,9 +3,46 @@
 # and also contains some helper functions
 extends Spatial
 
+onready var palm_marker = $PalmMarker;
+
 var hand : ARVRController = null;
 var model : Spatial = null;
 var skel : Skeleton = null; 
+
+var tracking_confidence = 1.0;
+
+# the VrApi has at the moment no velocity tracking so we average sth. ourselves for now
+var average_velocity = Vector3(0, 0, 0);
+
+const _velocity_buffer_size := 16;
+const _velocity_update_confidence_threshold = 0.5;
+var _last_velocity_position := Vector3(0,0,0)
+var _velocity_buffer_pos := 0;
+var _velocity_buffer := [];
+
+func _track_average_velocity(_dt):
+	
+	if _velocity_buffer.size() == 0:
+		_velocity_buffer.resize(_velocity_buffer_size);
+		for i in range(0, _velocity_buffer_size): _velocity_buffer[i] = Vector3(0,0,0);
+		_last_velocity_position = global_transform.origin;
+	
+	var v = global_transform.origin - _last_velocity_position;
+	if (tracking_confidence < _velocity_update_confidence_threshold): # no update
+		v = Vector3(0, 0, 0); # assume no movement
+	
+	_velocity_buffer[_velocity_buffer_pos] = v;
+	_velocity_buffer_pos = (_velocity_buffer_pos + 1)%_velocity_buffer_size;
+	
+	average_velocity = Vector3(0, 0, 0);
+	for i in range(0, _velocity_buffer_size): 
+		average_velocity += _velocity_buffer[i]
+		
+	average_velocity = average_velocity * (1.0 / (_dt * _velocity_buffer_size));
+	
+	_last_velocity_position = global_transform.origin;
+
+
 
 # this array is used to get the orientations from the sdk each frame (an array of Quat)
 var _vrapi_bone_orientations = [];
@@ -152,7 +189,14 @@ var SimpleGestures = {
 
 # this will compute the finger state and check if the gesture is in the SimpleGestures
 # dictionary. If it is not found it returns the empty string
+
+var _last_detected_gesture = "";
+
 func detect_simple_gesture():
+	
+	# this is to make sure we do keep the state when we loose tracking
+	if (tracking_confidence <= 0.5): return _last_detected_gesture;
+	
 	var m = 1;
 	var gesture = 0;
 	for i in range(0, 5):
@@ -160,10 +204,11 @@ func detect_simple_gesture():
 		gesture += m * finger_state;
 		m *= 10; # ??? No idea what I'm thinking here to solve it this way... needs some less stupid solution in the future
 	
+	_last_detected_gesture = "";
 	if SimpleGestures.has(int(gesture)):
-		return SimpleGestures[int(gesture)];
+		_last_detected_gesture = SimpleGestures[int(gesture)];
 
-	return "";
+	return _last_detected_gesture;
 
 
 func _debug_show_finger_estimate():
@@ -178,6 +223,7 @@ func _debug_show_finger_estimate():
 func _process(_dt):
 	if (vr.inVR):
 		_update_hand_model(hand, model, skel);
+	_track_average_velocity(_dt);
 
 # the rotations we get from the OVR sdk are absolute and not relative
 # to the rest pose we have in the model; so we clear them here to be
@@ -209,8 +255,8 @@ func _update_hand_model(hand: ARVRController, model : Spatial, skel: Skeleton):
 		var ls = vr.ovrHandTracking.get_hand_scale(hand.controller_id);
 		if (ls > 0.0): model.scale = Vector3(ls, ls, ls);
 		
-		var confidence = vr.ovrHandTracking.get_hand_pose(hand.controller_id, _vrapi_bone_orientations);
-		if (confidence > 0.0):
+		tracking_confidence = vr.ovrHandTracking.get_hand_pose(hand.controller_id, _vrapi_bone_orientations);
+		if (tracking_confidence > 0.0):
 			model.visible = true;
 			for i in range(0, _vrapi2hand_bone_map.size()):
 				skel.set_bone_pose(_vrapi2hand_bone_map[i], Transform(_vrapi_bone_orientations[i]));

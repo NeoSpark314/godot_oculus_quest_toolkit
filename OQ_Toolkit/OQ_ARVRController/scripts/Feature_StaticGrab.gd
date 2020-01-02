@@ -26,6 +26,8 @@ func _ready():
 	
 	
 func _process(_dt):
+	grab_area.global_transform = controller.get_palm_transform();
+	
 	if (controller._button_just_pressed(grab_button)):
 		var overlapping_bodies = grab_area.get_overlapping_bodies();
 		for b in overlapping_bodies:

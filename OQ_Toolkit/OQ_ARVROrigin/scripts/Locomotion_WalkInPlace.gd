@@ -42,11 +42,14 @@ const _slowest_step_s = 30.0/72.0; # slower than this will not detect a high poi
 
 var _current_height_estimate = 0.0;
 
-var step_just_detected = false;
+var step_low_just_detected = false;
 var step_high_just_detected = false;
 
 # external object that can be set to check if walkinplace can actually move
 var move_checker = null;
+
+signal step_low;
+signal step_high;
 
 
 func _ready():
@@ -84,8 +87,8 @@ func _get_viewdir_corrected_height(h, viewdir_y):
 
 enum {
 	NO_STEP,
-	DOWN_STEP,
-	HIGH_STEP,
+	STEP_LOW,
+	STEP_HIGH,
 }
 
 
@@ -137,7 +140,7 @@ func _detect_step(dt):
 		#and (_get_buffered_height(0) - min_value) > _step_local_detect_threshold # this can avoid some local mis predicitons
 		): 
 		#print("high");
-		return HIGH_STEP;
+		return STEP_HIGH;
 	
 	# this is now the actual step detection based on that the center value of the ring buffer is the actual minimum (the turning point)
 	# and also the defined thresholds to minimize false detections as much as possible
@@ -150,7 +153,7 @@ func _detect_step(dt):
 		): 
 		_time_since_last_step = 0.0;
 		#print("down");
-		return DOWN_STEP;
+		return STEP_LOW;
 
 	return NO_STEP;
 
@@ -168,7 +171,7 @@ func _move(dt):
 	
 	var actual_translation = view_dir * step_speed* dt;
 	if (move_checker):
-		actual_translation = move_checker.oq_walk_in_place_check_move(actual_translation);
+		actual_translation = move_checker.oq_walk_in_place_check_move(actual_translation, step_speed);
 	
 	vr.vrOrigin.translation += actual_translation;
 
@@ -184,24 +187,24 @@ func _process(dt):
 	_store_height_in_buffer(corrected_height);
 	
 	var step = _detect_step(dt);
-	step_just_detected = false;
+	step_low_just_detected = false;
 	step_high_just_detected = false;
 	
-	if (step == DOWN_STEP):
+	if (step == STEP_LOW):
 		_step_time = step_duration;
-		step_just_detected = true;
-	elif (step == HIGH_STEP):
+		step_low_just_detected = true;
+		emit_signal("step_low");
+	elif (step == STEP_HIGH):
 		_step_time = step_duration;
 		step_high_just_detected = true;
+		emit_signal("step_high");
 	else:
 		_step_time -= dt;
 	
 
 	if (_step_time > 0.0):
 		_move(dt);
-		#vr.show_dbg_info("WalkInPlace2", "Moving");
 	else:
-		#vr.show_dbg_info("WalkInPlace2", "Standing")
 		pass
 
 

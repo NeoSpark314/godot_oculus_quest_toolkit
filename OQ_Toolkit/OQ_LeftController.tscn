@@ -5,5 +5,3 @@
 [node name="OQ_LeftController" type="ARVRController"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 1.5, -0.5 )
 script = ExtResource( 1 )
-
-[node name="PalmMarker" type="Spatial" parent="."]

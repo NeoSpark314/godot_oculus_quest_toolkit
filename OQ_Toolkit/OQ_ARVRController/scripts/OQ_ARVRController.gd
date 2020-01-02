@@ -11,9 +11,6 @@ export var hand_pinch_to_button = true;
 
 var is_hand = false; # this will be updated in the autoload_model
 
-# this is a helper to get the orientation of the palm as it is mirrored for the right hand
-onready var palm_position = $PalmMarker; 
-
 # used for the vr simulation
 var _simulation_buttons_pressed       = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
 
@@ -22,6 +19,8 @@ var _buttons_just_pressed  = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
 var _buttons_just_released = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
 
 var _simulation_joystick_axis = [0.0, 0.0, 0.0, 0.0];
+
+export var enable_gesture_to_button = false;
 
 
 # Sets up everything as it is expected by the helper scripts in the vr singleton
@@ -61,10 +60,15 @@ func _exit_tree():
 
 func get_angular_velocity():
 	return vr.get_controller_angular_velocity(controller_id);
+
 func get_angular_acceleration():
 	return vr.get_controller_angular_acceleration(controller_id);
+
 func get_linear_velocity():
+	if (is_hand && _hand_model):
+		return _hand_model.average_velocity;
 	return vr.get_controller_linear_velocity(controller_id);
+
 func get_linear_acceleration():
 	return vr.get_controller_linear_acceleration(controller_id);
 
@@ -77,6 +81,17 @@ func _ready():
 	# heuristic to detect if we want hand behaviour
 	if (_hand_model != null): is_hand = true;
 
+# this is a convenience funciton to know the palm orientation; it might be unnecessary
+# in the future
+func get_palm_transform() -> Transform:
+	
+	if (is_hand && _hand_model):
+		return _hand_model.palm_marker.global_transform;
+	elif (!is_hand && _controller_model):
+		return _controller_model.palm_marker.global_transform;
+
+	#fallback if we don't have any information yet
+	return global_transform;
 
 # this is the logic for controller/hand model switching
 # at the moment it is not configurable from the outside
@@ -150,10 +165,32 @@ func _button_just_pressed(button_id):
 
 func _button_just_released(button_id):
 	return _buttons_just_released[button_id];
+	
+	
+func _hand_gesture_to_button(i):
+	
+	if (i == vr.CONTROLLER_BUTTON.GRIP_TRIGGER):
+		var current_gesture = _hand_model.detect_simple_gesture();
+		if (current_gesture == "Fist"):
+			#vr.show_dbg_info("HandGesture"+str(controller_id), "Fist");
+			return 1;
+		else:
+			#vr.show_dbg_info("HandGesture"+str(controller_id), "");
+			pass;
+	
+	# keep the hand_pinch to button mapping
+	if (hand_pinch_to_button):
+		return is_button_pressed(i);
+	
 
 func _sim_is_button_pressed(i):
 	if (vr.inVR): 
-		if (is_hand && !hand_pinch_to_button): return 0; 
+		if (is_hand): 
+			if (enable_gesture_to_button):
+				return _hand_gesture_to_button(i);
+			elif (!hand_pinch_to_button):
+				return 0;
+			 
 		return is_button_pressed(i); # is the button pressed
 	else: return _simulation_buttons_pressed[i];
 	
@@ -186,6 +223,7 @@ func _process(_dt):
 	if (autoload_model): _auto_update_controller_model();
 	
 	if (get_is_active() || !vr.inVR): # wait for active controller; or update if we are in simulation mode
+
 		_update_buttons_and_sticks();
 		
 		# this avoid getting just_pressed events when a key is pressed and the controller becomes 
