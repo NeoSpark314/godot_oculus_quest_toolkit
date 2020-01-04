@@ -7,4 +7,4 @@ moving forard.
 You can also climb everything in this demo."""
 
 func _ready():
-	$OQ_UILabel.set_text(INFO_TEXT)
+	$OQ_UILabel.set_label_text(INFO_TEXT)

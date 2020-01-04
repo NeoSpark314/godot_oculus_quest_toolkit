@@ -6,4 +6,4 @@ func _ready():
 	pass # Replace with function body.
 
 func _process(delta):
-	info_label.set_text("%.2f %.2f %.2f" % [vr.vrOrigin.translation.x, vr.vrOrigin.translation.y, vr.vrOrigin.translation.z]);
+	info_label.set_label_text("%.2f %.2f %.2f" % [vr.vrOrigin.translation.x, vr.vrOrigin.translation.y, vr.vrOrigin.translation.z]);

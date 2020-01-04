@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://demo_scenes/PhysicsScene.gd" type="Script" id=1]
 [ext_resource path="res://OQ_Toolkit/OQ_RightController.tscn" type="PackedScene" id=2]
@@ -10,6 +10,7 @@
 [ext_resource path="res://OQ_Toolkit/OQ_ARVRCamera.tscn" type="PackedScene" id=8]
 [ext_resource path="res://OQ_Toolkit/OQ_ARVRController/Feature_ControllerModel_Left.tscn" type="PackedScene" id=9]
 [ext_resource path="res://demo_scenes/data/models_3d/GrabAndThrowRoom/GrabAndThrowRoom.gltf" type="PackedScene" id=10]
+[ext_resource path="res://OQ_Toolkit/OQ_ARVRController/scripts/grabbable_rigid_body.gd" type="Script" id=11]
 
 [sub_resource type="BoxShape" id=1]
 extents = Vector3( 0.1, 0.1, 0.1 )
@@ -47,6 +48,7 @@ reparent_mesh = true
 
 [node name="RigidBody" type="RigidBody" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -1 )
+script = ExtResource( 11 )
 
 [node name="CollisionShape" type="CollisionShape" parent="RigidBody"]
 shape = SubResource( 1 )
@@ -57,6 +59,7 @@ material/0 = null
 
 [node name="RigidBody2" type="RigidBody" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.23701, -1 )
+script = ExtResource( 11 )
 
 [node name="CollisionShape" type="CollisionShape" parent="RigidBody2"]
 shape = SubResource( 1 )
@@ -67,6 +70,7 @@ material/0 = null
 
 [node name="RigidBody3" type="RigidBody" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.48077, -1 )
+script = ExtResource( 11 )
 
 [node name="CollisionShape" type="CollisionShape" parent="RigidBody3"]
 shape = SubResource( 1 )
@@ -77,6 +81,7 @@ material/0 = null
 
 [node name="RigidBody4" type="RigidBody" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.238643, 1.44637, 0.415651 )
+script = ExtResource( 11 )
 
 [node name="CollisionShape" type="CollisionShape" parent="RigidBody4"]
 shape = SubResource( 1 )
@@ -87,6 +92,7 @@ material/0 = null
 
 [node name="RigidBody5" type="RigidBody" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.238643, 1.14147, 0.415651 )
+script = ExtResource( 11 )
 
 [node name="CollisionShape" type="CollisionShape" parent="RigidBody5"]
 shape = SubResource( 1 )
