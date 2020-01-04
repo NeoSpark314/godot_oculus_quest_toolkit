@@ -17,7 +17,7 @@ export var move_up_speed : float = 0.0; # 0.0 == instance move up
 export var max_raycast_distance : float = 128.0; 
 export var ray_collision_mask : int = 2147483647;
 export var fall_without_hit : bool = false;
-export var raycast_radius = 0.0;
+export var fall_raycast_radius = 0.0;
 
 export(CollisionType) var collision_type = CollisionType.FIXED_GROUND;
 
@@ -31,30 +31,35 @@ func _ready():
 		vr.log_error("Feature_Falling: parent is not ARVROrigin");
 		
 
-func _get_raycast_hit(space_state, from, to):
-	if (raycast_radius > 0.0):
+func _get_raycast_hit_center(space_state, from, to):
+	return space_state.intersect_ray(from, to, [], ray_collision_mask);
+	
+func _get_raycast_hit_surrounding(h0, space_state, from, to):
+	if (fall_raycast_radius > 0.0):
 		# simple 4 ray in world space offseted
-		var o1 = Vector3(raycast_radius, 0, 0);
-		var o2 = Vector3(-raycast_radius, 0, 0);
-		var o3 = Vector3(0, 0, raycast_radius);
-		var o4 = Vector3(0, 0, -raycast_radius);
+		var o1 = Vector3(fall_raycast_radius, 0, 0);
+		var o2 = Vector3(-fall_raycast_radius, 0, 0);
+		var o3 = Vector3(0, 0, fall_raycast_radius);
+		var o4 = Vector3(0, 0, -fall_raycast_radius);
 
-		var h0 = space_state.intersect_ray(from, to, [], ray_collision_mask);
+		#var h0 = space_state.intersect_ray(from, to, [], ray_collision_mask);
 		var h1 = space_state.intersect_ray(from+o1, to+o1, [], ray_collision_mask);
 		var h2 = space_state.intersect_ray(from+o2, to+o2, [], ray_collision_mask);
 		var h3 = space_state.intersect_ray(from+o3, to+o3, [], ray_collision_mask);
 		var h4 = space_state.intersect_ray(from+o4, to+o4, [], ray_collision_mask);
 		
-		if (!h0 || !h1 || !h2 || !h3 || !h4): return null;
+		if (!h0 || !h1 || !h2 || !h3 || !h4): return false;
 		
-		if (abs(h0.position.y - h1.position.y) > raycast_radius): return null;
-		if (abs(h0.position.y - h2.position.y) > raycast_radius): return null;
-		if (abs(h0.position.y - h3.position.y) > raycast_radius): return null;
-		if (abs(h0.position.y - h4.position.y) > raycast_radius): return null;
+		if (abs(h0.position.y - h1.position.y) > fall_raycast_radius): return false
+		if (abs(h0.position.y - h2.position.y) > fall_raycast_radius): return false;
+		if (abs(h0.position.y - h3.position.y) > fall_raycast_radius): return false;
+		if (abs(h0.position.y - h4.position.y) > fall_raycast_radius): return false;
 	
-		return h0;
+		return true;
 	else:
-		return space_state.intersect_ray(from, to, [], ray_collision_mask);
+		return _get_raycast_hit_center(space_state, from, to);
+
+
 
 
 var fall_speed = 0.0;
@@ -89,7 +94,7 @@ func _physics_process(dt):
 		var space_state = get_world().direct_space_state
 		var from = head_position;
 		var to = from - Vector3(0.0, max_raycast_distance, 0.0);
-		var hit_result = _get_raycast_hit(space_state, from, to);
+		var hit_result = _get_raycast_hit_center(space_state, from, to);
 		
 		#vr.show_dbg_info("rayCastInfo", "player_height = %f foot_height = %f" % [player_height, foot_height]);
 		
@@ -110,7 +115,13 @@ func _physics_process(dt):
 			else:
 				#vr.show_dbg_info("dbgFalling", "onGround: dist = %f; player_height = %f" % [hit_dist, player_height]);
 				on_ground = true;
+				var surrounding_can_fall = true;
 				max_fall_distance = 0.0;
+				
+				if (fall_raycast_radius > 0.0):
+					surrounding_can_fall = _get_raycast_hit_surrounding(hit_point, space_state, from, to);
+			
+				# move only up when enabled and if we have a similar surrounding (this avoids moving up too soon when leaning)
 				if (force_move_up && (hit_dist < player_height - epsilon)):
 					var move = Vector3(0,0,0);
 					if (move_up_speed == 0.0):

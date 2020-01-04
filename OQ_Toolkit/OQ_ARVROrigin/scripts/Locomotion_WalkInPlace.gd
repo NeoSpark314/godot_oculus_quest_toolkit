@@ -162,6 +162,10 @@ const step_duration = 20.0 / 72.0; # I had ~ 30 frames between steps...
 var _step_time = 0.0;
 var step_speed = 1.4;
 
+# indicator to check if currenlty in a moving state (means steps detected)
+# not actually moving; this depends still on the move_cheker
+var is_moving = false;
+
 
 func _move(dt):
 	var view_dir = -vr.vrCamera.global_transform.basis.z;
@@ -203,9 +207,10 @@ func _process(dt):
 	
 
 	if (_step_time > 0.0):
+		is_moving = true;
 		_move(dt);
 	else:
-		pass
+		is_moving = false;
 
 
 
