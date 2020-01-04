@@ -33,11 +33,13 @@ func _update_raycasts():
 		
 	ui_raycast.force_raycast_update(); # need to update here to get the current position; else the marker laggs behind
 	
+	
 	if ui_raycast.is_colliding():
 		var c = ui_raycast.get_collider();
 		if (!c.has_method("ui_raycast_hit_event")): return;
 		var click = controller._button_just_pressed(ui_raycast_click_button);
 		var release = controller._button_just_released(ui_raycast_click_button);
+		
 		var position = ui_raycast.get_collision_point();
 		ui_raycast_hitmarker.visible = true;
 		ui_raycast_hitmarker.global_transform.origin = position;
@@ -66,4 +68,7 @@ func _ready():
 	ui_raycast_mesh.visible = false;
 
 func _process(dt):
+	if (controller._button_just_pressed(ui_raycast_click_button)):
+		print("click");
+
 	_update_raycasts();

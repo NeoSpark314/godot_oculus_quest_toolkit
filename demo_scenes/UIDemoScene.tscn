@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=27 format=2]
 
 [ext_resource path="res://OQ_Toolkit/OQ_ARVRCamera.tscn" type="PackedScene" id=1]
 [ext_resource path="res://OQ_Toolkit/OQ_ARVROrigin/Feature_VRSimulator.tscn" type="PackedScene" id=2]
@@ -18,6 +18,10 @@
 [ext_resource path="res://icon.png" type="Texture" id=16]
 [ext_resource path="res://OQ_Toolkit/OQ_UI2D/OQ_UI2DLogWindow.tscn" type="PackedScene" id=17]
 [ext_resource path="res://OQ_Toolkit/OQ_UI2D/OQ_UI2DLabel_IPD.tscn" type="PackedScene" id=18]
+[ext_resource path="res://OQ_Toolkit/OQ_Interactables/OQ_ButtonPressable.tscn" type="PackedScene" id=19]
+[ext_resource path="res://OQ_Toolkit/OQ_ARVRController/Feature_StaticGrab.tscn" type="PackedScene" id=20]
+[ext_resource path="res://demo_scenes/data/Material_Green.material" type="Material" id=21]
+[ext_resource path="res://demo_scenes/data/Material_Red.material" type="Material" id=22]
 
 [sub_resource type="PlaneMesh" id=1]
 size = Vector2( 16, 16 )
@@ -170,16 +174,18 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="Feature_StaticGrab" parent="OQ_ARVROrigin/OQ_LeftController" instance=ExtResource( 20 )]
+
 [node name="OQ_RightController" parent="OQ_ARVROrigin" instance=ExtResource( 13 )]
 
 [node name="Feature_ControllerModel_Right" parent="OQ_ARVROrigin/OQ_RightController" instance=ExtResource( 8 )]
 
 [node name="Feature_UIRayCast" parent="OQ_ARVROrigin/OQ_RightController" instance=ExtResource( 12 )]
 ui_raycast_visible_button = -1
-ui_raycast_click_button = 7
+
+[node name="Feature_StaticGrab" parent="OQ_ARVROrigin/OQ_RightController" instance=ExtResource( 20 )]
 
 [node name="Locomotion_Stick" parent="OQ_ARVROrigin" instance=ExtResource( 11 )]
-move_speed = 1.0
 enable_vignette = false
 
 [node name="OQ_UI2DLogWindow" parent="." instance=ExtResource( 17 )]
@@ -417,8 +423,8 @@ mesh = SubResource( 1 )
 material/0 = SubResource( 4 )
 
 [node name="InfoLabel" parent="." instance=ExtResource( 3 )]
-transform = Transform( 1.64014, 0, 0.572261, 0, 2, 0, -1.14452, 0, 0.820072, -0.98408, 2.03673, -1.58457 )
-text = "Blub"
+transform = Transform( 1.95886, 0, 0.201796, 0, 2, 0, -0.403593, 0, 0.979428, -0.867748, 2.03673, -1.23376 )
+text = "Info Label"
 
 [node name="OQ_UI2DCanvas_LevelSelector" parent="." instance=ExtResource( 10 )]
 transform = Transform( 1.67744, -0.544566, 0.471608, 0, 1.73205, 0.5, -1.08913, -0.838718, 0.726351, -0.915071, 1.17961, -1.52167 )
@@ -482,10 +488,16 @@ __meta__ = {
 }
 
 [node name="OQ_UI2DLabel_IPD" parent="." instance=ExtResource( 18 )]
-transform = Transform( 0.499697, 0, 0.8662, 0, 1, 0, -0.8662, 0, 0.499697, -1.29015, 1.60767, -0.684684 )
+transform = Transform( 0.999394, 0, 0.8662, 0, 2, 0, -1.7324, 0, 0.499697, -1.57326, 1.60767, -0.792704 )
 
 [node name="OQ_UI2DVRSettings" parent="." instance=ExtResource( 15 )]
-transform = Transform( 3, 0, 0, 0, 3, 0, 0, 0, 1, 0.732496, 1.73966, -1.24014 )
+transform = Transform( 2.95446, 0, -0.173579, 0, 3, 0, 0.520738, 0, 0.98482, 0.732496, 1.73966, -1.24014 )
+
+[node name="OQ_ButtonPressable" parent="." instance=ExtResource( 19 )]
+transform = Transform( 1, 1.49012e-08, 0, 0, 1, -5.96046e-08, 0, 0, 1, -0.0901041, 1.35395, -0.834221 )
+press_distance = 0.02
+off_material = ExtResource( 22 )
+on_material = ExtResource( 21 )
 [connection signal="value_changed" from="OQ_UI2DCanvas_MovementOptions/Control/MoveSpeedSpinBox" to="." method="_on_MoveSpeedSpinBox_value_changed"]
 [connection signal="value_changed" from="OQ_UI2DCanvas_MovementOptions/Control/RotateSpeedSpinBox" to="." method="_on_RotateSpeedSpinBox_value_changed"]
 [connection signal="value_changed" from="OQ_UI2DCanvas_MovementOptions/Control/ClickTurnAngleSpinBox" to="." method="_on_ClickTurnAngleSpinBox_value_changed"]

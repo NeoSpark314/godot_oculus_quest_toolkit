@@ -226,7 +226,7 @@ func _input(event):
 	_update_virtual_controller_position();
 
 
-func _physics_process(dt):
+func _process(dt):
 	if vr.inVR || !active: return;
 	
 	if (!initialized): initialize();

@@ -31,7 +31,7 @@ func setup_movement_options_ui():
 
 func _ready():
 	setup_movement_options_ui();
-	$InfoLabel.set_text(info_text);
+	$InfoLabel.set_label_text(info_text);
 
 
 func _on_MoveSpeedSpinBox_value_changed(value):

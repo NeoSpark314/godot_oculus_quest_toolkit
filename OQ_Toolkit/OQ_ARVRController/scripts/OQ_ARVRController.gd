@@ -220,6 +220,8 @@ var first_time = true;
 
 func _process(_dt):
 	
+	#vr.show_dbg_info(str(controller_id), str(_buttons_pressed));
+
 	if (autoload_model): _auto_update_controller_model();
 	
 	if (get_is_active() || !vr.inVR): # wait for active controller; or update if we are in simulation mode
@@ -231,5 +233,3 @@ func _process(_dt):
 		if (first_time): 
 			_update_buttons_and_sticks();
 			first_time = false;
-
-

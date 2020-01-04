@@ -67,7 +67,7 @@ func show_dbg_info(key, value):
 		_dbg_labels[key] = l;
 		vrCamera.add_child(l);
 		_reorder_dbg_labels();
-	_dbg_labels[key].set_text(value);
+	_dbg_labels[key].set_label_text(value);
 	
 func remove_dbg_info(key):
 	if (!_dbg_labels.has(key)): return;
