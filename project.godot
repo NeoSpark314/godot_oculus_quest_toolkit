@@ -8,6 +8,16 @@
 
 config_version=4
 
+_global_script_classes=[ {
+"base": "RigidBody",
+"class": "OQClass_GrabbableRigidBody",
+"language": "GDScript",
+"path": "res://OQ_Toolkit/OQ_Classes/OQClass_GrabbableRigidBody.gd"
+} ]
+_global_script_class_icons={
+"OQClass_GrabbableRigidBody": ""
+}
+
 [application]
 
 config/name="Godot Oculus Quest Toolkit Demo"

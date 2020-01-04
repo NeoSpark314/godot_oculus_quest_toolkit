@@ -10,7 +10,9 @@
 [ext_resource path="res://OQ_Toolkit/OQ_ARVRCamera.tscn" type="PackedScene" id=8]
 [ext_resource path="res://OQ_Toolkit/OQ_ARVRController/Feature_ControllerModel_Left.tscn" type="PackedScene" id=9]
 [ext_resource path="res://demo_scenes/data/models_3d/GrabAndThrowRoom/GrabAndThrowRoom.gltf" type="PackedScene" id=10]
-[ext_resource path="res://OQ_Toolkit/OQ_ARVRController/scripts/grabbable_rigid_body.gd" type="Script" id=11]
+[ext_resource path="res://OQ_Toolkit/OQ_Classes/OQClass_GrabbableRigidBody.gd" type="Script" id=11]
+
+
 
 [sub_resource type="BoxShape" id=1]
 extents = Vector3( 0.1, 0.1, 0.1 )

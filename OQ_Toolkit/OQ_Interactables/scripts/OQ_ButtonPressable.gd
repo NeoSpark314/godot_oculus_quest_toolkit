@@ -1,7 +1,7 @@
-extends Spatial
+# This is a first draft of a pressable toggle button
+# At the moment it interacts with any area that enters it
 
-# a button that needs to be physically pressed
-class_name ButtonPressable
+extends Spatial
 
 signal button_pressed
 

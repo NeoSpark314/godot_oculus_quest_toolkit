@@ -44,7 +44,7 @@ func _ready():
 
 func _process(delta):
 	if (is_visible_in_tree() && vr.ovrUtilities):
-		ipd_info_label.set_label_text("Current IPD: %.1fmm" % (vr.get_ipd() * 1000.0));
+		ipd_info_label.set_text("Current IPD: %.1fmm" % (vr.get_ipd() * 1000.0));
 
 
 func _on_FoveationLevel_OptionButton_item_selected(id):

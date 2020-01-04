@@ -1,7 +1,8 @@
+# Attach this script to any rigid body you want to be grabbable
+# by the Feature_RigidBodyGrab
 extends RigidBody
 
-# makes a rigid body grabbable by OQ_Controller
-class_name GrabbableRigidBody
+class_name OQClass_GrabbableRigidBody
 
 
 var target_node = null;
