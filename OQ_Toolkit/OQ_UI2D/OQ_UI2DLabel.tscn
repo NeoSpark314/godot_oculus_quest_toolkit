@@ -1,6 +1,7 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://OQ_Toolkit/OQ_UI2D/scripts/OQ_UI2DLabel.gd" type="Script" id=1]
+[ext_resource path="res://OQ_Toolkit/OQ_UI2D/theme/oq_ui2d_standard.theme" type="Theme" id=2]
 
 [sub_resource type="ViewportTexture" id=1]
 viewport_path = NodePath("Viewport")
@@ -38,20 +39,20 @@ hdr = false
 usage = 0
 
 [node name="ColorRect" type="ColorRect" parent="Viewport"]
+theme = ExtResource( 2 )
 color = Color( 0, 0, 0, 1 )
 
 [node name="CenterContainer" type="CenterContainer" parent="Viewport/ColorRect"]
-margin_right = 40.0
-margin_bottom = 40.0
+theme = ExtResource( 2 )
 
 [node name="Label" type="Label" parent="Viewport/ColorRect/CenterContainer"]
-margin_top = 13.0
-margin_right = 89.0
-margin_bottom = 27.0
-text = "Text Text Text"
+margin_right = 128.0
+margin_bottom = 32.0
+theme = ExtResource( 2 )
+text = "This is a Label"
 
 [node name="MeshInstance" type="MeshInstance" parent="."]
-transform = Transform( -1, -1.50996e-07, -6.60024e-15, 0, -4.37114e-08, 1, -1.50996e-07, 1, 4.37114e-08, 0, 0, 0 )
+transform = Transform( 1, 6.35732e-08, 2.77887e-15, 0, -4.37114e-08, 1, 6.35732e-08, -1, -4.37114e-08, 0, 0, 0 )
 mesh = SubResource( 3 )
 material/0 = null
 

@@ -8,9 +8,10 @@ enum ResizeModes {AUTO_RESIZE, FIXED}
 export (ResizeModes) var resize_mode := ResizeModes.AUTO_RESIZE
 
 export var font_size_multiplier = 1.0
-export (Color) var font_color
-export (Color) var background_color
+export (Color) var font_color = Color(1,1,1,1);
+export (Color) var background_color = Color(0,0,0,1);
 #export var line_to_parent = false;
+export var transparent := false;
 
 onready var ui_label : Label = $Viewport/ColorRect/CenterContainer/Label
 onready var ui_container : CenterContainer = $Viewport/ColorRect/CenterContainer
@@ -21,13 +22,8 @@ var ui_mesh : PlaneMesh = null;
 
 func _ready():
 	ui_mesh = mesh_instance.mesh;
-	set_label_text(text)
-	
-	match resize_mode:
-		ResizeModes.AUTO_RESIZE:
-			resize_auto()
-		ResizeModes.FIXED:
-			resize_fixed()
+	set_label_text(text);
+
 	
 	if (billboard):
 		mesh_instance.mesh.surface_get_material(0).set_billboard_mode(SpatialMaterial.BILLBOARD_FIXED_Y);
@@ -35,7 +31,8 @@ func _ready():
 	ui_label.add_color_override("font_color", font_color)
 	ui_color_rect.color = background_color
 	
-	mesh_instance.mesh.surface_get_material(0).set_feature(SpatialMaterial.FEATURE_TRANSPARENT, true)
+	# only enable transparency when necessary as it is significantly slower than non-transparent rendering
+	mesh_instance.mesh.surface_get_material(0).set_feature(SpatialMaterial.FEATURE_TRANSPARENT, transparent);
 	
 	#if (line_to_parent):
 		#var p = get_parent();
@@ -46,10 +43,7 @@ func _ready():
 
 
 func resize_auto():
-	# make sure parent is at uniform scale
-	scale = Vector3(1, 1, 1)
-	
-	var size = ui_label.get_minimum_size()
+	var size = ui_label.get_minimum_size();
 	var res = Vector2(size.x + margin * 2, size.y + margin * 2)
 	
 	ui_container.set_size(res)
@@ -79,6 +73,10 @@ func resize_fixed():
 	
 
 func set_label_text(t: String):
-	ui_label.set_text(t)
-	if ResizeModes.AUTO_RESIZE:
-		resize_auto()
+	ui_label.set_text(t);
+	
+	match resize_mode:
+		ResizeModes.AUTO_RESIZE:
+			resize_auto();
+		ResizeModes.FIXED:
+			resize_fixed();

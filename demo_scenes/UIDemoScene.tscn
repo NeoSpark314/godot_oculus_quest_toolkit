@@ -415,8 +415,8 @@ mesh = SubResource( 1 )
 material/0 = SubResource( 4 )
 
 [node name="InfoLabel" parent="." instance=ExtResource( 3 )]
-transform = Transform( 2, 0, 4.13264e-07, 0, 2, 0, -8.26529e-07, 0, 1, -0.408255, 2.03673, -1.48423 )
-text = "Blub"
+transform = Transform( 1.95886, 0, 0.201796, 0, 2, 0, -0.403593, 0, 0.979428, -0.867748, 2.03673, -1.23376 )
+text = "Info Label"
 
 [node name="OQ_UI2DCanvas_LevelSelector" parent="." instance=ExtResource( 10 )]
 transform = Transform( 1.67744, -0.544566, 0.471608, 0, 1.73205, 0.5, -1.08913, -0.838718, 0.726351, -1.0728, 1.17961, -1.37952 )
@@ -470,10 +470,10 @@ __meta__ = {
 }
 
 [node name="OQ_UI2DLabel_IPD" parent="." instance=ExtResource( 18 )]
-transform = Transform( 0.499697, 0, 0.8662, 0, 1, 0, -0.8662, 0, 0.499697, -1.29015, 1.60767, -0.684684 )
+transform = Transform( 0.999394, 0, 0.8662, 0, 2, 0, -1.7324, 0, 0.499697, -1.57326, 1.60767, -0.792704 )
 
 [node name="OQ_UI2DVRSettings" parent="." instance=ExtResource( 15 )]
-transform = Transform( 3, 0, 0, 0, 3, 0, 0, 0, 1, 0.732496, 1.73966, -1.24014 )
+transform = Transform( 2.95446, 0, -0.173579, 0, 3, 0, 0.520738, 0, 0.98482, 0.732496, 1.73966, -1.24014 )
 [connection signal="value_changed" from="OQ_UI2DCanvas_MovementOptions/Control/MoveSpeedSpinBox" to="." method="_on_MoveSpeedSpinBox_value_changed"]
 [connection signal="value_changed" from="OQ_UI2DCanvas_MovementOptions/Control/RotateSpeedSpinBox" to="." method="_on_RotateSpeedSpinBox_value_changed"]
 [connection signal="value_changed" from="OQ_UI2DCanvas_MovementOptions/Control/ClickTurnAngleSpinBox" to="." method="_on_ClickTurnAngleSpinBox_value_changed"]
