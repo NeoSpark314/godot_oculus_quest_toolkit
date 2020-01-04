@@ -6,30 +6,57 @@ export(vr.CONTROLLER_BUTTON) var ui_raycast_visible_button := vr.CONTROLLER_BUTT
 export(vr.CONTROLLER_BUTTON) var ui_raycast_click_button := vr.CONTROLLER_BUTTON.INDEX_TRIGGER;
 
 var controller : ARVRController = null;
-onready var ui_position : Spatial = $RayCastPosition;
+onready var ui_raycast_position : Spatial = $RayCastPosition;
 onready var ui_raycast : RayCast = $RayCastPosition/RayCast;
 onready var ui_raycast_mesh : MeshInstance = $RayCastPosition/RayCastMesh;
 onready var ui_raycast_hitmarker : MeshInstance = $RayCastPosition/RayCastHitMarker;
 
+const hand_click_button := vr.CONTROLLER_BUTTON.XA;
+
+
+func _set_raycast_transform():
+	# woraround for now until there is a more standardized way to know the controller
+	# orientation
+	
+	
+	if (controller.is_hand):
+		
+		if (vr.ovrHandTracking):
+			ui_raycast_position.transform = controller.transform.inverse() * vr.ovrHandTracking.get_pointer_pose(controller.controller_id);
+		else:
+			ui_raycast_position.transform.basis = Basis(Vector3(deg2rad(-90),0,0));
+	else:
+		ui_raycast_position.transform.basis = Basis();
+		
+		ui_raycast_position.translation.y = -0.005;
+		ui_raycast_position.translation.z = -0.01;
+		# center the ray cast better to the actual controller position
+		if (controller.controller_id == 1):
+			ui_raycast_position.translation.x = -0.01;
+		if (controller.controller_id == 2):
+			ui_raycast_position.translation.x =  0.01;
+		
+	
+		
 
 func _update_raycasts():
 	ui_raycast_hitmarker.visible = false;
 	
-	# woraround for now until there is a more standardized way to know the controller
-	# orientation
-	if (controller.is_hand):
-		ui_position.transform.basis = Basis(Vector3(deg2rad(-90),0,0));
-	else:
-		ui_position.transform.basis = Basis();
-		
 	
-	# show only when trigger is touched
-	if (ui_raycast_visible_button == vr.CONTROLLER_BUTTON.None ||
-		controller._button_pressed(ui_raycast_visible_button) ||
-		controller._button_pressed(ui_raycast_click_button)): 
+		
+	if (controller.is_hand && vr.ovrHandTracking): # hand has separate logic
+		ui_raycast_mesh.visible = vr.ovrHandTracking.is_pointer_pose_valid(controller.controller_id);
+	elif (ui_raycast_visible_button == vr.CONTROLLER_BUTTON.None ||
+		  controller._button_pressed(ui_raycast_visible_button) ||
+		  controller._button_pressed(ui_raycast_click_button)): 
 		ui_raycast_mesh.visible = true;
 	else:
 		ui_raycast_mesh.visible = false;
+		
+	if (!ui_raycast_mesh.visible): return;
+	
+	_set_raycast_transform();
+
 		
 	ui_raycast.force_raycast_update(); # need to update here to get the current position; else the marker laggs behind
 	
@@ -37,8 +64,15 @@ func _update_raycasts():
 	if ui_raycast.is_colliding():
 		var c = ui_raycast.get_collider();
 		if (!c.has_method("ui_raycast_hit_event")): return;
-		var click = controller._button_just_pressed(ui_raycast_click_button);
-		var release = controller._button_just_released(ui_raycast_click_button);
+		
+		var click = false;
+		var release = false;
+		if (controller.is_hand):
+			click = controller._button_just_pressed(hand_click_button);
+			release = controller._button_just_released(hand_click_button);
+		else:
+			click = controller._button_just_pressed(ui_raycast_click_button);
+			release = controller._button_just_released(ui_raycast_click_button);
 		
 		var position = ui_raycast.get_collision_point();
 		ui_raycast_hitmarker.visible = true;
@@ -49,14 +83,6 @@ func _ready():
 	controller = get_parent();
 	if (not controller is ARVRController):
 		vr.log_error(" in Feature_UIRayCast: parent not ARVRController.");
-	else:
-		$RayCastPosition.translation.y = -0.005;
-		$RayCastPosition.translation.z = -0.01;
-		# center the ray cast better to the actual controller position
-		if (controller.controller_id == 1):
-			$RayCastPosition.translation.x = -0.01;
-		if (controller.controller_id == 2):
-			$RayCastPosition.translation.x =  0.01;
 	
 	ui_raycast.set_cast_to(Vector3(0, 0, -ui_raycast_length));
 	
@@ -67,8 +93,6 @@ func _ready():
 	ui_raycast_hitmarker.visible = false;
 	ui_raycast_mesh.visible = false;
 
-func _process(dt):
-	if (controller._button_just_pressed(ui_raycast_click_button)):
-		print("click");
-
+# we use the physics process here be in sync with the controller position
+func _physics_process(dt):
 	_update_raycasts();

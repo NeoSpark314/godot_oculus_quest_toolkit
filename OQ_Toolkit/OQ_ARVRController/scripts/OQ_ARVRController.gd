@@ -22,6 +22,8 @@ var _simulation_joystick_axis = [0.0, 0.0, 0.0, 0.0];
 
 export var enable_gesture_to_button = false;
 
+signal signal_controller_type_changed;
+
 
 # Sets up everything as it is expected by the helper scripts in the vr singleton
 func _enter_tree():
@@ -110,12 +112,14 @@ func _auto_update_controller_model():
 	var controller_name = get_controller_name();
 	
 	if (_last_controller_name == controller_name): return; # nothing to do
+	
 	_last_controller_name = controller_name;
 	
 	# in vr when we are not connected we hide all controllers (but not in desktop mode)
 	if (vr.inVR && controller_name == "Not connected"):
 		if (_hand_model != null): _hand_model.visible = false;
 		if (_controller_model != null): _controller_model.visible = false;
+		emit_signal("signal_controller_type_changed", self);
 		return;
 
 	vr.log_info("Switching model for controller '%s' (id %d)" % [controller_name, controller_id]);
@@ -123,14 +127,14 @@ func _auto_update_controller_model():
 	if (controller_name == "Oculus Tracked Left Hand"):
 		is_hand = true;
 		if (_controller_model != null): _controller_model.visible = false;
-		if (_hand_model == null): 
+		if (autoload_model && _hand_model == null): 
 			_hand_model = load(vr.oq_base_dir + "/OQ_ARVRController/Feature_HandModel_Left.tscn").instance();
 			add_child(_hand_model);
 		_hand_model.visible = true;
 	elif (controller_name == "Oculus Tracked Right Hand"):
 		is_hand = true;
 		if (_controller_model != null): _controller_model.visible = false;
-		if (_hand_model == null): 
+		if (autoload_model && _hand_model == null): 
 			_hand_model = load(vr.oq_base_dir + "/OQ_ARVRController/Feature_HandModel_Right.tscn").instance();
 			add_child(_hand_model);
 		_hand_model.visible = true;
@@ -141,20 +145,22 @@ func _auto_update_controller_model():
 	elif (controller_id == 1):
 		is_hand = false;
 		if (_hand_model != null): _hand_model.visible = false;
-		if (_controller_model == null): 
+		if (autoload_model && _controller_model == null): 
 			_controller_model = load(vr.oq_base_dir + "/OQ_ARVRController/Feature_ControllerModel_Left.tscn").instance();
 			add_child(_controller_model);
 		_controller_model.visible = true;
 	elif (controller_id == 2):
 		is_hand = false;
 		if (_hand_model != null): _hand_model.visible = false;
-		if (_controller_model == null): 
+		if (autoload_model && _controller_model == null): 
 			_controller_model = load(vr.oq_base_dir + "/OQ_ARVRController/Feature_ControllerModel_Right.tscn").instance();
 			add_child(_controller_model);
 		_controller_model.visible = true;
 	else:
 		vr.log_warning("Unknown/Unsupported controller id in _auto_update_controller_model()")
 		
+	emit_signal("signal_controller_type_changed", self);
+
 
 
 func _button_pressed(button_id):
@@ -222,7 +228,7 @@ func _process(_dt):
 	
 	#vr.show_dbg_info(str(controller_id), str(_buttons_pressed));
 
-	if (autoload_model): _auto_update_controller_model();
+	_auto_update_controller_model();
 	
 	if (get_is_active() || !vr.inVR): # wait for active controller; or update if we are in simulation mode
 
