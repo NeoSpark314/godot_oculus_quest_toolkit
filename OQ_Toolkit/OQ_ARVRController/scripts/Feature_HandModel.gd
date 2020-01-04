@@ -185,6 +185,7 @@ var SimpleGestures = {
 	00110 : "V",
 	10010 : "Rock",
 	10011 : "Spiderman",
+	11120 : "OK",
 }
 
 # this will compute the finger state and check if the gesture is in the SimpleGestures
@@ -207,6 +208,9 @@ func detect_simple_gesture():
 	_last_detected_gesture = "";
 	if SimpleGestures.has(int(gesture)):
 		_last_detected_gesture = SimpleGestures[int(gesture)];
+		
+		
+	#_debug_show_finger_estimate();
 
 	return _last_detected_gesture;
 
