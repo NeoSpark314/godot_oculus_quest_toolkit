@@ -1,28 +1,29 @@
-# This script is attached by the ObjectGrabber to a rigid body when it is picked up
-#
 extends RigidBody
 
-var target_node = null;
+# makes a rigid body grabbable by OQ_Controller
+class_name GrabbableRigidBody
 
+
+var target_node = null;
 var delta_orientation = Basis();
 var delta_position = Vector3();
+var is_grabbed := false
+
+export var is_grabbable := true
 
 
 func grab_init(node):
-	target_node = node;
+	target_node = node
 	
 	var node_basis = node.get_global_transform().basis;
-	
-	#delta_position = get_global_transform().origin - node.get_global_transform().origin;
-	#delta_position = node_basis.xform_inv(delta_position);
-	
-	delta_orientation = Basis(Vector3(1, 0, 0), deg2rad(40.0)) * Basis(Vector3(0, 0, 1), deg2rad(90.0));
-	
+	is_grabbed = true
+
+
 func grab_release(node):
-	pass;
+	is_grabbed = false
+	target_node = null
 
 
-	
 func orientation_follow(state, current_basis : Basis, target_basis : Basis):
 	var delta : Basis = target_basis * current_basis.inverse();
 	
@@ -41,14 +42,14 @@ func orientation_follow(state, current_basis : Basis, target_basis : Basis):
 func position_follow(state, current_position, target_position):
 	var dir = target_position - current_position;
 	state.set_linear_velocity(dir / state.get_step());
-	
+
 
 func _integrate_forces(state):
-	if (!target_node): return;
+	if (!is_grabbed): return
+	
+	if (!target_node): return
 	
 	var target_basis =  target_node.get_global_transform().basis * delta_orientation;
 	var target_position = target_node.get_global_transform().origin# + target_basis.xform(delta_position);
 	position_follow(state, get_global_transform().origin, target_position);
 	orientation_follow(state, get_global_transform().basis, target_basis);
-	
-
