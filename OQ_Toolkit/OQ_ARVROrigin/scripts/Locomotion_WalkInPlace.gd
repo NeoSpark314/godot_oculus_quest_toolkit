@@ -16,34 +16,39 @@
 
 extends Spatial
 
-export var active = true;
-export var active_in_desktop = false; # turn this on if you work for example with the VRRecorder feature
+export var active := true;
+export var active_in_desktop := false; # turn this on if you work for example with the VRRecorder feature
 
-const _height_ringbuffer_size = 15; # full ring buffer; lower latency can be achieved by accessing only a subset
-var _height_ringbuffer_pos = 0;
-var _height_ringbuffer = Array()
+const _height_ringbuffer_size := 15; # full ring buffer; lower latency can be achieved by accessing only a subset
+var _height_ringbuffer_pos := 0;
+var _height_ringbuffer := Array()
 
-const _num_steps_for_step_estimate = 5;
-const _num_steps_for_height_estimate = 15; 
+const _num_steps_for_step_estimate := 5;
+const _num_steps_for_height_estimate := 15; 
 
 
-const _step_local_detect_threshold = 0.04; # local difference
-const _step_height_min_detect_threshold = 0.02; # This might need some tweaking now to avoid missed steps
-const _step_height_max_detect_threshold = 0.1; # This might need some tweaking now to avoid missed steps
+const _step_local_detect_threshold := 0.04; # local difference
+const _step_height_min_detect_threshold := 0.01; # This might need some tweaking now to avoid missed steps
+const _step_height_max_detect_threshold := 0.1; # This might need some tweaking now to avoid missed steps
 
-const _step_up_min_detect_threshold = 0.005; # This might need some tweaking now to avoid missed steps
-const _step_up_max_detect_threshold = 0.1; # This might need some tweaking now to avoid missed steps
+const _step_up_min_detect_threshold := 0.012; # This might need some tweaking now to avoid missed steps
+const _step_up_max_detect_threshold := 0.1; # This might need some tweaking now to avoid missed steps
 
 const _variance_height_detect_threshold = 0.001;
 
-var _last_step_time_s = 0.0; # time elapsed after the last step was detected
-const _fastest_step_s = 10.0/72.0; # faster then this will not detect a new step
-const _slowest_step_s = 30.0/72.0; # slower than this will not detect a high point step
+var _had_high_step_after_low := false;
 
-var _current_height_estimate = 0.0;
+var _last_step_time_s := 0.0; # time elapsed after the last step was detected
+const _fastest_step_s := 10.0/72.0; # faster then this will not detect a new step
+const _slowest_step_s := 25.0/72.0; # slower than this will not detect a high point step
 
-var step_low_just_detected = false;
-var step_high_just_detected = false;
+var _current_height_estimate := 0.0;
+
+var step_low_just_detected := false;
+var step_high_just_detected := false;
+
+var _last_step_min := 0.0;
+var _last_step_max := 0.0;
 
 # external object that can be set to check if walkinplace can actually move
 var move_checker = null;
@@ -137,9 +142,12 @@ func _detect_step(dt):
 		and dist_max > _step_up_min_detect_threshold
 		and dist_max < _step_up_max_detect_threshold
 		and _time_since_last_step <= _slowest_step_s
+		and _had_high_step_after_low
 		#and (_get_buffered_height(0) - min_value) > _step_local_detect_threshold # this can avoid some local mis predicitons
 		): 
-		#print("high");
+		_last_step_max = max_value;
+		_had_high_step_after_low = false;
+		_current_height_estimate = (_current_height_estimate + (_last_step_max + _last_step_min) * 0.5) * 0.5;
 		return STEP_HIGH;
 	
 	# this is now the actual step detection based on that the center value of the ring buffer is the actual minimum (the turning point)
@@ -152,30 +160,46 @@ func _detect_step(dt):
 		and (_get_buffered_height(0) - min_value) > _step_local_detect_threshold # this can avoid some local mis predicitons
 		): 
 		_time_since_last_step = 0.0;
-		#print("down");
+		_last_step_min = min_value;
+		_had_high_step_after_low = true
 		return STEP_LOW;
 
 	return NO_STEP;
 
 
-const step_duration = 20.0 / 72.0; # I had ~ 30 frames between steps...
-var _step_time = 0.0;
-var step_speed = 1.4;
+const step_duration := 20.0 / 72.0; # I had ~ 30 frames between steps...
+var _step_time := 0.0;
+
+var speed_walking := 5.0 / 3.6; # km/h
+var speed_jogging := 10.0 / 3.6; # km/h
+
+var num_steps_till_jogging := 2;
+
+var _continous_step_count := 0;
+const _time_until_continous_step_reset = 2.0;
 
 # indicator to check if currenlty in a moving state (means steps detected)
 # not actually moving; this depends still on the move_cheker
 var is_moving = false;
 
 
+func is_jogging() -> bool:
+	return _continous_step_count > num_steps_till_jogging;
+
 func _move(dt):
 	var view_dir = -vr.vrCamera.global_transform.basis.z;
 	view_dir.y = 0.0;
 	view_dir = view_dir.normalized();
 	
+	var speed = speed_walking;
 	
-	var actual_translation = view_dir * step_speed* dt;
+	if (is_jogging()):
+		 speed = speed_jogging;
+	
+	
+	var actual_translation = view_dir * speed * dt;
 	if (move_checker):
-		actual_translation = move_checker.oq_walk_in_place_check_move(actual_translation, step_speed);
+		actual_translation = move_checker.oq_walk_in_place_check_move(actual_translation, speed);
 	
 	vr.vrOrigin.translation += actual_translation;
 
@@ -197,6 +221,7 @@ func _process(dt):
 	if (step == STEP_LOW):
 		_step_time = step_duration;
 		step_low_just_detected = true;
+		_continous_step_count += 1;
 		emit_signal("step_low");
 	elif (step == STEP_HIGH):
 		_step_time = step_duration;
@@ -204,13 +229,25 @@ func _process(dt):
 		emit_signal("step_high");
 	else:
 		_step_time -= dt;
-	
+		
+		
 
 	if (_step_time > 0.0):
 		is_moving = true;
 		_move(dt);
 	else:
 		is_moving = false;
+		#if (_step_time < -_time_until_continous_step_reset):
+		_continous_step_count = 0;
+		
+#	if (is_moving):
+#		if (is_jogging()):
+#			vr.show_dbg_info("WalkInPlace", "Jogging: %.3f" % _step_time);
+#		else:
+#			vr.show_dbg_info("WalkInPlace", "Walking: %.3f" % _step_time);
+#	else:
+#			vr.show_dbg_info("WalkInPlace", "Standing: %.3f" % _step_time);
+
 
 
 
