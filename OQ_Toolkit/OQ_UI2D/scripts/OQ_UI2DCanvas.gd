@@ -7,6 +7,8 @@ onready var viewport = $Viewport;
 onready var ui_area = $UIArea;
 var ui_collisionshape = null;
 
+export var editor_live_update := false;
+
 var ui_size = Vector2();
 
 func _get_configuration_warning():
@@ -51,7 +53,7 @@ func _ready():
 	
 	
 func _editor_update_preview():
-	var preview_node = ui_control.duplicate();
+	var preview_node = ui_control.duplicate(DUPLICATE_USE_INSTANCING);
 	preview_node.visible = true;
 	
 	for c in viewport.get_children():
@@ -80,6 +82,8 @@ func _process(_dt):
 		if (last != ui_control || ui_size != ui_control.get_size()):
 			#print("Editor update size of ", name);
 			update_size();
+			_editor_update_preview();
+		elif (editor_live_update):
 			_editor_update_preview();
 
 
