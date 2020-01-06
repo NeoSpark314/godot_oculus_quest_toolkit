@@ -1,3 +1,4 @@
+tool
 extends Spatial
 
 export var text = "I am a Label\nWith a new line"
@@ -80,3 +81,8 @@ func set_label_text(t: String):
 			resize_auto();
 		ResizeModes.FIXED:
 			resize_fixed();
+			
+func _process(dt):
+	if Engine.editor_hint:
+		set_label_text(text);
+			

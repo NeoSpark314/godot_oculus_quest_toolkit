@@ -48,6 +48,17 @@ func _ready():
 	ui_control.visible = true; # set visible here as it might was set invisible for editing multiple controls
 	
 	ui_collisionshape = $UIArea/UICollisionShape
+	
+	
+func _editor_update_preview():
+	var preview_node = ui_control.duplicate();
+	preview_node.visible = true;
+	
+	for c in viewport.get_children():
+		viewport.remove_child(c);
+		c.queue_free();
+	
+	viewport.add_child(preview_node);
 
 
 func _process(_dt):
@@ -69,6 +80,7 @@ func _process(_dt):
 		if (last != ui_control || ui_size != ui_control.get_size()):
 			#print("Editor update size of ", name);
 			update_size();
+			_editor_update_preview();
 
 
 
