@@ -186,6 +186,7 @@ var SimpleGestures = {
 	10010 : "Rock",
 	10011 : "Spiderman",
 	11120 : "OK",
+	10001 : "Shaka",
 }
 
 # this will compute the finger state and check if the gesture is in the SimpleGestures
