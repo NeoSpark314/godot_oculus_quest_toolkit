@@ -6,7 +6,7 @@ onready var locomotion_stick = $OQ_ARVROrigin/Locomotion_Stick;
 var info_text = """Welcome to the Godot Oculus Quest Toolkit Demo!
 
 This is the UI test room.
- - Press A to select menu items.
+ - Press Trigger/Pinch to select menu items.
  - Press Y to toggle the hand UI test.
  - Behind you is a big console window.
 
