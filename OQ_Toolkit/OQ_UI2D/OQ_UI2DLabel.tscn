@@ -9,6 +9,7 @@ viewport_path = NodePath("Viewport")
 [sub_resource type="SpatialMaterial" id=2]
 resource_local_to_scene = true
 flags_unshaded = true
+flags_no_depth_test = true
 params_cull_mode = 2
 albedo_texture = SubResource( 1 )
 
@@ -30,7 +31,6 @@ size = Vector2( 0.01, 1 )
 [node name="OQ_UILabel" type="Spatial"]
 script = ExtResource( 1 )
 text = "I am a Label..."
-font_size_multiplier = 1.0
 
 [node name="Viewport" type="Viewport" parent="."]
 size = Vector2( 204, 65 )

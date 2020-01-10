@@ -1,5 +1,6 @@
 extends ARVROrigin
 
+export var debug_information := false;
 
 var is_fixed = false;
 
@@ -21,3 +22,11 @@ func _exit_tree():
 		vr.log_error("in OQ_ARVROrigin._exit_tree(): different vrOrigin");
 		return;
 	vr.vrOrigin = null;
+
+func _show_debug_information():
+	var vro = global_transform.origin;
+	vr.show_dbg_info(name, "world_pos=(%.2f, %.2f, %.2f)" %
+	[vro.x, vro.y, vro.z]);
+
+func _process(_dt):
+	if (debug_information): _show_debug_information();

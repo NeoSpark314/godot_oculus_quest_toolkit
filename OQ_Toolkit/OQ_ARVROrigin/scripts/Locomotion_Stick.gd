@@ -1,12 +1,13 @@
 extends Spatial
 
 export var active = true;
+export var debug_information := false;
 
 export var dead_zone = 0.125;
 
 export var move_speed = 1.0;
 
-export var enable_vignette = true;
+export var enable_vignette = false;
 export var vignette_radius_0 = 0.5;
 export var vignette_radius_1 = 0.8;
 export var vignette_color = Color(0.0,0.0,0.0,1.0);
@@ -15,6 +16,7 @@ onready var movement_vignette_rect = $MovementVignette_ColorRect;
 
 export(vr.AXIS) var move_left_right = vr.AXIS.LEFT_JOYSTICK_X;
 export(vr.AXIS) var move_forward_back = vr.AXIS.LEFT_JOYSTICK_Y;
+
 
 enum TurnType {
 	CLICK,
@@ -26,7 +28,17 @@ export var smooth_turn_speed = 90.0;
 export var click_turn_angle = 45.0; 
 export(vr.AXIS) var turn_left_right = vr.AXIS.RIGHT_JOYSTICK_X;
 
+
+# this is a basic solution to get some control over movement into the
+# application. There can at the moment only be one; It will be overwritten
+# when the Feature_PlayerCollision is used; so be careful there.
 var move_checker = null;
+
+
+func _show_debug_information():
+	var mcname = "null";
+	if (move_checker != null): mcname = move_checker.name;
+	vr.show_dbg_info(name, "move_checker=%s" % [mcname]);
 
 func _ready():
 	if (not get_parent() is ARVROrigin):
@@ -37,6 +49,13 @@ func _ready():
 	movement_vignette_rect.material.set_shader_param("color", vignette_color);
 	
 	movement_vignette_rect.visible = false;
+	
+	var player_collision = get_parent().find_node("Feature_PlayerCollision", false, false);
+	if (player_collision != null):
+		vr.log_info("Locomotion_Stick: found Feature_PlayerCollision: using it as move_checker");
+		move_checker = player_collision;
+	
+	
 
 
 func move(dt):
@@ -61,7 +80,7 @@ func move(dt):
 	var actual_move = (view_dir * move.y + strafe_dir * move.x) * dt;
 	
 	if (move_checker):
-		actual_move = move_checker.oq_locomotion_stick_check_move(actual_move);
+		actual_move = move_checker.oq_locomotion_stick_check_move(actual_move, dt);
 
 	vr.vrOrigin.translation += actual_move;
 
@@ -105,6 +124,8 @@ func _physics_process(dt):
 	if (vr.vrOrigin && vr.vrOrigin.is_fixed): 
 		return;
 	
-	move(dt);
 	turn(dt);
+	move(dt);
+	
+	if (debug_information): _show_debug_information();
 

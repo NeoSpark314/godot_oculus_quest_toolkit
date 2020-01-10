@@ -8,6 +8,9 @@ var inVR = false;
 # so make sure to always use this if instancing nodes/features via code
 onready var oq_base_dir = self.get_script().get_path().get_base_dir();
 
+# a global counter for frames; incremented in the process of vr
+# usefule for remembering time-stamps when sth. happened
+var frame_counter := 0;
 
 ###############################################################################
 # VR logging systems
@@ -64,10 +67,11 @@ func show_dbg_info(key, value):
 		# somehow prevented parsing...
 		if (_label_scene == null): _label_scene = load(oq_base_dir + "/OQ_UI2D/OQ_UI2DLabel.tscn");
 		var l = _label_scene.instance();
+		l.depth_test = false;
 		_dbg_labels[key] = l;
 		vrCamera.add_child(l);
 		_reorder_dbg_labels();
-	_dbg_labels[key].set_label_text(value);
+	_dbg_labels[key].set_label_text(key + ": " + value);
 	
 func remove_dbg_info(key):
 	if (!_dbg_labels.has(key)): return;
@@ -571,6 +575,8 @@ func _ready():
 	pass;
 	
 func _process(dt):
+	frame_counter += 1;
+	
 	if (_need_settings_refresh):
 		_refresh_settings();
 		

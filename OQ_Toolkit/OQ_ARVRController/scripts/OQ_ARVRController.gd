@@ -130,14 +130,14 @@ func _auto_update_controller_model():
 		if (autoload_model && _hand_model == null): 
 			_hand_model = load(vr.oq_base_dir + "/OQ_ARVRController/Feature_HandModel_Left.tscn").instance();
 			add_child(_hand_model);
-		_hand_model.visible = true;
+		if (_hand_model != null): _hand_model.visible = true;
 	elif (controller_name == "Oculus Tracked Right Hand"):
 		is_hand = true;
 		if (_controller_model != null): _controller_model.visible = false;
 		if (autoload_model && _hand_model == null): 
 			_hand_model = load(vr.oq_base_dir + "/OQ_ARVRController/Feature_HandModel_Right.tscn").instance();
 			add_child(_hand_model);
-		_hand_model.visible = true;
+		if (_hand_model != null): _hand_model.visible = true;
 	
 	# default models
 	# for now we do not perform more checks and assume that we have touch controllers if
@@ -148,14 +148,14 @@ func _auto_update_controller_model():
 		if (autoload_model && _controller_model == null): 
 			_controller_model = load(vr.oq_base_dir + "/OQ_ARVRController/Feature_ControllerModel_Left.tscn").instance();
 			add_child(_controller_model);
-		_controller_model.visible = true;
+		if (_controller_model != null): _controller_model.visible = true;
 	elif (controller_id == 2):
 		is_hand = false;
 		if (_hand_model != null): _hand_model.visible = false;
 		if (autoload_model && _controller_model == null): 
 			_controller_model = load(vr.oq_base_dir + "/OQ_ARVRController/Feature_ControllerModel_Right.tscn").instance();
 			add_child(_controller_model);
-		_controller_model.visible = true;
+		if (_controller_model != null): _controller_model.visible = true;
 	else:
 		vr.log_warning("Unknown/Unsupported controller id in _auto_update_controller_model()")
 		

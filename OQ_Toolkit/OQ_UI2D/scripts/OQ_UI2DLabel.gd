@@ -1,16 +1,17 @@
 tool
 extends Spatial
 
-export var text = "I am a Label\nWith a new line"
-export var margin = 16;
-export var billboard = false;
+export var text := "I am a Label\nWith a new line"
+export var margin := 16;
+export var billboard := false;
+export var depth_test := true;
 
 enum ResizeModes {AUTO_RESIZE, FIXED}
 export (ResizeModes) var resize_mode := ResizeModes.AUTO_RESIZE
 
-export var font_size_multiplier = 1.0
-export (Color) var font_color = Color(1,1,1,1);
-export (Color) var background_color = Color(0,0,0,1);
+export var font_size_multiplier := 1.0
+export (Color) var font_color := Color(1,1,1,1);
+export (Color) var background_color := Color(0,0,0,1);
 #export var line_to_parent = false;
 export var transparent := false;
 
@@ -21,19 +22,23 @@ onready var ui_viewport : Viewport = $Viewport
 onready var mesh_instance : MeshInstance = $MeshInstance
 var ui_mesh : PlaneMesh = null;
 
+var mesh_material = null;
+
 func _ready():
 	ui_mesh = mesh_instance.mesh;
 	set_label_text(text);
 
+	mesh_material = mesh_instance.mesh.surface_get_material(0);
 	
 	if (billboard):
-		mesh_instance.mesh.surface_get_material(0).set_billboard_mode(SpatialMaterial.BILLBOARD_FIXED_Y);
+		mesh_material.params_billboard_mode = SpatialMaterial.BILLBOARD_FIXED_Y;
 	
 	ui_label.add_color_override("font_color", font_color)
 	ui_color_rect.color = background_color
 	
 	# only enable transparency when necessary as it is significantly slower than non-transparent rendering
-	mesh_instance.mesh.surface_get_material(0).set_feature(SpatialMaterial.FEATURE_TRANSPARENT, transparent);
+	mesh_material.flags_transparent = transparent;
+	mesh_material.flags_no_depth_test = !depth_test;
 	
 	#if (line_to_parent):
 		#var p = get_parent();
@@ -71,9 +76,10 @@ func resize_fixed():
 
 	#if new_size.x < ui_container.get_size().x or new_size.y < ui_container.get_size().y:
 	#	print("Your labels text is too large and therefore might look weird. Consider decreasing the font_size_multiplier.")
-	
+
 
 func set_label_text(t: String):
+	if (!ui_label): return;
 	ui_label.set_text(t);
 	
 	match resize_mode:
