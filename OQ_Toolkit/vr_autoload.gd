@@ -12,6 +12,8 @@ onready var oq_base_dir = self.get_script().get_path().get_base_dir();
 # usefule for remembering time-stamps when sth. happened
 var frame_counter := 0;
 
+var physics_frame_counter := 0;
+
 ###############################################################################
 # VR logging systems
 ###############################################################################
@@ -57,7 +59,7 @@ func _reorder_dbg_labels():
 	# reorder all available labels
 	var offset = 0.0;
 	for labels in _dbg_labels.values():
-		labels.translation = Vector3(0.1, 0.1 - offset, -0.75);
+		labels.translation = Vector3(0.2, 0.25 - offset, -0.75);
 		offset += 0.08;
 
 # this funciton attaches a UI label to the camera to show debug information
@@ -573,6 +575,9 @@ func _check_for_scene_switch_and_fade(dt):
 
 func _ready():
 	pass;
+	
+func _physics_process(_dt):
+	physics_frame_counter += 1;
 	
 func _process(dt):
 	frame_counter += 1;

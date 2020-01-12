@@ -1,13 +1,17 @@
 extends Spatial
 
 enum CollisionType {
+	AUTOMATIC,
 	FIXED_GROUND,
 	RAYCAST,
+	#PLAYERCOLLISION,
 	#CAPSULE, # not yet implemented...
 }
 
 
-export var active = true;
+export var active := true;
+export var debug_information := false;
+
 export var ground_height := 0.0;
 export var gravity := 9.81;
 export var epsilon := 0.001;
@@ -19,16 +23,38 @@ export var ray_collision_mask : int = 2147483647;
 export var fall_without_hit : bool = false;
 export var fall_raycast_radius = 0.0;
 
-export(CollisionType) var collision_type = CollisionType.FIXED_GROUND;
+export(CollisionType) var collision_type = CollisionType.AUTOMATIC;
 
 var move_checker = null;
+
+var feature_player_collision : KinematicBody = null;
 
 
 var on_ground = true;
 
+func _show_debug_information():
+	var mcn = move_checker.name if (move_checker) else "null";
+	vr.show_dbg_info("Feature_Falling", "on_ground = %s; move_checker = %s; collision_type = %s" 
+	% [str(on_ground), mcn, str(collision_type)]);
+
 func _ready():
 	if (not get_parent() is ARVROrigin):
 		vr.log_error("Feature_Falling: parent is not ARVROrigin");
+		
+	if (collision_type == CollisionType.AUTOMATIC):
+		var pc = get_parent().find_node("Feature_PlayerCollision", false, false);
+		if (pc is KinematicBody):
+			feature_player_collision = pc;
+			
+			collision_type = CollisionType.RAYCAST;
+			if (fall_raycast_radius == 0.0): fall_raycast_radius = feature_player_collision.capsule_radius;
+			vr.log_info("Feature_Falling: automatic: using raycast with radius %.2f for falling" % [fall_raycast_radius]);
+			
+			#collision_type = CollisionType.PLAYERCOLLISION;
+			#vr.log_info("Feature_Falling: automatic: using Feature_PlayerCollision for falling");
+		else:
+			vr.log_info("Feature_Falling: automatic: using raycast for falling");
+			collision_type = CollisionType.RAYCAST;
 		
 
 func _get_raycast_hit_center(space_state, from, to):
@@ -89,7 +115,13 @@ func _physics_process(dt):
 			max_fall_distance = foot_height - ground_height;
 		else:
 			on_ground = true;
-			
+#	elif (collision_type == CollisionType.PLAYERCOLLISION):
+#		feature_player_collision._update_collsion_shape_start_position();
+#		var delta_move = Vector3(0, -gravity, 0);
+#		delta_move = feature_player_collision.move_and_slide(delta_move, Vector3(0,1,0));
+#		on_ground = feature_player_collision.is_on_floor();
+#		max_fall_distance = -delta_move.y;
+		
 	elif (collision_type == CollisionType.RAYCAST):
 		var space_state = get_world().direct_space_state
 		var from = head_position;
@@ -143,3 +175,7 @@ func _physics_process(dt):
 		vr.vrOrigin.translation.y -= min(max_fall_distance, fall_speed * dt);
 	else:
 		fall_speed = 0.0;
+		
+	if (debug_information):
+		_show_debug_information();
+

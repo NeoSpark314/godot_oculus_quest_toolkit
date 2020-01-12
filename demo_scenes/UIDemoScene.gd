@@ -67,3 +67,7 @@ func _on_ButtonWalkInPlace_pressed():
 
 func _on_HandTracking_pressed():
 	vr.switch_scene("res://demo_scenes/HandTrackingDemoScene.tscn");
+
+
+func _on_PlayerCollision_pressed():
+	vr.switch_scene("res://demo_scenes/PlayerCollisionDemoScene.tscn");

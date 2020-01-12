@@ -186,7 +186,6 @@ ui_raycast_visible_button = -1
 [node name="Feature_StaticGrab" parent="OQ_ARVROrigin/OQ_RightController" instance=ExtResource( 20 )]
 
 [node name="Locomotion_Stick" parent="OQ_ARVROrigin" instance=ExtResource( 11 )]
-enable_vignette = false
 
 [node name="OQ_UI2DLogWindow" parent="." instance=ExtResource( 17 )]
 transform = Transform( -4, 0, -8.74228e-08, 1.74846e-07, 3.4641, -0.5, 3.02841e-07, -2, -0.866025, 0, 3, 2 )
@@ -460,9 +459,19 @@ __meta__ = {
 [node name="HandTracking" type="Button" parent="OQ_UI2DCanvas_LevelSelector/ReferenceRect"]
 margin_left = 16.0
 margin_top = 128.0
-margin_right = 224.0
+margin_right = 256.0
 margin_bottom = 176.0
 text = "HandTracking"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PlayerCollision" type="Button" parent="OQ_UI2DCanvas_LevelSelector/ReferenceRect"]
+margin_left = 272.0
+margin_top = 128.0
+margin_right = 528.0
+margin_bottom = 176.0
+text = "PlayerCollision"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -504,5 +513,6 @@ on_material = ExtResource( 21 )
 [connection signal="item_selected" from="OQ_UI2DCanvas_MovementOptions/Control/RotationOptionButton" to="." method="_on_RotationOptionButton_item_selected"]
 [connection signal="pressed" from="OQ_UI2DCanvas_LevelSelector/ReferenceRect/ButtonPhysics" to="." method="_on_ButtonPhysics_pressed"]
 [connection signal="pressed" from="OQ_UI2DCanvas_LevelSelector/ReferenceRect/HandTracking" to="." method="_on_HandTracking_pressed"]
+[connection signal="pressed" from="OQ_UI2DCanvas_LevelSelector/ReferenceRect/PlayerCollision" to="." method="_on_PlayerCollision_pressed"]
 [connection signal="pressed" from="OQ_UI2DCanvas_LevelSelector/ReferenceRect/ButtonClimbing" to="." method="_on_ButtonClimbing_pressed"]
 [connection signal="pressed" from="OQ_UI2DCanvas_LevelSelector/ReferenceRect/ButtonWalkInPlace" to="." method="_on_ButtonWalkInPlace_pressed"]

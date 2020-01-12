@@ -2,15 +2,9 @@ extends KinematicBody
 
 export var enabled := true;
 export var debug_information := false;
-
-export var gravity := Vector3(0.0, -9.81, 0.0);
-
 export var capsule_radius := 0.15;
 
-
 onready var collision_object = $CollisionShape;
-
-
 
 func _ready():
 	if (not get_parent() is ARVROrigin):
@@ -40,15 +34,14 @@ func _update_collsion_shape_start_position():
 	global_transform.origin = vr.vrCamera.global_transform.origin;
 	global_transform.origin.y -= player_height * 0.5;
 
-
-func oq_locomotion_stick_check_move(move, dt):
-	if (!enabled): return move;
+func oq_locomotion_stick_check_move(velocity, dt):
+	if (!enabled): return velocity;
 
 	_update_collsion_shape_start_position();
 
-	move = move_and_slide_with_snap(move, Vector3(0.0, 1.0, 0.0));
-		
+	velocity = move_and_slide(velocity, Vector3(0.0, 1.0, 0.0));
+	
 	if (debug_information):
 		_show_debug_information();
 	
-	return move;
+	return velocity;

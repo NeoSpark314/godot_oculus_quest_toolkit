@@ -27,7 +27,7 @@ var mesh_material = null;
 func _ready():
 	ui_mesh = mesh_instance.mesh;
 	set_label_text(text);
-
+	
 	mesh_material = mesh_instance.mesh.surface_get_material(0);
 	
 	if (billboard):

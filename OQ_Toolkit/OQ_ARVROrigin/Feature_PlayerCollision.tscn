@@ -6,6 +6,7 @@
 radius = 0.15
 
 [node name="Feature_PlayerCollision" type="KinematicBody"]
+collision_layer = 0
 script = ExtResource( 1 )
 
 [node name="CollisionShape" type="CollisionShape" parent="."]

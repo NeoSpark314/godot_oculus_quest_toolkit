@@ -77,12 +77,12 @@ func move(dt):
 
 	var move = Vector2(dx, dy).normalized() * move_speed;
 	
-	var actual_move = (view_dir * move.y + strafe_dir * move.x) * dt;
+	var actual_velocity = (view_dir * move.y + strafe_dir * move.x);
 	
 	if (move_checker):
-		actual_move = move_checker.oq_locomotion_stick_check_move(actual_move, dt);
+		actual_velocity = move_checker.oq_locomotion_stick_check_move(actual_velocity, dt);
 
-	vr.vrOrigin.translation += actual_move;
+	vr.vrOrigin.translation += actual_velocity * dt;
 
 var last_click_rotate = false;
 
