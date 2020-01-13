@@ -86,7 +86,6 @@ func _ready():
 # this is a convenience funciton to know the palm orientation; it might be unnecessary
 # in the future
 func get_palm_transform() -> Transform:
-	
 	if (is_hand && _hand_model):
 		return _hand_model.palm_marker.global_transform;
 	elif (!is_hand && _controller_model):
@@ -94,6 +93,18 @@ func get_palm_transform() -> Transform:
 
 	#fallback if we don't have any information yet
 	return global_transform;
+
+# this is another convenience function as sometimes you don't want to flip
+# based on the palm orientation
+func get_grab_transform() -> Transform:
+	if (is_hand && _hand_model):
+		return _hand_model.grab_marker.global_transform;
+	elif (!is_hand && _controller_model):
+		return _controller_model.grab_marker.global_transform;
+
+	#fallback if we don't have any information yet
+	return global_transform;
+
 
 # this is the logic for controller/hand model switching
 # at the moment it is not configurable from the outside

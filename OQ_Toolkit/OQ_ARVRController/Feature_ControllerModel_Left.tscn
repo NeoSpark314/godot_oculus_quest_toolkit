@@ -9,3 +9,5 @@ script = ExtResource( 2 )
 [node name="OculusQuestTouchController_Left" parent="." instance=ExtResource( 1 )]
 
 [node name="PalmMarker" type="Spatial" parent="."]
+
+[node name="GrabMarker" type="Spatial" parent="."]

@@ -28,6 +28,8 @@ func _ready():
 	ui_mesh = mesh_instance.mesh;
 	set_label_text(text);
 	
+	#mesh_material = mesh_instance.mesh.surface_get_material(0).duplicate();
+	#mesh_instance.mesh.surface_set_material(0, mesh_material);
 	mesh_material = mesh_instance.mesh.surface_get_material(0);
 	
 	if (billboard):

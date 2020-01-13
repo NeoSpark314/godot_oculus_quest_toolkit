@@ -10,3 +10,6 @@ script = ExtResource( 2 )
 
 [node name="PalmMarker" type="Spatial" parent="."]
 transform = Transform( -1.91069e-15, -4.37114e-08, 1, -1, 4.37114e-08, 0, 4.37114e-08, 1, 4.37114e-08, -0.07, -0.005, 0.03 )
+
+[node name="GrabMarker" type="Spatial" parent="."]
+transform = Transform( 0, 0, 1, 1, 0, 0, 0, 1, 0, -0.07, -0.005, 0.03 )
