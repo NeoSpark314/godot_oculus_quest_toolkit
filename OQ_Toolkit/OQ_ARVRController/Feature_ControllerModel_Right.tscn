@@ -9,4 +9,6 @@ script = ExtResource( 2 )
 [node name="OculusQuestTouchController_Right" parent="." instance=ExtResource( 1 )]
 
 [node name="PalmMarker" type="Spatial" parent="."]
-transform = Transform( -1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
+transform = Transform( -1, 0, 0, 0, 1, -8.74228e-08, 0, 8.74228e-08, 1, 0, 0, 0 )
+
+[node name="GrabMarker" type="Spatial" parent="."]
