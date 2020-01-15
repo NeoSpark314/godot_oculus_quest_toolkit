@@ -108,9 +108,9 @@ func _is_interact_right():
 
 func _interact_move_controller(dir):
 	if (_is_interact_left()):
-		left_controller_node.translation += dir;
+		if (left_controller_node): left_controller_node.translation += dir;
 	if (_is_interact_right()):
-		right_controller_node.translation += dir;
+		if (right_controller_node): right_controller_node.translation += dir;
 	_update_virtual_controller_position();
 
 

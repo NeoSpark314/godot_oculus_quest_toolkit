@@ -523,12 +523,14 @@ func _perform_switch_scene(scene_path):
 		log_error("could not load scene '%s'" % scene_path)
 
 
-var _target_scene_path = null;
-var _scene_switch_fade_out_duration = 0.0;
-var _scene_switch_fade_out_time = 0.0;
-var _scene_switch_fade_in_duration = 0.0;
-var _scene_switch_fade_in_time = 0.0;
-var _switch_performed = false;
+var _target_scene_path := null;
+var _scene_switch_fade_out_duration := 0.0;
+var _scene_switch_fade_out_time := 0.0;
+var _scene_switch_fade_in_duration := 0.0;
+var _scene_switch_fade_in_time := 0.0;
+var _switch_performed := false;
+
+var switch_scene_in_progress := false;
 
 func switch_scene(scene_path, fade_time = 0.1, wait_time = 0.0):
 	if (wait_time > 0.0 && _active_scene_path != null):
@@ -550,21 +552,25 @@ func switch_scene(scene_path, fade_time = 0.1, wait_time = 0.0):
 
 func _check_for_scene_switch_and_fade(dt):
 	# first fade out before switch
+	switch_scene_in_progress = false;
 	if (_target_scene_path != null && !_switch_performed):
 		if (_scene_switch_fade_out_time < _scene_switch_fade_out_duration):
 			var c = 1.0 - _scene_switch_fade_out_time / _scene_switch_fade_out_duration;
 			set_default_layer_color_scale(Color(c, c, c, c));
 			_scene_switch_fade_out_time += dt;
+			switch_scene_in_progress = true;
 		else: # then swith scene when everything is black
 			set_default_layer_color_scale(Color(0, 0, 0, 0));
 			_perform_switch_scene(_target_scene_path);
 			_switch_performed = true;
+			switch_scene_in_progress = true;
 	elif (_target_scene_path != null && _switch_performed):
 		if (_scene_switch_fade_in_time < _scene_switch_fade_in_duration):
 			var c = _scene_switch_fade_in_time / _scene_switch_fade_in_duration;
 			set_default_layer_color_scale(Color(c, c, c, c));
 			_scene_switch_fade_in_time += dt;
-		else: # then swith scene when everything is black
+			switch_scene_in_progress = true;
+		else: # everything done; full white again for color
 			set_default_layer_color_scale(Color(1, 1, 1, 1));
 			_target_scene_path = null;
 
