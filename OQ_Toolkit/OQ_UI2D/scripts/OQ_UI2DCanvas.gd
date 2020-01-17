@@ -9,6 +9,12 @@ var ui_collisionshape = null;
 
 export var editor_live_update := false;
 
+export var transparent := false;
+
+var mesh_material = null;
+onready var mesh_instance : MeshInstance = $UIArea/UIMeshInstance
+
+
 var ui_size = Vector2();
 
 func _get_configuration_warning():
@@ -33,6 +39,11 @@ func update_size():
 
 
 func _ready():
+	
+	mesh_material = mesh_instance.mesh.surface_get_material(0);
+	# only enable transparency when necessary as it is significantly slower than non-transparent rendering
+	mesh_material.flags_transparent = transparent;
+	
 	if Engine.editor_hint:
 		return;
 

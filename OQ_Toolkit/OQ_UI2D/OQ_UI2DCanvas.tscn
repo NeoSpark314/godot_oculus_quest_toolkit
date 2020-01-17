@@ -26,10 +26,11 @@ script = ExtResource( 1 )
 
 [node name="Viewport" type="Viewport" parent="."]
 size = Vector2( 512, 256 )
+transparent_bg = true
 hdr = false
 disable_3d = true
 keep_3d_linear = true
-usage = 3
+usage = 0
 
 [node name="UIArea" type="Area" parent="."]
 script = ExtResource( 2 )
