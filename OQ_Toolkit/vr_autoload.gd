@@ -511,6 +511,7 @@ func _perform_switch_scene(scene_path):
 		if (s.has_method("scene_exit")): s.scene_exit();
 		scene_switch_root.remove_child(s);
 		s.queue_free();
+		_dbg_labels.clear(); # make sure to also clear the debug label dictionary as they might be created in the scene above
 
 	var next_scene_resource = load(scene_path);
 	if (next_scene_resource):
