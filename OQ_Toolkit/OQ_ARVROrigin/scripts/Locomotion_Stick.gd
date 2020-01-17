@@ -34,6 +34,8 @@ export(vr.AXIS) var turn_left_right = vr.AXIS.RIGHT_JOYSTICK_X;
 # when the Feature_PlayerCollision is used; so be careful there.
 var move_checker = null;
 
+var is_moving = false;
+
 
 func _show_debug_information():
 	var mcname = "null";
@@ -59,6 +61,7 @@ func _ready():
 
 
 func move(dt):
+	is_moving = false;
 	var dx = vr.get_controller_axis(move_left_right);
 	var dy = vr.get_controller_axis(move_forward_back);
 	
@@ -83,6 +86,8 @@ func move(dt):
 		actual_velocity = move_checker.oq_locomotion_stick_check_move(actual_velocity, dt);
 
 	vr.vrOrigin.translation += actual_velocity * dt;
+	
+	is_moving = actual_velocity.length_squared() > 0.0;
 
 var last_click_rotate = false;
 
