@@ -42,7 +42,7 @@ func _ready():
 	_setup_ui_elements();
 
 
-func _process(delta):
+func _process(_dt):
 	if (is_visible_in_tree() && vr.ovrUtilities):
 		ipd_info_label.set_text("Current IPD: %.1fmm" % (vr.get_ipd() * 1000.0));
 

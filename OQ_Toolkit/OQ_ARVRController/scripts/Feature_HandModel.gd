@@ -13,6 +13,7 @@ var skel : Skeleton = null;
 var tracking_confidence = 1.0;
 
 # the VrApi has at the moment no velocity tracking so we average sth. ourselves for now
+# this variable is used/returned in the method OQ_ARVRController.gd get_linear_velocity()
 var average_velocity = Vector3(0, 0, 0);
 
 const _velocity_buffer_size := 16;
@@ -21,8 +22,10 @@ var _last_velocity_position := Vector3(0,0,0)
 var _velocity_buffer_pos := 0;
 var _velocity_buffer := [];
 
+# currently the VrAPI seems not to give the velocity of the hands. This
+# function averages the movement over several frames to give a rough estimate
+# of the hand velocity
 func _track_average_velocity(_dt):
-	
 	if _velocity_buffer.size() == 0:
 		_velocity_buffer.resize(_velocity_buffer_size);
 		for i in range(0, _velocity_buffer_size): _velocity_buffer[i] = Vector3(0,0,0);
@@ -236,12 +239,12 @@ func _process(_dt):
 # able to use set pose
 # This is more like a workaround then a clean solution but allows to use 
 # the hand model from the sample without major modifications
-func _clear_bone_rest(skel : Skeleton):
-	_vrapi_inverse_neutral_pose.resize(skel.get_bone_count());
-	for i in range(0, skel.get_bone_count()):
-		var bone_rest = skel.get_bone_rest(i);
+func _clear_bone_rest(skeleton : Skeleton):
+	_vrapi_inverse_neutral_pose.resize(skeleton.get_bone_count());
+	for i in range(0, skeleton.get_bone_count()):
+		var bone_rest = skeleton.get_bone_rest(i);
 		
-		skel.set_bone_pose(i, Transform(bone_rest.basis)); # use the loaded rest as start pose
+		skeleton.set_bone_pose(i, Transform(bone_rest.basis)); # use the loaded rest as start pose
 		
 		_vrapi_inverse_neutral_pose[_hand2vrapi_bone_map[i]] = bone_rest.basis.get_rotation_quat().inverse();
 		
@@ -249,25 +252,25 @@ func _clear_bone_rest(skel : Skeleton):
 		_vrapi_bone_orientations[_hand2vrapi_bone_map[i]]  = bone_rest.basis.get_rotation_quat();
 		
 		bone_rest.basis = Basis(); # clear the rotation of the rest pose
-		skel.set_bone_rest(i, bone_rest); # and set this as the rest pose for the skeleton
+		skeleton.set_bone_rest(i, bone_rest); # and set this as the rest pose for the skeleton
 
 
 # Query the VrApi hand pose state and update the hand model bone pose
-func _update_hand_model(hand: ARVRController, model : Spatial, skel: Skeleton):
+func _update_hand_model(param_hand: ARVRController, param_model : Spatial, skeleton: Skeleton):
 	# we check to level visibility here for the node to not update
 	# when the application (or the OQ_XXXController) set it invisible
 	if (vr.ovrHandTracking && visible): # check if the hand tracking API was loaded
 		# scale of the hand model as reported by VrApi
-		var ls = vr.ovrHandTracking.get_hand_scale(hand.controller_id);
-		if (ls > 0.0): model.scale = Vector3(ls, ls, ls);
+		var ls = vr.ovrHandTracking.get_hand_scale(param_hand.controller_id);
+		if (ls > 0.0): param_model.scale = Vector3(ls, ls, ls);
 		
-		tracking_confidence = vr.ovrHandTracking.get_hand_pose(hand.controller_id, _vrapi_bone_orientations);
+		tracking_confidence = vr.ovrHandTracking.get_hand_pose(param_hand.controller_id, _vrapi_bone_orientations);
 		if (tracking_confidence > 0.0):
-			model.visible = true;
+			param_model.visible = true;
 			for i in range(0, _vrapi2hand_bone_map.size()):
-				skel.set_bone_pose(_vrapi2hand_bone_map[i], Transform(_vrapi_bone_orientations[i]));
+				skeleton.set_bone_pose(_vrapi2hand_bone_map[i], Transform(_vrapi_bone_orientations[i]));
 		else:
-			model.visible = false;
+			param_model.visible = false;
 		return true;
 	else:
 		return false;

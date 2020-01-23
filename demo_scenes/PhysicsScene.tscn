@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://demo_scenes/PhysicsScene.gd" type="Script" id=1]
 [ext_resource path="res://OQ_Toolkit/OQ_RightController.tscn" type="PackedScene" id=2]
@@ -11,6 +11,7 @@
 [ext_resource path="res://OQ_Toolkit/OQ_ARVRController/Feature_ControllerModel_Left.tscn" type="PackedScene" id=9]
 [ext_resource path="res://demo_scenes/data/models_3d/GrabAndThrowRoom/GrabAndThrowRoom.gltf" type="PackedScene" id=10]
 [ext_resource path="res://OQ_Toolkit/OQ_Classes/OQClass_GrabbableRigidBody.gd" type="Script" id=11]
+[ext_resource path="res://OQ_Toolkit/OQ_UI2D/OQ_UI2DLabel.tscn" type="PackedScene" id=12]
 
 [sub_resource type="BoxShape" id=1]
 extents = Vector3( 0.1, 0.1, 0.1 )
@@ -40,7 +41,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.26669, 0 )
 [node name="Feature_ControllerModel_Right" parent="OQ_ARVROrigin/OQ_RightController" instance=ExtResource( 4 )]
 
 [node name="Feature_RigidBodyGrab" parent="OQ_ARVROrigin/OQ_RightController" instance=ExtResource( 5 )]
-reparent_mesh = true
+grab_type = 1
 
 [node name="Feature_VRSimulator" parent="OQ_ARVROrigin" instance=ExtResource( 7 )]
 
@@ -103,3 +104,7 @@ material/0 = null
 
 [node name="PinJoint" type="PinJoint" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.235108, 1.31238, 0.416507 )
+
+[node name="InfoLabel" parent="." instance=ExtResource( 12 )]
+transform = Transform( 4, 0, 0, 0, 4, 0, 0, 0, 1, 0, 2, -1.99021 )
+text = "InfoText"

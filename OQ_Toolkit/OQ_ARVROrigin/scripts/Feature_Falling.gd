@@ -147,11 +147,11 @@ func _physics_process(dt):
 			else:
 				#vr.show_dbg_info("dbgFalling", "onGround: dist = %f; player_height = %f" % [hit_dist, player_height]);
 				on_ground = true;
-				var surrounding_can_fall = true;
+				#var surrounding_can_fall = true;
 				max_fall_distance = 0.0;
 				
-				if (fall_raycast_radius > 0.0):
-					surrounding_can_fall = _get_raycast_hit_surrounding(hit_result, space_state, from, to);
+				#if (fall_raycast_radius > 0.0):
+				#	surrounding_can_fall = _get_raycast_hit_surrounding(hit_result, space_state, from, to);
 			
 				# move only up when enabled and if we have a similar surrounding (this avoids moving up too soon when leaning)
 				if (force_move_up && (hit_dist < player_height - epsilon)):

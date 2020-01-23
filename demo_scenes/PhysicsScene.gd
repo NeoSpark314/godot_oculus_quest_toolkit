@@ -1,18 +1,11 @@
 extends Spatial
 
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
+const info_text = """Physics Demo Room
 
-# Called when the node enters the scene tree for the first time.
+Right Controller uses GrabType == HingeJoint
+Left Controller uses GrabType == Velocity + Reparent Mesh
+"""
+
 func _ready():
-	#$PinJoint.set_node_a($RigidBody4.get_path());
-	#$PinJoint.set_node_b($RigidBody5.get_path());
-	#print(vr.rightController.get_node("ObjectGrabber"));
-	pass # Replace with function body.
+	$InfoLabel.set_label_text(info_text);
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	#$RigidBody4.global_translate(Vector3(0,1,0)*delta*0.2);
-	#print($PinJoint.global_transform.origin);
-	pass

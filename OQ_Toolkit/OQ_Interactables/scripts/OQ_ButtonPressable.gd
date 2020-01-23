@@ -93,11 +93,11 @@ func _on_ButtonArea_area_entered(area):
 	prev_hand_pos = hand_area.global_transform.origin
 
 
-func _on_ButtonArea_area_exited(area):
+func _on_ButtonArea_area_exited(_area):
 	touching = false
 
 
-func button_press(other_area: Area):
+func button_press(_other_area: Area):
 	is_on = !is_on
 	switch_mat(is_on)
 	emit_signal("button_pressed")

@@ -16,17 +16,21 @@ var last_reported_collision_pos : Vector3 = Vector3(0,0,0);
 
 var _orig_can_sleep := true;
 
-func grab_init(node):
+var _grab_mode := -1;
+
+func grab_init(node, grab_mode):
 	target_node = node
 	
-	var node_basis = node.get_global_transform().basis;
+	_grab_mode = grab_mode;
+	
+	#var node_basis = node.get_global_transform().basis;
 	is_grabbed = true
 	sleeping = false;
 	_orig_can_sleep = can_sleep;
 	can_sleep = false;
 
 
-func grab_release(node):
+func grab_release(_node):
 	is_grabbed = false
 	target_node = null
 	can_sleep = _orig_can_sleep;
@@ -53,11 +57,11 @@ func position_follow(state, current_position, target_position):
 
 
 func _integrate_forces(state):
-	if (!is_grabbed): return
+	if (!is_grabbed): return;
 	
-	if (!target_node): return
-	
-	var target_basis =  target_node.get_global_transform().basis * delta_orientation;
-	var target_position = target_node.get_global_transform().origin# + target_basis.xform(delta_position);
-	position_follow(state, get_global_transform().origin, target_position);
-	orientation_follow(state, get_global_transform().basis, target_basis);
+	if (_grab_mode == 0):
+		if (!target_node): return;
+		var target_basis =  target_node.get_global_transform().basis * delta_orientation;
+		var target_position = target_node.get_global_transform().origin# + target_basis.xform(delta_position);
+		position_follow(state, get_global_transform().origin, target_position);
+		orientation_follow(state, get_global_transform().basis, target_basis);
