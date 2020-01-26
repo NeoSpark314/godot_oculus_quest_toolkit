@@ -1,18 +1,22 @@
 extends Spatial
 
+
+class_name Feature_RigidBodyGrab
+
+
 var controller : ARVRController = null;
 var grab_area : Area = null;
 var held_object = null;
 var held_object_data = {};
 var grab_mesh : MeshInstance = null;
+var held_object_initial_parent : Node
 
-enum {
-	GRABTYPE_VELOCITY,
-	GRABTYPE_PINJOINT, #!!TODO: not yet working; I first need to figure out how joints work
+enum GrabTypes {
+	KINEMATIC,
+	VELOCITY,
+	PINJOINT, #!!TODO: not yet working; I first need to figure out how joints work
 }
-var grab_type = GRABTYPE_VELOCITY;
-
-
+export (GrabTypes) var grab_type := GrabTypes.KINEMATIC
 export var reparent_mesh = false;
 
 func _ready():
@@ -51,21 +55,67 @@ func grab():
 			if body is OQClass_GrabbableRigidBody:
 				if body.is_grabbable:
 					grabbable_rigid_body = body
-
-	if grabbable_rigid_body:
-		if (grab_type == GRABTYPE_VELOCITY): start_grab_velocity(grabbable_rigid_body)
-		#elif (grab_type == GRABTYPE_PINJOINT): start_grab_pinjoint(rigid_body);
+	
+	
+	match grab_type:
+		GrabTypes.KINEMATIC:
+			start_grab_kinematic(grabbable_rigid_body)
+		GrabTypes.VELOCITY:
+			start_grab_velocity(grabbable_rigid_body)
+		GrabTypes.PINJOINT:
+			start_grab_pinjoint(grabbable_rigid_body)
 
 
 func release():
 	if !held_object:
 		return
 	
-	if (grab_type == GRABTYPE_VELOCITY): release_grab_velocity();
-	#elif (grab_type == GRABTYPE_PINJOINT): release_grab_pinjoint();
+	match grab_type:
+		GrabTypes.KINEMATIC:
+			release_grab_kinematic()
+		GrabTypes.VELOCITY:
+			release_grab_velocity()
+		GrabTypes.PINJOINT:
+			release_grab_pinjoint()
 
 
-func start_grab_velocity(grabbable_rigid_body: OQClass_GrabbableRigidBody):
+func start_grab_kinematic(grabbable_rigid_body):
+	if grabbable_rigid_body.is_grabbed:
+		return
+	
+	held_object = grabbable_rigid_body
+	
+	# keep initial transform
+	var initial_transform = held_object.get_global_transform()
+	
+	# reparent
+	held_object_initial_parent = held_object.get_parent()
+	held_object_initial_parent.remove_child(held_object)
+	add_child(held_object)
+	
+	held_object.global_transform = initial_transform
+	held_object.set_mode(RigidBody.MODE_KINEMATIC)
+	
+	held_object.grab_init(held_object.to_local(global_transform.origin), grab_type)
+
+
+func release_grab_kinematic():
+	# keep initial transform
+	var initial_transform = held_object.get_global_transform()
+	
+	# reparent
+	remove_child(held_object)
+	held_object_initial_parent.add_child(held_object)
+	
+	held_object.global_transform = initial_transform
+	held_object.set_mode(RigidBody.MODE_RIGID)
+	
+	held_object.grab_release(self)
+	
+	held_object = null
+
+
+func start_grab_velocity(grabbable_rigid_body):
 	if grabbable_rigid_body.is_grabbed:
 		return
 	
@@ -77,10 +127,9 @@ func start_grab_velocity(grabbable_rigid_body: OQClass_GrabbableRigidBody):
 	grabbable_rigid_body.global_transform.basis = temp_rotation
 	
 	held_object = grabbable_rigid_body
-	held_object.grab_init(self)
+	held_object.grab_init(self, grab_type)
 	
-	# if the 
-	if (reparent_mesh):
+	if (reparent_mesh and grab_type != GrabTypes.KINEMATIC):
 			for c in held_object.get_children():
 				if (c is MeshInstance):
 					grab_mesh = c;

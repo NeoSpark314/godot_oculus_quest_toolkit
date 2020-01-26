@@ -9,12 +9,18 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "Spatial",
+"class": "Feature_RigidBodyGrab",
+"language": "GDScript",
+"path": "res://OQ_Toolkit/OQ_ARVRController/scripts/Feature_RigidBodyGrab.gd"
+}, {
 "base": "RigidBody",
 "class": "OQClass_GrabbableRigidBody",
 "language": "GDScript",
 "path": "res://OQ_Toolkit/OQ_Classes/OQClass_GrabbableRigidBody.gd"
 } ]
 _global_script_class_icons={
+"Feature_RigidBodyGrab": "",
 "OQClass_GrabbableRigidBody": ""
 }
 
