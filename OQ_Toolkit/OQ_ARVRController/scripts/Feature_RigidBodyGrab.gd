@@ -106,7 +106,7 @@ func start_grab_kinematic(grabbable_rigid_body):
 	held_object.global_transform = initial_transform
 	held_object.set_mode(RigidBody.MODE_KINEMATIC)
 	
-	held_object.grab_init(held_object.to_local(global_transform.origin), grab_type)
+	held_object.grab_init(self, grab_type)
 
 
 func release_grab_kinematic():
@@ -120,7 +120,7 @@ func release_grab_kinematic():
 	held_object.global_transform = initial_transform
 	held_object.set_mode(RigidBody.MODE_RIGID)
 	
-	held_object.grab_release(self)
+	held_object.grab_release()
 	
 	held_object = null
 
@@ -172,7 +172,7 @@ func start_grab_hinge_joint(grabbable_rigid_body):
 func release_grab_hinge_joint():
 	_release_reparent_mesh();
 	_hinge_joint.set_node_b("");
-	held_object.grab_release(self);
+	held_object.grab_release();
 	held_object = null;
 
 
@@ -201,7 +201,7 @@ func start_grab_velocity(grabbable_rigid_body):
 func release_grab_velocity():
 	_release_reparent_mesh();
 	
-	held_object.grab_release(self)
+	held_object.grab_release()
 	held_object = null
 
 

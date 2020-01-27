@@ -18,6 +18,10 @@ var _orig_can_sleep := true;
 
 var _grab_type := -1;
 
+var _release_next_physics_step := false;
+var _cached_linear_velocity := Vector3(0,0,0); # required for kinematic grab
+var _cached_angular_velocity := Vector3(0,0,0);
+
 func grab_init(node, grab_type: int) -> void:
 	target_node = node
 	_grab_type = grab_type
@@ -27,18 +31,23 @@ func grab_init(node, grab_type: int) -> void:
 	_orig_can_sleep = can_sleep;
 	can_sleep = false;
 
+func _release():
+	is_grabbed = false
+	target_node = null
+	can_sleep = _orig_can_sleep;
 
-func grab_release(_node) -> void:
+
+func grab_release() -> void:
 	# TODO: it would be better to use == Feature_RigidBodyGrab.GrabTypes.KINEMATIC
 	# but this leads to an odd cyclic reference error
 	# related to this bug: https://github.com/godotengine/godot/issues/21461
 	if _grab_type == 0:
-		apply_impulse(target_node, linear_velocity)
-		apply_torque_impulse(angular_velocity * 0.001)
+		_release_next_physics_step = true;
+		_cached_linear_velocity = linear_velocity;
+		_cached_angular_velocity = angular_velocity;
+	else:
+		_release();
 	
-	is_grabbed = false
-	target_node = null
-	can_sleep = _orig_can_sleep;
 
 
 func orientation_follow(state, current_basis : Basis, target_basis : Basis) -> void:
@@ -63,6 +72,13 @@ func position_follow(state, current_position, target_position) -> void:
 
 func _integrate_forces(state):
 	if (!is_grabbed): return;
+	
+	if (_release_next_physics_step):
+		_release_next_physics_step = false;
+		state.set_linear_velocity(_cached_linear_velocity);
+		state.set_angular_velocity(_cached_angular_velocity);
+		_release();
+		return;
 	
 	# TODO: it would be better to use == Feature_RigidBodyGrab.GrabTypes.KINEMATIC
 	# but this leads to an odd cyclic reference error
