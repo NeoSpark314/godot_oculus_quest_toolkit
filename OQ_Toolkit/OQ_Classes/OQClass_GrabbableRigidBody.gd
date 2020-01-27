@@ -38,10 +38,7 @@ func _release():
 
 
 func grab_release() -> void:
-	# TODO: it would be better to use == Feature_RigidBodyGrab.GrabTypes.KINEMATIC
-	# but this leads to an odd cyclic reference error
-	# related to this bug: https://github.com/godotengine/godot/issues/21461
-	if _grab_type == 0:
+	if _grab_type == vr.GrabTypes.KINEMATIC:
 		_release_next_physics_step = true;
 		_cached_linear_velocity = linear_velocity;
 		_cached_angular_velocity = angular_velocity;
@@ -75,21 +72,22 @@ func _integrate_forces(state):
 	
 	if (_release_next_physics_step):
 		_release_next_physics_step = false;
-		state.set_linear_velocity(_cached_linear_velocity);
-		state.set_angular_velocity(_cached_angular_velocity);
+		if _grab_type == vr.GrabTypes.KINEMATIC:
+			state.set_linear_velocity(_cached_linear_velocity);
+			state.set_angular_velocity(_cached_angular_velocity);
 		_release();
 		return;
 	
 	# TODO: it would be better to use == Feature_RigidBodyGrab.GrabTypes.KINEMATIC
 	# but this leads to an odd cyclic reference error
 	# related to this bug: https://github.com/godotengine/godot/issues/21461
-	if _grab_type == 0:
+	if _grab_type == vr.GrabTypes.KINEMATIC:
 		return;
 
-	if _grab_type == 2:
+	if _grab_type == vr.GrabTypes.HINGEJOINT:
 		return;
 	
-	if (_grab_type == 1):
+	if (_grab_type == vr.GrabTypes.VELOCITY):
 		if (!target_node): return;
 		var target_basis =  target_node.get_global_transform().basis * delta_orientation;
 		var target_position = target_node.get_global_transform().origin# + target_basis.xform(delta_position);

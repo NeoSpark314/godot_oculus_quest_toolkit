@@ -11,12 +11,8 @@ var held_object_data = {};
 var grab_mesh : MeshInstance = null;
 var held_object_initial_parent : Node
 
-enum GrabTypes {
-	KINEMATIC,
-	VELOCITY,
-	HINGEJOINT,
-}
-export (GrabTypes) var grab_type := GrabTypes.HINGEJOINT;
+
+export (vr.GrabTypes) var grab_type := vr.GrabTypes.HINGEJOINT;
 
 export var collision_body_active := false;
 
@@ -68,11 +64,11 @@ func grab() -> void:
 	
 	if grabbable_rigid_body:
 		match grab_type:
-			GrabTypes.KINEMATIC:
+			vr.GrabTypes.KINEMATIC:
 				start_grab_kinematic(grabbable_rigid_body);
-			GrabTypes.VELOCITY:
+			vr.GrabTypes.VELOCITY:
 				start_grab_velocity(grabbable_rigid_body);
-			GrabTypes.HINGEJOINT:
+			vr.GrabTypes.HINGEJOINT:
 				start_grab_hinge_joint(grabbable_rigid_body);
 
 
@@ -81,11 +77,11 @@ func release():
 		return
 	
 	match grab_type:
-		GrabTypes.KINEMATIC:
+		vr.GrabTypes.KINEMATIC:
 			release_grab_kinematic()
-		GrabTypes.VELOCITY:
+		vr.GrabTypes.VELOCITY:
 			release_grab_velocity()
-		GrabTypes.HINGEJOINT:
+		vr.GrabTypes.HINGEJOINT:
 			release_grab_hinge_joint()
 
 
@@ -145,11 +141,11 @@ func _reparent_mesh():
 		held_object.remove_child(grab_mesh);
 		add_child(grab_mesh);
 		
-		if (grab_type == GrabTypes.VELOCITY):
+		if (grab_type == vr.GrabTypes.VELOCITY):
 			# now set the mesh transform to be the same as used for the rigid body
 			grab_mesh.transform = Transform();
 			grab_mesh.transform.basis = held_object.delta_orientation;
-		elif (grab_type == GrabTypes.HINGEJOINT):
+		elif (grab_type == vr.GrabTypes.HINGEJOINT):
 			grab_mesh.global_transform = mesh_global_trafo;
 
 	

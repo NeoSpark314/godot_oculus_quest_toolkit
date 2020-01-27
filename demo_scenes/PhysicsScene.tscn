@@ -42,7 +42,6 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.26669, 0 )
 [node name="Feature_ControllerModel_Right" parent="OQ_ARVROrigin/OQ_RightController" instance=ExtResource( 4 )]
 
 [node name="Feature_RigidBodyGrab" parent="OQ_ARVROrigin/OQ_RightController" instance=ExtResource( 5 )]
-grab_type = 0
 
 [node name="Feature_VRSimulator" parent="OQ_ARVROrigin" instance=ExtResource( 7 )]
 
