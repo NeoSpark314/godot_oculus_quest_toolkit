@@ -26,6 +26,10 @@ var _velocity_buffer := [];
 # function averages the movement over several frames to give a rough estimate
 # of the hand velocity
 func _track_average_velocity(_dt):
+	# workaround for https://github.com/NeoSpark314/godot_oculus_quest_toolkit/issues/5
+	# since we divide by _dt; so far I did not figure out in which cases this actually happens
+	if (_dt <= 0.0): return;
+	
 	if _velocity_buffer.size() == 0:
 		_velocity_buffer.resize(_velocity_buffer_size);
 		for i in range(0, _velocity_buffer_size): _velocity_buffer[i] = Vector3(0,0,0);
