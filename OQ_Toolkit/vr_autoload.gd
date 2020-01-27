@@ -507,6 +507,9 @@ var scene_switch_root = null;
 # helper function to switch different scenes; this will be in the
 # future extend to allow for some transtioning to happen as well as maybe some shader caching
 func _perform_switch_scene(scene_path):
+	print("_perform_switch_scene")
+	print(scene_path)
+	
 	for s in scene_switch_root.get_children():
 		if (s.has_method("scene_exit")): s.scene_exit();
 		scene_switch_root.remove_child(s);
@@ -524,7 +527,7 @@ func _perform_switch_scene(scene_path):
 		log_error("could not load scene '%s'" % scene_path)
 
 
-var _target_scene_path := null;
+var _target_scene_path = null;
 var _scene_switch_fade_out_duration := 0.0;
 var _scene_switch_fade_out_time := 0.0;
 var _scene_switch_fade_in_duration := 0.0;
@@ -540,6 +543,7 @@ func switch_scene(scene_path, fade_time = 0.1, wait_time = 0.0):
 	if (scene_switch_root == null):
 		log_error("vr.switch_scene(...) called but no scene_switch_root configured");
 	if (_active_scene_path == scene_path): return;
+
 	if (fade_time <= 0.0):
 		_perform_switch_scene(scene_path);
 		return;
@@ -550,6 +554,7 @@ func switch_scene(scene_path, fade_time = 0.1, wait_time = 0.0):
 	_scene_switch_fade_out_time = 0.0;
 	_scene_switch_fade_in_time = 0.0;
 	_switch_performed = false;
+	
 
 func _check_for_scene_switch_and_fade(dt):
 	# first fade out before switch

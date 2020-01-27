@@ -9,7 +9,6 @@ var target_node = null;
 var delta_orientation = Basis();
 var delta_position = Vector3();
 var is_grabbed := false
-var current_grab_type : int
 
 export var is_grabbable := true
 
@@ -17,10 +16,11 @@ var last_reported_collision_pos : Vector3 = Vector3(0,0,0);
 
 var _orig_can_sleep := true;
 
+var _grab_type := -1;
 
 func grab_init(node, grab_type: int) -> void:
 	target_node = node
-	current_grab_type = grab_type
+	_grab_type = grab_type
 	
 	is_grabbed = true
 	sleeping = false;
@@ -28,11 +28,11 @@ func grab_init(node, grab_type: int) -> void:
 	can_sleep = false;
 
 
-func grab_release(node) -> void:
+func grab_release(_node) -> void:
 	# TODO: it would be better to use == Feature_RigidBodyGrab.GrabTypes.KINEMATIC
 	# but this leads to an odd cyclic reference error
 	# related to this bug: https://github.com/godotengine/godot/issues/21461
-	if current_grab_type == 0:
+	if _grab_type == 0:
 		apply_impulse(target_node, linear_velocity)
 		apply_torque_impulse(angular_velocity * 0.001)
 	
@@ -62,17 +62,20 @@ func position_follow(state, current_position, target_position) -> void:
 
 
 func _integrate_forces(state):
-	if (!is_grabbed): return
-	
-	if (!target_node): return
+	if (!is_grabbed): return;
 	
 	# TODO: it would be better to use == Feature_RigidBodyGrab.GrabTypes.KINEMATIC
 	# but this leads to an odd cyclic reference error
 	# related to this bug: https://github.com/godotengine/godot/issues/21461
-	if current_grab_type == 0:
-		return
+	if _grab_type == 0:
+		return;
+
+	if _grab_type == 2:
+		return;
 	
-	var target_basis =  target_node.get_global_transform().basis * delta_orientation;
-	var target_position = target_node.get_global_transform().origin# + target_basis.xform(delta_position);
-	position_follow(state, get_global_transform().origin, target_position);
-	orientation_follow(state, get_global_transform().basis, target_basis);
+	if (_grab_type == 1):
+		if (!target_node): return;
+		var target_basis =  target_node.get_global_transform().basis * delta_orientation;
+		var target_position = target_node.get_global_transform().origin# + target_basis.xform(delta_position);
+		position_follow(state, get_global_transform().origin, target_position);
+		orientation_follow(state, get_global_transform().basis, target_basis);

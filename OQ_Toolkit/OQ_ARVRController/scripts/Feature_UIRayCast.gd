@@ -94,5 +94,5 @@ func _ready():
 	ui_raycast_mesh.visible = false;
 
 # we use the physics process here be in sync with the controller position
-func _physics_process(dt):
+func _physics_process(_dt):
 	_update_raycasts();

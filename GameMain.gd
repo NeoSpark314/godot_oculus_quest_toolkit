@@ -12,7 +12,7 @@ var room_list = [
 
 var current_room = 0;
 
-func _process(dt):
+func _process(_dt):
 	if (vr.button_just_released(vr.BUTTON.ENTER) ||
 		(vr.leftController && vr.leftController.is_hand && vr.button_just_released(vr.BUTTON.Y))):
 		vr.switch_scene(room_list[0]);
@@ -31,6 +31,7 @@ func _ready():
 	#vr.switch_scene("res://demo_scenes/WalkInPlaceDemoScene.tscn"); return;
 	#vr.switch_scene("res://demo_scenes/PlayerCollisionDemoScene.tscn"); return;
 	#vr.switch_scene("res://demo_scenes/HandTrackingDemoScene.tscn"); return;
+	#vr.switch_scene("res://demo_scenes/PhysicsScene.tscn"); return;
 
 	# Always advertise Godot a bit in the beggining
 	if (vr.inVR): vr.switch_scene("res://demo_scenes/GodotSplash.tscn", 0.0, 0.0);

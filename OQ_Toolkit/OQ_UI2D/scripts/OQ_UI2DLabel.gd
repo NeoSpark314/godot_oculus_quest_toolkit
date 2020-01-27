@@ -58,7 +58,7 @@ func resize_auto():
 	ui_viewport.set_size(res)
 	ui_color_rect.set_size(res)
 
-	var aspect = res.x / res.y
+	#var aspect = res.x / res.y
 
 	ui_mesh.size.x = font_size_multiplier * res.x * vr.UI_PIXELS_TO_METER
 	ui_mesh.size.y = font_size_multiplier * res.y * vr.UI_PIXELS_TO_METER
@@ -90,7 +90,7 @@ func set_label_text(t: String):
 		ResizeModes.FIXED:
 			resize_fixed();
 			
-func _process(dt):
+func _process(_dt):
 	if Engine.editor_hint:
 		set_label_text(text);
 			
