@@ -9,6 +9,7 @@ var target_node = null;
 var delta_orientation = Basis();
 var delta_position = Vector3();
 var is_grabbed := false
+var current_grab_type : int
 
 export var is_grabbable := true
 
@@ -16,23 +17,31 @@ var last_reported_collision_pos : Vector3 = Vector3(0,0,0);
 
 var _orig_can_sleep := true;
 
-func grab_init(node):
+
+func grab_init(node, grab_type: int) -> void:
 	target_node = node
+	current_grab_type = grab_type
 	
-	var node_basis = node.get_global_transform().basis;
 	is_grabbed = true
 	sleeping = false;
 	_orig_can_sleep = can_sleep;
 	can_sleep = false;
 
 
-func grab_release(node):
+func grab_release(node) -> void:
+	# TODO: it would be better to use == Feature_RigidBodyGrab.GrabTypes.KINEMATIC
+	# but this leads to an odd cyclic reference error
+	# related to this bug: https://github.com/godotengine/godot/issues/21461
+	if current_grab_type == 0:
+		apply_impulse(target_node, linear_velocity)
+		apply_torque_impulse(angular_velocity * 0.001)
+	
 	is_grabbed = false
 	target_node = null
 	can_sleep = _orig_can_sleep;
 
 
-func orientation_follow(state, current_basis : Basis, target_basis : Basis):
+func orientation_follow(state, current_basis : Basis, target_basis : Basis) -> void:
 	var delta : Basis = target_basis * current_basis.inverse();
 	
 	var q = Quat(delta);
@@ -47,7 +56,7 @@ func orientation_follow(state, current_basis : Basis, target_basis : Basis):
 
 
 
-func position_follow(state, current_position, target_position):
+func position_follow(state, current_position, target_position) -> void:
 	var dir = target_position - current_position;
 	state.set_linear_velocity(dir / state.get_step());
 
@@ -56,6 +65,12 @@ func _integrate_forces(state):
 	if (!is_grabbed): return
 	
 	if (!target_node): return
+	
+	# TODO: it would be better to use == Feature_RigidBodyGrab.GrabTypes.KINEMATIC
+	# but this leads to an odd cyclic reference error
+	# related to this bug: https://github.com/godotengine/godot/issues/21461
+	if current_grab_type == 0:
+		return
 	
 	var target_basis =  target_node.get_global_transform().basis * delta_orientation;
 	var target_position = target_node.get_global_transform().origin# + target_basis.xform(delta_position);

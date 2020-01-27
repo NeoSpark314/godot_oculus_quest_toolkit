@@ -48,6 +48,8 @@ reparent_mesh = true
 
 [node name="RigidBody" type="RigidBody" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -1 )
+linear_damp = 0.9
+angular_damp = 1.0
 script = ExtResource( 11 )
 
 [node name="CollisionShape" type="CollisionShape" parent="RigidBody"]
@@ -59,6 +61,8 @@ material/0 = null
 
 [node name="RigidBody2" type="RigidBody" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.23701, -1 )
+linear_damp = 0.9
+angular_damp = 1.0
 script = ExtResource( 11 )
 
 [node name="CollisionShape" type="CollisionShape" parent="RigidBody2"]
@@ -70,6 +74,8 @@ material/0 = null
 
 [node name="RigidBody3" type="RigidBody" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.48077, -1 )
+linear_damp = 0.9
+angular_damp = 1.0
 script = ExtResource( 11 )
 
 [node name="CollisionShape" type="CollisionShape" parent="RigidBody3"]
@@ -81,6 +87,8 @@ material/0 = null
 
 [node name="RigidBody4" type="RigidBody" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.238643, 1.44637, 0.415651 )
+linear_damp = 0.9
+angular_damp = 1.0
 script = ExtResource( 11 )
 
 [node name="CollisionShape" type="CollisionShape" parent="RigidBody4"]
@@ -92,6 +100,8 @@ material/0 = null
 
 [node name="RigidBody5" type="RigidBody" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.238643, 1.14147, 0.415651 )
+linear_damp = 0.9
+angular_damp = 1.0
 script = ExtResource( 11 )
 
 [node name="CollisionShape" type="CollisionShape" parent="RigidBody5"]
