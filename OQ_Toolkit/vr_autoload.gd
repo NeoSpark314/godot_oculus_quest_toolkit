@@ -616,8 +616,9 @@ func initialize():
 	log_info("Initializing VR");
 	log_info("  Available Interfaces are %s: " % str(ARVRServer.get_interfaces()));
 	
-	var arvr_ovr_mobile_interface = ARVRServer.find_interface("OVRMobile")
-	var arvr_open_vr_interface = ARVRServer.find_interface("OpenVR")
+	var arvr_ovr_mobile_interface = ARVRServer.find_interface("OVRMobile");
+	var arvr_oculus_interface = ARVRServer.find_interface("Oculus");
+	var arvr_open_vr_interface = ARVRServer.find_interface("OpenVR");
 	
 	if arvr_ovr_mobile_interface:
 		log_info("  Found OVRMobile Interface.");
@@ -631,6 +632,14 @@ func initialize():
 			log_info("  Success initializing OVRMobile Interface.");
 			# TODO: set physics FPS here too instead of in the project settings
 			return true;
+	elif arvr_oculus_interface:
+		log_info("  Found Oculus Interface.");
+		if arvr_oculus_interface.initialize():
+			get_viewport().arvr = true;
+			Engine.target_fps = 80 # TODO: this is headset dependent (RiftS == 80)=> figure out how to get this info at runtime
+			OS.vsync_enabled = false;
+			inVR = true;
+			log_info("  Success initializing Oculus Interface.");
 	elif arvr_open_vr_interface:
 		log_info("  Found OpenVR Interface.");
 		if arvr_open_vr_interface.initialize():
