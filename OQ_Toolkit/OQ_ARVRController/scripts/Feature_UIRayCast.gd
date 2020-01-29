@@ -1,7 +1,8 @@
 extends Spatial
 
-export var ui_raycast_length := 3;
-export var ui_mesh_length := 1;
+export var active := true;
+export var ui_raycast_length := 3.0;
+export var ui_mesh_length := 1.0;
 export(vr.CONTROLLER_BUTTON) var ui_raycast_visible_button := vr.CONTROLLER_BUTTON.TOUCH_INDEX_TRIGGER;
 export(vr.CONTROLLER_BUTTON) var ui_raycast_click_button := vr.CONTROLLER_BUTTON.INDEX_TRIGGER;
 
@@ -95,4 +96,5 @@ func _ready():
 
 # we use the physics process here be in sync with the controller position
 func _physics_process(_dt):
+	if (!active): return;
 	_update_raycasts();

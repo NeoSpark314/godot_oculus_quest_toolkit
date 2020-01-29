@@ -128,7 +128,6 @@ func _physics_process(dt):
 		var to = from - Vector3(0.0, max_raycast_distance, 0.0);
 		var hit_result = _get_raycast_hit_center(space_state, from, to);
 		
-		#vr.show_dbg_info("rayCastInfo", "player_height = %f foot_height = %f" % [player_height, foot_height]);
 		
 		if (fall_without_hit):
 			on_ground = false;
@@ -140,6 +139,9 @@ func _physics_process(dt):
 		if (hit_result):
 			var hit_point = hit_result.position;
 			var hit_dist = head_position.y - hit_point.y;
+			
+			#vr.show_dbg_info("rayCastInfo", "player_height = %f foot_height = %f hit_dist = %f" % [player_height, foot_height, hit_dist]);
+
 			if (hit_dist > player_height + epsilon):
 				on_ground = false;
 				max_fall_distance = hit_dist - player_height;
