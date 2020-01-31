@@ -135,9 +135,9 @@ func _update_keyboard(dt):
 		dir += Vector3(-1,0,0);
 	if (Input.is_key_pressed(KEY_D)):
 		dir += Vector3(1,0,0);
-	if (Input.is_key_pressed(KEY_Q)):
+	if (Input.is_key_pressed(KEY_V)):
 		dir += Vector3(0,-1,0);
-	if (Input.is_key_pressed(KEY_E)):
+	if (Input.is_key_pressed(KEY_F)):
 		dir += Vector3(0,1,0);
 
 	if (_is_interact_left() || _is_interact_right()):
