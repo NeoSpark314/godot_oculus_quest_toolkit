@@ -33,6 +33,8 @@ keep_3d_linear = true
 usage = 0
 
 [node name="UIArea" type="Area" parent="."]
+collision_layer = 524288
+collision_mask = 0
 script = ExtResource( 2 )
 
 [node name="UICollisionShape" type="CollisionShape" parent="UIArea"]
