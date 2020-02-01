@@ -8,6 +8,11 @@ signal oq_area_object_grab_ended;
 
 export var use_parent_of_area := true;
 
+# if true the object is checked if it has a method "oq_can_area_object_grab" and calls it
+# to check if it actually can be grabbed. All other objects are ignored
+export var check_can_grab = false;
+
+
 var is_grabbing = false;
 var is_just_grabbing = false;
 var grabbed_object = null;
@@ -27,14 +32,30 @@ func _process(_dt):
 	if (controller._button_just_pressed(grab_button)):
 		var overlapping_areas = grab_area.get_overlapping_areas();
 		for b in overlapping_areas:
+			if (use_parent_of_area):
+				grabbed_object = b.get_parent();
+			else:
+				grabbed_object = b;
+			if (check_can_grab):
+				if (grabbed_object.has_method("oq_can_area_object_grab") &&
+				    grabbed_object.oq_can_area_object_grab(controller)):
+						pass;
+				else:
+					grabbed_object = null;
+					continue;
+
 			is_grabbing = true;
 			is_just_grabbing = true;
-			grabbed_object = b;
-			var trafo = b.global_transform;
-			grabbed_object_parent = b.get_parent();
-			grabbed_object_parent.remove_child(b);
-			add_child(b);
-			b.global_transform = trafo;
+
+					
+					
+			
+			var trafo = grabbed_object.global_transform;
+			grabbed_object_parent = grabbed_object.get_parent();
+			grabbed_object_parent.remove_child(grabbed_object);
+			add_child(grabbed_object);
+			grabbed_object.global_transform = trafo;
+			
 			emit_signal("oq_area_object_grab_started", grabbed_object, controller)
 			break;
 	else:
