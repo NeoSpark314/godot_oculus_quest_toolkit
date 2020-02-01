@@ -18,14 +18,9 @@ export(vr.AXIS) var move_left_right = vr.AXIS.LEFT_JOYSTICK_X;
 export(vr.AXIS) var move_forward_back = vr.AXIS.LEFT_JOYSTICK_Y;
 
 
-enum TurnType {
-	CLICK,
-	SMOOTH
-}
-
-export(TurnType) var turn_type = TurnType.CLICK
-export var smooth_turn_speed = 90.0;
-export var click_turn_angle = 45.0; 
+export(vr.LocomotionStickTurnType) var turn_type = vr.LocomotionStickTurnType.CLICK
+export var smooth_turn_speed := 90.0;
+export var click_turn_angle := 45.0; 
 export(vr.AXIS) var turn_left_right = vr.AXIS.RIGHT_JOYSTICK_X;
 
 
@@ -106,13 +101,13 @@ func turn(dt):
 	var origHeadPos = vr.vrCamera.global_transform.origin;
 	
 	# click turning
-	if (turn_type == TurnType.CLICK && !last_click_rotate):
+	if (turn_type == vr.LocomotionStickTurnType.CLICK && !last_click_rotate):
 		last_click_rotate = true;
 		var dsign = sign(dlr);
 		vr.vrOrigin.rotate_y(dsign * deg2rad(click_turn_angle));
 			
 	# smooth turning
-	elif (turn_type == TurnType.SMOOTH):
+	elif (turn_type == vr.LocomotionStickTurnType.SMOOTH):
 		if (enable_vignette) : movement_vignette_rect.visible = true;
 		vr.vrOrigin.rotate_y(deg2rad(dlr * smooth_turn_speed * dt));
 

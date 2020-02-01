@@ -19,9 +19,9 @@
 [ext_resource path="res://OQ_Toolkit/OQ_UI2D/OQ_UI2DLogWindow.tscn" type="PackedScene" id=17]
 [ext_resource path="res://OQ_Toolkit/OQ_UI2D/OQ_UI2DLabel_IPD.tscn" type="PackedScene" id=18]
 [ext_resource path="res://OQ_Toolkit/OQ_Interactables/OQ_ButtonPressable.tscn" type="PackedScene" id=19]
-[ext_resource path="res://OQ_Toolkit/OQ_ARVRController/Feature_StaticGrab.tscn" type="PackedScene" id=20]
 [ext_resource path="res://demo_scenes/data/Material_Green.material" type="Material" id=21]
 [ext_resource path="res://demo_scenes/data/Material_Red.material" type="Material" id=22]
+[ext_resource path="res://OQ_Toolkit/OQ_ARVRController/Feature_AreaObjectGrab.tscn" type="PackedScene" id=23]
 
 [sub_resource type="PlaneMesh" id=1]
 size = Vector2( 16, 16 )
@@ -176,7 +176,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Feature_StaticGrab" parent="OQ_ARVROrigin/OQ_LeftController" instance=ExtResource( 20 )]
+[node name="Feature_AreaObjectGrab" parent="OQ_ARVROrigin/OQ_LeftController" instance=ExtResource( 23 )]
 
 [node name="OQ_RightController" parent="OQ_ARVROrigin" instance=ExtResource( 13 )]
 
@@ -185,7 +185,7 @@ __meta__ = {
 [node name="Feature_UIRayCast" parent="OQ_ARVROrigin/OQ_RightController" instance=ExtResource( 12 )]
 ui_raycast_visible_button = -1
 
-[node name="Feature_StaticGrab" parent="OQ_ARVROrigin/OQ_RightController" instance=ExtResource( 20 )]
+[node name="Feature_AreaObjectGrab" parent="OQ_ARVROrigin/OQ_RightController" instance=ExtResource( 23 )]
 
 [node name="Locomotion_Stick" parent="OQ_ARVROrigin" instance=ExtResource( 11 )]
 
@@ -430,6 +430,14 @@ material/0 = SubResource( 4 )
 [node name="InfoLabel" parent="." instance=ExtResource( 3 )]
 transform = Transform( 1.95886, 0, 0.201796, 0, 2, 0, -0.403593, 0, 0.979428, -0.867748, 2.03673, -1.23376 )
 text = "Info Label"
+margin = 16
+billboard = false
+depth_test = true
+resize_mode = 0
+font_size_multiplier = 1.0
+font_color = Color( 1, 1, 1, 1 )
+background_color = Color( 0, 0, 0, 1 )
+transparent = false
 
 [node name="OQ_UI2DCanvas_LevelSelector" parent="." instance=ExtResource( 10 )]
 transform = Transform( 1.67744, -0.544566, 0.471608, 0, 1.73205, 0.5, -1.08913, -0.838718, 0.726351, -0.915071, 1.17961, -1.52167 )

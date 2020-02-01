@@ -78,6 +78,7 @@ func _update_raycasts():
 		var position = ui_raycast.get_collision_point();
 		ui_raycast_hitmarker.visible = true;
 		ui_raycast_hitmarker.global_transform.origin = position;
+		
 		c.ui_raycast_hit_event(position, click, release);
 
 func _ready():
@@ -97,4 +98,5 @@ func _ready():
 # we use the physics process here be in sync with the controller position
 func _physics_process(_dt):
 	if (!active): return;
+	if (!visible): return;
 	_update_raycasts();
