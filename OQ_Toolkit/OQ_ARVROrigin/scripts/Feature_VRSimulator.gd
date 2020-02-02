@@ -28,8 +28,8 @@ var info_rect = null;
 const info_text = """VR Simulator Keys:
  mouse right-click: move (camera or controller)
  W A S D: move (camera or controller)
- space:  fly mode (moves origin up)
- SHIFT: duck player
+ space: duck player
+ shift:  fly mode (moves origin up)
 
  hold CTRL/ALT: enable left/right controller for manipulation
    Keypad 8 4 2 6: analog stick
@@ -124,7 +124,7 @@ func _interact_move_controller(dir, rotate):
 
 func _update_keyboard(dt):
 	
-	_fly_mode = Input.is_key_pressed(KEY_SPACE);
+	_fly_mode = Input.is_key_pressed(KEY_SHIFT);
 
 	var dir = Vector3(0,0,0);
 	if (Input.is_key_pressed(KEY_W)):
@@ -214,7 +214,7 @@ func _input(event):
 			_reset_controller_position();
 			
 	_current_player_height = player_height;
-	if (Input.is_key_pressed(KEY_SHIFT)):
+	if (Input.is_key_pressed(KEY_SPACE)):
 		_current_player_height = player_height * duck_multiply;
 
 	vr.vrCamera.translation.y = _current_player_height;
