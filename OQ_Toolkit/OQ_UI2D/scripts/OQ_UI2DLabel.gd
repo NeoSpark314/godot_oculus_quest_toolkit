@@ -79,6 +79,10 @@ func resize_fixed():
 	#if new_size.x < ui_container.get_size().x or new_size.y < ui_container.get_size().y:
 	#	print("Your labels text is too large and therefore might look weird. Consider decreasing the font_size_multiplier.")
 
+func get_label_text():
+	if (!ui_label): return "";
+	return ui_label.text;
+
 
 func set_label_text(t: String):
 	if (!ui_label): return;

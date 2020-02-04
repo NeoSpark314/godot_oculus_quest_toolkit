@@ -207,6 +207,7 @@ func _update_keyboard(dt):
 
 func _input(event):
 	if vr.inVR || !active: return;
+	
 
 	# basic keyboard events
 	if (event is InputEventKey && event.pressed):

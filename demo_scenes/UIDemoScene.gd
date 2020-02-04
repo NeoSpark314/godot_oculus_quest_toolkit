@@ -28,11 +28,18 @@ func setup_movement_options_ui():
 	
 	rotation_optionbutton.add_item("Click");
 	rotation_optionbutton.add_item("Smooth");
+	
+	
+func _on_text_enter(text):
+	var t = $OQ_UI2DKeyboard/TestTextInputLabel.get_label_text() + "\n" + text;
+	$OQ_UI2DKeyboard/TestTextInputLabel.set_label_text(t);
 
 func _ready():
 	setup_movement_options_ui();
 	$InfoLabel.set_label_text(info_text);
-
+	
+	$OQ_UI2DKeyboard.connect("text_input_enter", self, "_on_text_enter");
+	
 
 func _on_MoveSpeedSpinBox_value_changed(value):
 	locomotion_stick.move_speed = value;

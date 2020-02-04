@@ -22,6 +22,11 @@ func _get_configuration_warning():
 	return '';
 
 
+func _input(event):
+	if (event is InputEventKey):
+		viewport.input(event);
+
+
 func find_child_control():
 	ui_control = null;
 	for c in get_children():

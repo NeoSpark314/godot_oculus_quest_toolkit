@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=2]
+[gd_scene load_steps=28 format=2]
 
 [ext_resource path="res://OQ_Toolkit/OQ_ARVRCamera.tscn" type="PackedScene" id=1]
 [ext_resource path="res://OQ_Toolkit/OQ_ARVROrigin/Feature_VRSimulator.tscn" type="PackedScene" id=2]
@@ -19,6 +19,7 @@
 [ext_resource path="res://OQ_Toolkit/OQ_UI2D/OQ_UI2DLogWindow.tscn" type="PackedScene" id=17]
 [ext_resource path="res://OQ_Toolkit/OQ_UI2D/OQ_UI2DLabel_IPD.tscn" type="PackedScene" id=18]
 [ext_resource path="res://OQ_Toolkit/OQ_Interactables/OQ_ButtonPressable.tscn" type="PackedScene" id=19]
+[ext_resource path="res://OQ_Toolkit/OQ_UI2D/OQ_UI2DKeyboard.tscn" type="PackedScene" id=20]
 [ext_resource path="res://demo_scenes/data/Material_Green.material" type="Material" id=21]
 [ext_resource path="res://demo_scenes/data/Material_Red.material" type="Material" id=22]
 [ext_resource path="res://OQ_Toolkit/OQ_ARVRController/Feature_AreaObjectGrab.tscn" type="PackedScene" id=23]
@@ -424,14 +425,6 @@ material/0 = SubResource( 4 )
 [node name="InfoLabel" parent="." instance=ExtResource( 3 )]
 transform = Transform( 1.95886, 0, 0.201796, 0, 2, 0, -0.403593, 0, 0.979428, -0.867748, 2.03673, -1.23376 )
 text = "Info Label"
-margin = 16
-billboard = false
-depth_test = true
-resize_mode = 0
-font_size_multiplier = 1.0
-font_color = Color( 1, 1, 1, 1 )
-background_color = Color( 0, 0, 0, 1 )
-transparent = false
 
 [node name="OQ_UI2DCanvas_LevelSelector" parent="." instance=ExtResource( 10 )]
 transform = Transform( 1.67744, -0.544566, 0.471608, 0, 1.73205, 0.5, -1.08913, -0.838718, 0.726351, -0.915071, 1.17961, -1.52167 )
@@ -515,6 +508,13 @@ transform = Transform( 1, 1.49012e-08, 0, 0, 1, -5.96046e-08, 0, 0, 1, -0.090104
 press_distance = 0.02
 off_material = ExtResource( 22 )
 on_material = ExtResource( 21 )
+
+[node name="OQ_UI2DKeyboard" parent="." instance=ExtResource( 20 )]
+transform = Transform( -0.737772, -0.174716, 0.652048, -1.13133e-08, 0.965926, 0.258819, -0.675049, 0.19095, -0.712634, -1.10645, 1.69779, 0.595507 )
+
+[node name="TestTextInputLabel" parent="OQ_UI2DKeyboard" instance=ExtResource( 3 )]
+transform = Transform( 1, 1.49012e-08, 0, -2.98023e-08, 1, 0, 1.19209e-07, 8.9407e-08, 1, -0.0543875, 0.421844, 0.0514949 )
+text = "Input Log"
 [connection signal="value_changed" from="OQ_UI2DCanvas_MovementOptions/Control/MoveSpeedSpinBox" to="." method="_on_MoveSpeedSpinBox_value_changed"]
 [connection signal="value_changed" from="OQ_UI2DCanvas_MovementOptions/Control/RotateSpeedSpinBox" to="." method="_on_RotateSpeedSpinBox_value_changed"]
 [connection signal="value_changed" from="OQ_UI2DCanvas_MovementOptions/Control/ClickTurnAngleSpinBox" to="." method="_on_ClickTurnAngleSpinBox_value_changed"]
