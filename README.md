@@ -3,22 +3,30 @@ This is an early alpha version of a toolkit for basic VR interactions with the O
 The toolkit in this repository requires (at the time of writing) a recent version of Godot 3.2.
 If you have questions or run into problems please open an issue here or contact me at the [official Godot Discord](https://discord.gg/zH7NUgz): @NeoSpark314 or in the #XR channel.
 
+## Showcases
+A list of some projects and prototypes that use the Oculus Quest Toolkit that I'm aware of. If you are using the toolkit and would like to be here you can ping me or open an issue and I will add it.
+
+|[![Voxel Works Quest](doc/images/showcase/voxel_works_quest.jpg)](https://sidequestvr.com/#/app/431) | [![Get Wood](doc/images/showcase/getwood.jpg)](https://globalgamejam.org/2020/games/get-wood-0) | [![Seurat TPS test](doc/images/showcase/seurat_tps_test.jpg)](https://www.youtube.com/watch?v=2RgMMeGQi2Q) |
+|[![Seurat Capture](doc/images/showcase/seurat_capture.jpg)](https://www.youtube.com/watch?v=ikYTkyIMV8k) | [![Pipelines](doc/images/showcase/pipelines.jpg)](https://saoigames.itch.io/pipelines-quest) | [![Mawashi](doc/images/showcase/mawashi.jpg)](https://sidequestvr.com/#/app/460) |
+
+
+
 ## Features (so far... early alpha)
 - Touch controller button handling and controller models
+- 2D UI canvas with controller interaction
+- Virtual Keyboard
 - Hand Tracking support with included hand models and basic gesture detection
 - VR Simulator and VR Recorder (for easier testing on desktop)
 - Joystick locomotion and rotation (smooth and step)
 - Walk in Place detection
-- 2D UI canvas with controller interaction
 - Falling and Climbing logic
 - Rigid body grab
 - Several utilities to accelerate prototyping and debugging (Log, Labels, ...)
 
 [![Feature Images](doc/images/feature_overview.jpg?raw=true)](https://youtu.be/-jzkHOum1kU)
 ![Medieval City Test Scene](doc/images/medieval_city_screenshot.jpg?raw=true)
-![Simple Hand Gestures](doc/images/hand_gestures.jpg?raw=true)
-
-A video of some of the early alpha features can be seen [on youtube here](https://youtu.be/-jzkHOum1kU).
+[![Simple Hand Gestures](doc/images/hand_gestures.jpg?raw=true)](https://twitter.com/NeoSpark314/status/1213443646755934208)
+![Feature Images 2](doc/images/feature_overview_2.jpg)
 
 # Documentation
 The documentation is in the [project wiki](https://github.com/NeoSpark314/godot_oculus_quest_toolkit/wiki). It includes
@@ -39,7 +47,6 @@ There are a lot of potential extensions and missing features. Some of the things
 - Teleport movement option
 - Jumping of ledges while climbing
 - Grabbed objects
-  - more grab-follow modes (like kinematic body)
   - handing over objects
   - interaction trigger
 - Improvements to the labeling system
