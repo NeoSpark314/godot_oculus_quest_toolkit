@@ -26,11 +26,6 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TextEdit" type="TextEdit" parent="."]
-margin_top = 272.0
-margin_right = 576.0
-margin_bottom = 320.0
-
 [node name="Container_Letters" type="Container" parent="."]
 margin_right = 40.0
 margin_bottom = 40.0
