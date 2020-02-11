@@ -67,7 +67,7 @@ func _process(_dt):
 			remove_child(grabbed_object);
 			grabbed_object_parent.add_child(grabbed_object);
 			grabbed_object.global_transform = trafo;
+			emit_signal("oq_area_object_grab_ended", grabbed_object, controller)
 			grabbed_object = null;
 			grabbed_object_parent = null;
 			is_grabbing = false;
-			emit_signal("oq_area_object_grab_ended", grabbed_object, controller)
