@@ -4,6 +4,8 @@ export var enabled := true;
 export var debug_information := false;
 export var capsule_radius := 0.15;
 
+export var step_offset := 0.0;
+
 onready var collision_object = $CollisionShape;
 
 func _ready():
@@ -30,9 +32,11 @@ func _show_debug_information():
 func _update_collsion_shape_start_position():
 	var player_height = vr.get_current_player_height();
 	collision_object.shape.radius = capsule_radius;
-	collision_object.shape.height = player_height - 2.0 * capsule_radius;
+	collision_object.shape.height = player_height - 2.0 * capsule_radius - step_offset;
 	global_transform.origin = vr.vrCamera.global_transform.origin;
-	global_transform.origin.y -= player_height * 0.5;
+	global_transform.origin.y -= (player_height-step_offset) * 0.5;
+	
+	
 
 func oq_locomotion_stick_check_move(velocity, dt):
 	if (!enabled): return velocity;

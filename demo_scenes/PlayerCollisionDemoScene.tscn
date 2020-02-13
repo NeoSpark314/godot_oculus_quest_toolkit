@@ -47,8 +47,10 @@ size = Vector3( 1, 1, 1 )
 [node name="PlayerCollisionDemoScene" type="Spatial"]
 
 [node name="OQ_ARVROrigin" parent="." instance=ExtResource( 10 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9, 0, -2.4 )
 
 [node name="Feature_VRSimulator" parent="OQ_ARVROrigin" instance=ExtResource( 6 )]
+info_label_visible = false
 
 [node name="OQ_ARVRCamera" parent="OQ_ARVROrigin" instance=ExtResource( 7 )]
 current = true
@@ -62,9 +64,11 @@ move_speed = 2.0
 
 [node name="Feature_PlayerCollision" parent="OQ_ARVROrigin" instance=ExtResource( 11 )]
 debug_information = true
+step_offset = 0.3
 
 [node name="Feature_Falling" parent="OQ_ARVROrigin" instance=ExtResource( 1 )]
 debug_information = true
+force_move_up = true
 
 [node name="Ground" type="StaticBody" parent="."]
 
@@ -235,5 +239,85 @@ shape = SubResource( 8 )
 mesh = SubResource( 10 )
 material/0 = null
 
-[node name="Camera" type="Camera" parent="."]
-transform = Transform( 1, 0, 0, 0, 0.5, 0.866025, 0, -0.866025, 0.5, 0, 7, 3 )
+[node name="DebugCamera" type="Camera" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2, 0.3, 0.492521 )
+
+[node name="Steps" type="Spatial" parent="."]
+
+[node name="Block011" type="StaticBody" parent="Steps"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2, -0.2, -2 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape" type="CollisionShape" parent="Steps/Block011"]
+shape = SubResource( 8 )
+
+[node name="Grip01" type="MeshInstance" parent="Steps/Block011"]
+mesh = SubResource( 10 )
+material/0 = null
+
+[node name="Block012" type="StaticBody" parent="Steps"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2.3, 0.1, -2 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape" type="CollisionShape" parent="Steps/Block012"]
+shape = SubResource( 8 )
+
+[node name="Grip01" type="MeshInstance" parent="Steps/Block012"]
+mesh = SubResource( 10 )
+material/0 = null
+
+[node name="Block013" type="StaticBody" parent="Steps"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2.6, 0.4, -2 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape" type="CollisionShape" parent="Steps/Block013"]
+shape = SubResource( 8 )
+
+[node name="Grip01" type="MeshInstance" parent="Steps/Block013"]
+mesh = SubResource( 10 )
+material/0 = null
+
+[node name="Block014" type="StaticBody" parent="Steps"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9, 0.7, -2 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape" type="CollisionShape" parent="Steps/Block014"]
+shape = SubResource( 8 )
+
+[node name="Grip01" type="MeshInstance" parent="Steps/Block014"]
+mesh = SubResource( 10 )
+material/0 = null
+
+[node name="Block015" type="StaticBody" parent="Steps"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -3.2, 1, -2 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape" type="CollisionShape" parent="Steps/Block015"]
+shape = SubResource( 8 )
+
+[node name="Grip01" type="MeshInstance" parent="Steps/Block015"]
+mesh = SubResource( 10 )
+material/0 = null
+
+[node name="Block016" type="StaticBody" parent="Steps"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 1.3, -2 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape" type="CollisionShape" parent="Steps/Block016"]
+shape = SubResource( 8 )
+
+[node name="Grip01" type="MeshInstance" parent="Steps/Block016"]
+mesh = SubResource( 10 )
+material/0 = null
