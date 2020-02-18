@@ -620,12 +620,22 @@ func _process(dt):
 func initialize():
 	_init_vr_log();
 	
-	log_info("Initializing VR");
-	log_info("  Available Interfaces are %s: " % str(ARVRServer.get_interfaces()));
+	var available_interfaces = ARVRServer.get_interfaces();
 	
-	var arvr_ovr_mobile_interface = ARVRServer.find_interface("OVRMobile");
-	var arvr_oculus_interface = ARVRServer.find_interface("Oculus");
-	var arvr_open_vr_interface = ARVRServer.find_interface("OpenVR");
+	log_info("Initializing VR");
+	log_info("  Available Interfaces are %s: " % str(available_interfaces));
+	
+	var arvr_ovr_mobile_interface = null;
+	var arvr_oculus_interface = null;
+	var arvr_open_vr_interface = null;
+	for interface in available_interfaces:
+		match interface:
+			"OVRMobile":
+				arvr_ovr_mobile_interface = ARVRServer.find_interface("OVRMobile");
+			"Oculus":
+				arvr_oculus_interface = ARVRServer.find_interface("Oculus");
+			"OpenVR":
+				arvr_open_vr_interface = ARVRServer.find_interface("OpenVR");
 	
 	if arvr_ovr_mobile_interface:
 		log_info("  Found OVRMobile Interface.");
