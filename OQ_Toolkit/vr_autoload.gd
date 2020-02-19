@@ -629,7 +629,7 @@ func initialize():
 	var arvr_oculus_interface = null;
 	var arvr_open_vr_interface = null;
 	for interface in available_interfaces:
-		match interface:
+		match interface.name:
 			"OVRMobile":
 				arvr_ovr_mobile_interface = ARVRServer.find_interface("OVRMobile");
 			"Oculus":
