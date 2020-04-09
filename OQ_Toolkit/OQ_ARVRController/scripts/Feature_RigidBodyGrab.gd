@@ -20,6 +20,8 @@ onready var _hinge_joint : HingeJoint = $HingeJoint;
 
 export var reparent_mesh = false;
 
+export var hide_model_on_grab := false;
+
 func _ready():
 	controller = get_parent();
 	if (not controller is ARVRController):
@@ -71,6 +73,16 @@ func grab() -> void:
 			vr.GrabTypes.HINGEJOINT:
 				start_grab_hinge_joint(grabbable_rigid_body);
 
+        if hide_model_on_grab:
+			#make model dissappear
+			var model = $"../Feature_ControllerModel_Left"
+			if model:
+				model.hide()
+			else:
+				model = $"../Feature_ControllerModel_Right"
+				if model:
+					model.hide()
+
 
 func release():
 	if !held_object:
@@ -83,6 +95,16 @@ func release():
 			release_grab_velocity()
 		vr.GrabTypes.HINGEJOINT:
 			release_grab_hinge_joint()
+
+	if hide_model_on_grab:
+		#make model reappear
+		var model = $"../Feature_ControllerModel_Left"
+		if model:
+			model.show()
+		else:
+			model = $"../Feature_ControllerModel_Right"
+			if model:
+				model.show()
 
 
 func start_grab_kinematic(grabbable_rigid_body):
