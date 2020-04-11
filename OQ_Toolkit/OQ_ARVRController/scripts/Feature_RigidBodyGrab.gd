@@ -73,7 +73,7 @@ func grab() -> void:
 			vr.GrabTypes.HINGEJOINT:
 				start_grab_hinge_joint(grabbable_rigid_body);
 
-        if hide_model_on_grab:
+		if hide_model_on_grab:
 			#make model dissappear
 			var model = $"../Feature_ControllerModel_Left"
 			if model:
