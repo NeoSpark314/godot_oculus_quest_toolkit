@@ -13,3 +13,6 @@ transform = Transform( 3.30012e-15, -4.37114e-08, -1, 1, 7.54979e-08, 1.05879e-2
 
 [node name="GrabMarker" type="Spatial" parent="."]
 transform = Transform( 3.30012e-15, -4.37114e-08, -1, 1, 7.54979e-08, 1.05879e-21, 7.54979e-08, -1, 4.37114e-08, 0.07, 0.005, -0.03 )
+
+[node name="UIMarker" type="Spatial" parent="."]
+transform = Transform( 3.30012e-15, -4.37114e-08, -1, 1, 7.54979e-08, 1.05879e-21, 7.54979e-08, -1, 4.37114e-08, 0.07, 0.005, -0.03 )

@@ -16,6 +16,8 @@ var grabbed_object = null;
 var grab_position = Vector3();
 var delta_position = Vector3();
 
+var _additional_grab_checker = null;
+
 export(vr.CONTROLLER_BUTTON) var grab_button = vr.CONTROLLER_BUTTON.GRIP_TRIGGER;
 
 func _ready():
@@ -29,9 +31,12 @@ func _process(_dt):
 	grab_area.global_transform = controller.get_palm_transform();
 	
 	if (controller._button_just_pressed(grab_button)):
+		
+		if (_additional_grab_checker):
+			grabbed_object = _additional_grab_checker.oq_additional_static_grab_check(grab_area, controller);
+
 		var overlapping_bodies = grab_area.get_overlapping_bodies();
 		for b in overlapping_bodies:
-			
 			if (check_parent_can_static_grab):
 				var p = b.get_parent();
 				if (p && p.has_method("oq_can_static_grab")):
@@ -39,12 +44,15 @@ func _process(_dt):
 				else:
 					continue;
 			
+			grabbed_object = b;
+			break;
+
+		if (grabbed_object):
 			is_grabbing = true;
 			is_just_grabbing = true;
 			grab_position = controller.translation; # we need the local translation here as we will move the origin
-			grabbed_object = b;
 			emit_signal("oq_static_grab_started", grabbed_object, controller)
-			break;
+
 	else:
 		is_just_grabbing = false;
 	

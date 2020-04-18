@@ -11,3 +11,5 @@ script = ExtResource( 2 )
 [node name="PalmMarker" type="Spatial" parent="."]
 
 [node name="GrabMarker" type="Spatial" parent="."]
+
+[node name="UIMarker" type="Spatial" parent="."]
