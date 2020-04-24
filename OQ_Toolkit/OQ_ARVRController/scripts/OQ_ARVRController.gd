@@ -244,7 +244,7 @@ func _update_buttons_and_sticks():
 
 var first_time = true;
 
-func _process(_dt):
+func _physics_process(_dt):
 	
 	#vr.show_dbg_info(str(controller_id), str(_buttons_pressed));
 
