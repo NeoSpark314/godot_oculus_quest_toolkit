@@ -38,7 +38,7 @@ func _ready():
 	#controller.connect("button_release", self, "_on_ARVRController_button_release")
 
 
-func _process(_dt):
+func _physics_process(_dt):
 	# TODO: we will re-implement signals later on when we have compatability with the OQ simulator and recorder
 	update_grab()
 

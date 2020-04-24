@@ -27,7 +27,7 @@ func _ready():
 	grab_area = $GrabArea;
 	
 	
-func _process(_dt):
+func _physics_process(_dt):
 	grab_area.global_transform = controller.get_palm_transform();
 	if (controller._button_just_pressed(grab_button)):
 		var overlapping_areas = grab_area.get_overlapping_areas();
@@ -38,7 +38,7 @@ func _process(_dt):
 				grabbed_object = b;
 			if (check_can_grab):
 				if (grabbed_object.has_method("oq_can_area_object_grab") &&
-				    grabbed_object.oq_can_area_object_grab(controller)):
+					grabbed_object.oq_can_area_object_grab(controller)):
 						pass;
 				else:
 					grabbed_object = null;
