@@ -661,6 +661,7 @@ func initialize():
 		log_info("  Found OpenVR Interface.");
 		if arvr_open_vr_interface.initialize():
 			get_viewport().arvr = true;
+			get_viewport().keep_3d_linear = true
 			Engine.target_fps = 90 # TODO: this is headset dependent => figure out how to get this info at runtime
 			OS.vsync_enabled = false;
 			inVR = true;
