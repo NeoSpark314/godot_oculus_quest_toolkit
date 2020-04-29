@@ -527,21 +527,25 @@ func _perform_switch_scene(scene_path):
 	print("_perform_switch_scene")
 	print(scene_path)
 	
-	for s in scene_switch_root.get_children():
-		if (s.has_method("scene_exit")): s.scene_exit();
-		scene_switch_root.remove_child(s);
-		s.queue_free();
-		_dbg_labels.clear(); # make sure to also clear the debug label dictionary as they might be created in the scene above
+	if scene_switch_root != null:
+		for s in scene_switch_root.get_children():
+			if (s.has_method("scene_exit")): s.scene_exit();
+			scene_switch_root.remove_child(s);
+			s.queue_free();
+			_dbg_labels.clear(); # make sure to also clear the debug label dictionary as they might be created in the scene above
 
-	var next_scene_resource = load(scene_path);
-	if (next_scene_resource):
-		_active_scene_path = scene_path;
-		var next_scene = next_scene_resource.instance();
-		log_info("    switching to scene '%s'" % scene_path)
-		scene_switch_root.add_child(next_scene);
-		if (next_scene.has_method("scene_enter")): next_scene.scene_enter();
+		var next_scene_resource = load(scene_path);
+		if (next_scene_resource):
+			_active_scene_path = scene_path;
+			var next_scene = next_scene_resource.instance();
+			log_info("    switching to scene '%s'" % scene_path)
+			scene_switch_root.add_child(next_scene);
+			if (next_scene.has_method("scene_enter")): next_scene.scene_enter();
+		else:
+			log_error("could not load scene '%s'" % scene_path)
 	else:
-		log_error("could not load scene '%s'" % scene_path)
+		get_tree().change_scene(scene_path)
+	
 
 
 var _target_scene_path = null;
@@ -558,7 +562,7 @@ func switch_scene(scene_path, fade_time = 0.1, wait_time = 0.0):
 		yield(get_tree().create_timer(wait_time), "timeout")
 
 	if (scene_switch_root == null):
-		log_error("vr.switch_scene(...) called but no scene_switch_root configured");
+		log_error("vr.switch_scene(...) called but no scene_switch_root configured. Will use default scene change.");
 	if (_active_scene_path == scene_path): return;
 
 	if (fade_time <= 0.0):
