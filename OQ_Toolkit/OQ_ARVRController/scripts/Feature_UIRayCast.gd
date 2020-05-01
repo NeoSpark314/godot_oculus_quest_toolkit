@@ -14,6 +14,8 @@ onready var ui_raycast_hitmarker : MeshInstance = $RayCastPosition/RayCastHitMar
 
 const hand_click_button := vr.CONTROLLER_BUTTON.XA;
 
+var is_colliding := false;
+
 
 func _set_raycast_transform():
 	# woraround for now until there is a more standardized way to know the controller
@@ -80,6 +82,9 @@ func _update_raycasts():
 		ui_raycast_hitmarker.global_transform.origin = position;
 		
 		c.ui_raycast_hit_event(position, click, release);
+		is_colliding = true;
+	else:
+		is_colliding = false;
 
 func _ready():
 	controller = get_parent();
