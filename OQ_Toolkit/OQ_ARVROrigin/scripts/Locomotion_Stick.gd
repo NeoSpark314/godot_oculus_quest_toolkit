@@ -85,8 +85,11 @@ func move(dt):
 	strafe_dir.y = 0.0;
 	view_dir = view_dir.normalized();
 	strafe_dir = strafe_dir.normalized();
+	
+	#var stick_speed 
 
-	var move = Vector2(dx, dy).normalized() * move_speed;
+	#var move = Vector2(dx, dy).normalized() * move_speed;
+	var move = Vector2(dx, dy) * move_speed;
 	
 	var actual_velocity = (view_dir * move.y + strafe_dir * move.x);
 	

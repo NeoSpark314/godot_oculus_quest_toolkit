@@ -83,6 +83,22 @@ func remove_dbg_info(key):
 	_reorder_dbg_labels();
 
 
+var _notification_scene = null;
+
+func show_notification(title, text):
+	if (_notification_scene == null): _notification_scene = load(oq_base_dir + "/OQ_UI2D/OQ_UI2DNotificationWindow.tscn");
+	var nw = _notification_scene.instance();
+	
+	nw.set_notificaiton_text(title, text);
+
+	vrOrigin.add_child(nw);
+	var pos = vr.vrCamera.global_transform.origin - vr.vrCamera.global_transform.basis.z;
+	
+	nw.look_at_from_position(pos, vr.vrCamera.global_transform.origin, Vector3(0,1,0));
+	
+	
+	
+	
 # returns the current player height based on the difference between
 # the height of origin and camera; this assumes that tracking is floor level
 func get_current_player_height():

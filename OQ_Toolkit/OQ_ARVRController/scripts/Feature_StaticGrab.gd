@@ -27,11 +27,10 @@ func _ready():
 	grab_area = $GrabArea;
 	
 	
-func _process(_dt):
+func _physics_process(_dt):
 	grab_area.global_transform = controller.get_palm_transform();
-	
 	if (controller._button_just_pressed(grab_button)):
-		
+
 		if (_additional_grab_checker):
 			grabbed_object = _additional_grab_checker.oq_additional_static_grab_check(grab_area, controller);
 
