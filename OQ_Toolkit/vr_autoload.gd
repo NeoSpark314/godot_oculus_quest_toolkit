@@ -91,7 +91,10 @@ func show_notification(title, text):
 	
 	nw.set_notificaiton_text(title, text);
 
-	vrOrigin.add_child(nw);
+	if (scene_switch_root):
+		scene_switch_root.add_child(nw);
+	else:
+		vr.vrOrigin.get_parent().add_child(nw);
 	var pos = vr.vrCamera.global_transform.origin - vr.vrCamera.global_transform.basis.z;
 	
 	nw.look_at_from_position(pos, vr.vrCamera.global_transform.origin, Vector3(0,1,0));
