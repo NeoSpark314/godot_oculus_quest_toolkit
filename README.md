@@ -1,15 +1,16 @@
 # Godot Oculus Quest Toolkit <!-- omit in toc --> 
 This is an early alpha version of a toolkit for basic VR interactions with the Oculus Quest using the Godot game engine.
 The toolkit in this repository requires (at the time of writing) a recent version of Godot 3.2.
-If you have questions or run into problems please open an issue here or contact me at the [official Godot Discord](https://discord.gg/zH7NUgz): @NeoSpark314 or in the #XR channel.
+If you have questions or run into problems please open an issue here or contact me at the [official Godot Discord](https://discord.gg/zH7NUgz): @NeoSpark314 in the #XR channel.
 
 ## Showcases
-A list of some projects and prototypes that use the Oculus Quest Toolkit that I'm aware of. If you are using the toolkit and would like to be here you can ping me or open an issue and I will add it.
+A list of some projects and prototypes that use the Oculus Quest Toolkit that I'm aware of. If you are using the toolkit and would like to be here you can ping me or open an issue with a link to your project and I will add it.
 
 | | | |
 | -- | -- | -- |
 |[![Voxel Works Quest](doc/images/showcase/voxel_works_quest.jpg)](https://sidequestvr.com/#/app/431) | [![Get Wood](doc/images/showcase/getwood.jpg)](https://globalgamejam.org/2020/games/get-wood-0) | [![Seurat TPS test](doc/images/showcase/seurat_tps_test.jpg)](https://www.youtube.com/watch?v=2RgMMeGQi2Q) |
 |[![Seurat Capture](doc/images/showcase/seurat_capture.jpg)](https://www.youtube.com/watch?v=ikYTkyIMV8k) | [![Pipelines](doc/images/showcase/pipelines.jpg)](https://saoigames.itch.io/pipelines-quest) | [![Mawashi](doc/images/showcase/mawashi.jpg)](https://sidequestvr.com/#/app/460) |
+|[![Blocks](doc/images/showcase/blocks.jpg)](https://kosmosschool.itch.io/blocks) | [![The Impossible Crypt](doc/images/showcase/impossible_crypt.jpg)](https://neospark314.itch.io/the-impossible-crypt)  | [![SpaceToys](doc/images/showcase/spacetoys.jpg)](https://github.com/ssj71/SpaceToys)|
 | | | |
 
 
