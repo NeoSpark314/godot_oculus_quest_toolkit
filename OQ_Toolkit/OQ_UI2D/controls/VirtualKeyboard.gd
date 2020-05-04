@@ -136,8 +136,6 @@ var _space_button : Button = null;
 var _cancel_button : Button = null;
 
 func _create_keyboard_buttons():
-	
-	
 	_toggle_symbols_button = _create_button(self, "#$%", 0+1, 1, 2, 1);
 	_toggle_symbols_button.set_rotation(deg2rad(90.0));
 	_toggle_symbols_button.toggle_mode = true;

@@ -16,8 +16,6 @@ func _on_cancel():
 
 func _on_enter():
 	emit_signal("text_input_enter", _text_edit.text);
-	
-	print("UUUH");
 	_text_edit.text = "";
 
 
