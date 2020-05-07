@@ -64,3 +64,11 @@ shape = SubResource( 1 )
 [node name="OQ_UILabel" parent="." instance=ExtResource( 14 )]
 transform = Transform( 2, 0, 0, 0, 2, 0, 0, 0, 2, -0.652434, 1.72716, -0.722204 )
 text = ""
+margin = 16
+billboard = false
+depth_test = true
+resize_mode = 0
+font_size_multiplier = 1.0
+font_color = Color( 1, 1, 1, 1 )
+background_color = Color( 0, 0, 0, 1 )
+transparent = false

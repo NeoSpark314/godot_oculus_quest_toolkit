@@ -7,10 +7,11 @@ var room_list = [
 	"res://demo_scenes/PhysicsScene.tscn",
 	"res://demo_scenes/ClimbingScene.tscn",
 	"res://demo_scenes/experiments/TableTennis.tscn",
-	"res://demo_scenes/experiments/TestRoom.tscn"
+	"res://demo_scenes/experiments/TestRoom.tscn",
+	"res://demo_scenes/WalkInPlaceDemoScene.tscn",
 	]
 
-var current_room = 2;
+var current_room = 0;
 
 func _process(_dt):
 	if (vr.button_just_released(vr.BUTTON.ENTER) ||
