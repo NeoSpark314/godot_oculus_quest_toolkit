@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=2]
+[gd_scene load_steps=26 format=2]
 
 [ext_resource path="res://OQ_Toolkit/OQ_ARVRController/Feature_StaticGrab.tscn" type="PackedScene" id=1]
 [ext_resource path="res://OQ_Toolkit/OQ_ARVRCamera.tscn" type="PackedScene" id=2]
@@ -16,6 +16,7 @@
 [ext_resource path="res://OQ_Toolkit/OQ_Helpers/OQ_VisibilityToggle.tscn" type="PackedScene" id=14]
 [ext_resource path="res://OQ_Toolkit/OQ_ARVRController/Feature_ControllerModel_Left.tscn" type="PackedScene" id=15]
 [ext_resource path="res://OQ_Toolkit/OQ_UI2D/OQ_UI2DLabel.tscn" type="PackedScene" id=16]
+[ext_resource path="res://OQ_Toolkit/OQ_ARVROrigin/Feature_MixedRealityCapture.tscn" type="PackedScene" id=17]
 
 [sub_resource type="BoxShape" id=1]
 extents = Vector3( 0.5, 0.05, 0.05 )
@@ -64,6 +65,14 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0654777, 0.606989, 0 )
 
 [node name="OQ_UILabel" parent="OQ_ARVROrigin/OQ_LeftController/OQ_VisibilityToggle" instance=ExtResource( 16 )]
 transform = Transform( 0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 0, 0.1, 0 )
+margin = 16
+billboard = false
+depth_test = true
+resize_mode = 0
+font_size_multiplier = 1.0
+font_color = Color( 1, 1, 1, 1 )
+background_color = Color( 0, 0, 0, 1 )
+transparent = false
 
 [node name="OQ_RightController" parent="OQ_ARVROrigin" instance=ExtResource( 11 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0704429, 0.606989, 0 )
@@ -82,6 +91,8 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0704429, 0.606989, 0 )
 
 [node name="Feature_VRSimulator" parent="OQ_ARVROrigin" instance=ExtResource( 5 )]
 
+[node name="Feature_MixedRealityCapture" parent="OQ_ARVROrigin" instance=ExtResource( 17 )]
+
 [node name="Grips" type="Spatial" parent="."]
 
 [node name="Ladder" type="Spatial" parent="Grips"]
@@ -97,6 +108,45 @@ __meta__ = {
 shape = SubResource( 1 )
 
 [node name="Grip01" type="MeshInstance" parent="Grips/Ladder/GripTest001"]
+mesh = SubResource( 3 )
+material/0 = null
+
+[node name="GripTest008" type="StaticBody" parent="Grips/Ladder"]
+transform = Transform( -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.24542, 0.557755, 0.560223 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape" type="CollisionShape" parent="Grips/Ladder/GripTest008"]
+shape = SubResource( 1 )
+
+[node name="Grip01" type="MeshInstance" parent="Grips/Ladder/GripTest008"]
+mesh = SubResource( 3 )
+material/0 = null
+
+[node name="GripTest010" type="StaticBody" parent="Grips/Ladder"]
+transform = Transform( -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, -0.75458, 0.557755, 0.560223 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape" type="CollisionShape" parent="Grips/Ladder/GripTest010"]
+shape = SubResource( 1 )
+
+[node name="Grip01" type="MeshInstance" parent="Grips/Ladder/GripTest010"]
+mesh = SubResource( 3 )
+material/0 = null
+
+[node name="GripTest009" type="StaticBody" parent="Grips/Ladder"]
+transform = Transform( -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.24542, 0.557755, -0.439777 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape" type="CollisionShape" parent="Grips/Ladder/GripTest009"]
+shape = SubResource( 1 )
+
+[node name="Grip01" type="MeshInstance" parent="Grips/Ladder/GripTest009"]
 mesh = SubResource( 3 )
 material/0 = null
 
@@ -197,6 +247,14 @@ material/0 = null
 mesh = SubResource( 7 )
 material/0 = null
 
+[node name="MeshInstance2" type="MeshInstance" parent="StaticBody"]
+transform = Transform( 0.1, 0, 0, 0, -4.37114e-09, -0.1, 0, 0.1, -4.37114e-09, -3.05745, 1, -3 )
+mesh = SubResource( 7 )
+material/0 = null
+
 [node name="CollisionShape" type="CollisionShape" parent="StaticBody"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0 )
 shape = SubResource( 8 )
+
+[node name="Camera" type="Camera" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.19, 2.04, 1.4 )

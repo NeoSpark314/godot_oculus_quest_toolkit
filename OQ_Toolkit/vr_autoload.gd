@@ -404,6 +404,13 @@ func set_tracking_space(tracking_space):
 	else:
 		oculus_mobile_settings_cache["tracking_space"] = tracking_space;
 		return ovrTrackingTransform.set_tracking_space(tracking_space);
+		
+func locate_tracking_space(target_tracking_space):
+	if (!ovrTrackingTransform):
+		log_error("set_tracking_space(): no ovrTrackingTransform object.");
+		return Transform();
+	else:
+		return ovrTrackingTransform.locate_tracking_space(target_tracking_space);
 
 
 # these variables are currently only used by the recording playback

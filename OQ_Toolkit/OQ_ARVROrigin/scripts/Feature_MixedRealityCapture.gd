@@ -45,11 +45,17 @@ func _mrc_update_capture_camera(mrc_camera_id, cam, vp, is_background):
 	
 	vp.size = Vector2(intrinsics[mrcCameraIntrinsics.ImageSensorPixelResolution_w], intrinsics[mrcCameraIntrinsics.ImageSensorPixelResolution_h]);
 	
-	var h_fov = intrinsics[mrcCameraIntrinsics.FOVPort_LeftTan] + intrinsics[mrcCameraIntrinsics.FOVPort_RightTan]
+	var h_fov = atan(intrinsics[mrcCameraIntrinsics.FOVPort_LeftTan]) + atan(intrinsics[mrcCameraIntrinsics.FOVPort_RightTan])
 	var v_fov = intrinsics[mrcCameraIntrinsics.FOVPort_UpTan] + intrinsics[mrcCameraIntrinsics.FOVPort_DownTan]
 	
-	cam.fov = rad2deg(h_fov * 0.5);
+	cam.keep_aspect = Camera.KEEP_HEIGHT;
+	cam.fov = rad2deg(h_fov);
+	
+	var tracking_space_transform = vr.locate_tracking_space(vr.ovrVrApiTypes.OvrTrackingSpace.VRAPI_TRACKING_SPACE_STAGE);
+	
 	cam.transform = extrinsics[mrcCameraExtrinsics.RelativePose];
+	cam.transform = vr.vrOrigin.global_transform * tracking_space_transform * cam.transform;
+
 	
 	var vr_camera_pos = vr.vrCamera.global_transform.origin;
 	var distance_to_headset = (cam.global_transform.origin - vr_camera_pos).length()
@@ -71,11 +77,14 @@ var _mrc_render_toggle = true;
 
 var initialized_once = false;
 
+var _override_transform = null;
+
 # I need to do this here as this can only be called once VR is initialized
 func _initialize():
 	if (initialized_once): return;
 	
 	ovr_mrc = load("res://addons/godot_ovrmobile/OvrMRC.gdns");
+
 
 	if (ovr_mrc.library.get_current_library_path() != ""):
 		ovr_mrc = ovr_mrc.new()
@@ -91,9 +100,31 @@ func _initialize():
 		ovr_mrc = null;
 		
 	initialized_once = true;
+	
+func _show_debug_info():
+	vr.show_dbg_info("vrOrigin", str(vr.vrOrigin.global_transform.origin))
+	vr.show_dbg_info("Left Controller", str(vr.leftController.global_transform.origin))
+	vr.show_dbg_info("Right Controller", str(vr.rightController.global_transform.origin))
+	vr.show_dbg_info("Right Controller: rot", str(vr.rightController.global_transform.basis.get_euler()))
+	vr.show_dbg_info("_camera_background: pos", str(_camera_background.global_transform.origin))
+	vr.show_dbg_info("_camera_background: rot", str(_camera_background.global_transform.basis.get_euler()))
+
+
+#func _physics_process(_dt):
+#	if (vr.button_just_pressed(vr.BUTTON.B)):
+#		_override_transform = vr.leftController.global_transform;
+#
+#	#if (vr.inVR):	
+#	#	vr.show_dbg_info("tracking_space", str(vr.get_tracking_space()));
+#
+#	#if (vr.button_just_pressed(vr.BUTTON.A)):
+#	#	_temp_tracking_space = (_temp_tracking_space + 1) % 4;
+#	#	vr.set_tracking_space(_temp_tracking_space);
 
 func _process(_dt):
 	_initialize();
+	
+	_show_debug_info();
 	
 	count += 1;
 	
@@ -135,15 +166,27 @@ func _process(_dt):
 			
 			vr.log_info("ovr_mrc.get_external_camera_count() = " + str(ovr_mrc.get_external_camera_count()));
 			for c in range(0, ovr_mrc.get_external_camera_count()):
-				vr.log_info(c);
+				vr.log_info(str(c));
 				vr.log_info("ovr_mrc.get_external_camera_intrinsics(...) = " + str(ovr_mrc.get_external_camera_intrinsics(c)));
 				vr.log_info("ovr_mrc.get_external_camera_extrinsics(...) = " + str(ovr_mrc.get_external_camera_extrinsics(c)));
 				
 			vr.log_info("---------");
+			
+			vr.log_info("vr.vrOrigin: " + str(vr.vrOrigin.global_transform));
+			vr.log_info("_camera_background: " + str(_camera_background.global_transform));
+			
+			vr.log_info("locate: VRAPI_TRACKING_SPACE_LOCAL_FLOOR: " + str(vr.locate_tracking_space(vr.ovrVrApiTypes.OvrTrackingSpace.VRAPI_TRACKING_SPACE_LOCAL_FLOOR)));
+			vr.log_info("locate: VRAPI_TRACKING_SPACE_STAGE: " + str(vr.locate_tracking_space(vr.ovrVrApiTypes.OvrTrackingSpace.VRAPI_TRACKING_SPACE_STAGE)));
+
+	
+			vr.log_info("--------------------------");
+			
 	
 
 func _ready():
 	if (not get_parent() is ARVROrigin):
 		vr.log_error("Feature_MixedRealityCapture: parent is not ARVROrigin");
+		
+	#vr.set_tracking_space(vr.ovrVrApiTypes.OvrTrackingSpace.VRAPI_TRACKING_SPACE_STAGE)
 
 

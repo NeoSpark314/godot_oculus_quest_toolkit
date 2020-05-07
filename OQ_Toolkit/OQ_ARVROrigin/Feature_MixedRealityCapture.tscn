@@ -14,6 +14,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 2.3055 )
 
 [node name="Foreground_Viewport" type="Viewport" parent="."]
 size = Vector2( 512, 512 )
+transparent_bg = true
 render_target_update_mode = 1
 
 [node name="Foreground_Camera" type="Camera" parent="Foreground_Viewport"]

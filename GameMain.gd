@@ -10,7 +10,7 @@ var room_list = [
 	"res://demo_scenes/experiments/TestRoom.tscn"
 	]
 
-var current_room = 0;
+var current_room = 2;
 
 func _process(_dt):
 	if (vr.button_just_released(vr.BUTTON.ENTER) ||
@@ -35,7 +35,8 @@ func _ready():
 	#vr.switch_scene("res://demo_scenes/PhysicsScene.tscn"); return;
 
 	# Always advertise Godot a bit in the beggining
-	if (vr.inVR): vr.switch_scene("res://demo_scenes/GodotSplash.tscn", 0.0, 0.0);
+	#if (vr.inVR): vr.switch_scene("res://demo_scenes/GodotSplash.tscn", 0.0, 0.0);
+	
 	vr.switch_scene(room_list[current_room], 0.1, 5.0);
 
 	vr.log_info("  Tracking space is: %d" % vr.get_tracking_space());

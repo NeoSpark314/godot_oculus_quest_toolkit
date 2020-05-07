@@ -7,3 +7,5 @@ func _ready():
 
 func _process(_dt):
 	info_label.set_label_text("%.2f %.2f %.2f" % [vr.vrOrigin.translation.x, vr.vrOrigin.translation.y, vr.vrOrigin.translation.z]);
+	
+	

@@ -61,8 +61,6 @@ invisible_on_start = true
 
 [node name="OQ_UI2DCanvas_NumButtons" parent="OQ_ARVROrigin/OQ_LeftController/OQ_VisibilityToggle" instance=ExtResource( 10 )]
 transform = Transform( 0.796625, 0, 0.604474, 0, 1, 0, -0.604474, 0, 0.796625, -0.0757154, 0.186514, -0.0449487 )
-editor_live_update = false
-transparent = false
 
 [node name="ReferenceRect" type="ReferenceRect" parent="OQ_ARVROrigin/OQ_LeftController/OQ_VisibilityToggle/OQ_UI2DCanvas_NumButtons"]
 visible = false
@@ -198,8 +196,6 @@ transform = Transform( -4, 0, -8.74228e-08, 1.74846e-07, 3.4641, -0.5, 3.02841e-
 
 [node name="TestUI" parent="." instance=ExtResource( 10 )]
 transform = Transform( 0.665606, 0, -0.942996, 0, 2, 0, 1.88599, 0, 0.332803, 1.85032, 1.7519, -0.245856 )
-editor_live_update = false
-transparent = false
 
 [node name="Control" type="ReferenceRect" parent="TestUI"]
 visible = false
@@ -314,8 +310,6 @@ color = Color( 0.192157, 0.411765, 0.141176, 1 )
 
 [node name="OQ_UI2DCanvas_MovementOptions" parent="." instance=ExtResource( 10 )]
 transform = Transform( -8.74228e-08, 0, 1, 0, 2, 0, -2, 0, -4.37114e-08, -2, 1.5, -0.246 )
-editor_live_update = false
-transparent = false
 
 [node name="Control" type="ReferenceRect" parent="OQ_UI2DCanvas_MovementOptions"]
 visible = false
@@ -445,8 +439,6 @@ transparent = false
 
 [node name="OQ_UI2DCanvas_LevelSelector" parent="." instance=ExtResource( 10 )]
 transform = Transform( 1.67744, -0.544566, 0.471608, 0, 1.73205, 0.5, -1.08913, -0.838718, 0.726351, -0.915071, 1.17961, -1.52167 )
-editor_live_update = false
-transparent = false
 
 [node name="ReferenceRect" type="ReferenceRect" parent="OQ_UI2DCanvas_LevelSelector"]
 margin_right = 544.0

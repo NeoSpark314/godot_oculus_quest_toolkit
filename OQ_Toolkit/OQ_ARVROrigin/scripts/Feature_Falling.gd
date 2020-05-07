@@ -91,7 +91,9 @@ func _get_raycast_hit_surrounding(h0, space_state, from, to):
 var fall_speed = 0.0;
 
 func _physics_process(dt):
-	if (!active): return;
+	if (!active): 
+		fall_speed = 0.0;
+		return;
 	
 	if (vr.vrOrigin.is_fixed): 
 		fall_speed = 0.0; # reset the fall speed when the player is fixed
