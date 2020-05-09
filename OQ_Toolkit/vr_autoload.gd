@@ -125,6 +125,21 @@ var rightController : ARVRController = null;
 var vrOrigin : ARVROrigin = null;
 var vrCamera : ARVRCamera = null;
 
+# these two variable point to leftController/rightController
+# and are swapped when calling
+var dominantController : ARVRController = rightController;
+var nonDominantController : ARVRController = leftController;
+
+func set_dominant_controller_left(is_left_handed):
+	if (is_left_handed):
+		dominantController = leftController;
+		nonDominantController = rightController;
+	else:
+		dominantController = rightController;
+		nonDominantController = leftController;
+		
+func is_dominant_controller_left():
+	return dominantController == leftController;
 
 enum AXIS {
 	None = -1,
