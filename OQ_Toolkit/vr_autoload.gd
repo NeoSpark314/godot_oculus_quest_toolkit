@@ -334,7 +334,7 @@ func _refresh_settings():
 	set_default_layer_color_scale(oculus_mobile_settings_cache["default_layer_color_scale"]);
 	set_extra_latency_mode(oculus_mobile_settings_cache["extra_latency_mode"]);
 	set_foveation_level(oculus_mobile_settings_cache["foveation_level"]);
-	
+	set_enable_dynamic_foveation(oculus_mobile_settings_cache["foveation_dynamic"]);
 	set_swap_interval(oculus_mobile_settings_cache["swap_interval"]);
 	set_clock_levels(oculus_mobile_settings_cache["clock_levels_cpu"], oculus_mobile_settings_cache["clock_levels_gpu"]);
 	
@@ -358,6 +358,7 @@ var oculus_mobile_settings_cache = {
 	"default_layer_color_scale" : Color(1.0, 1.0, 1.0, 1.0),
 	"extra_latency_mode" : ovrVrApiTypes.OvrExtraLatencyMode.VRAPI_EXTRA_LATENCY_MODE_ON,
 	"foveation_level" : FoveatedRenderingLevel.Off,
+	"foveation_dynamic" : 0,
 	"swap_interval" : 1,
 	"clock_levels_cpu" : 2,
 	"clock_levels_gpu" : 2,
@@ -552,6 +553,14 @@ func set_foveation_level(ffr_level):
 	else:
 		oculus_mobile_settings_cache["foveation_level"] = ffr_level;
 		return ovrPerfromance.set_foveation_level(ffr_level);
+
+func set_enable_dynamic_foveation(ffr_dynamic):
+	if (!ovrPerfromance):
+		log_error("set_enable_dynamic_foveation(): no ovrPerfromance object.");
+		return false;
+	else:
+		oculus_mobile_settings_cache["foveation_dynamic"] = ffr_dynamic;
+		return ovrPerfromance.set_enable_dynamic_foveation(ffr_dynamic);
 
 func set_swap_interval(interval):
 	if (!ovrPerfromance):
