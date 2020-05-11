@@ -85,7 +85,7 @@ func remove_dbg_info(key):
 
 var _notification_scene = null;
 
-func show_notification(title, text):
+func show_notification(title, text = ""):
 	if (_notification_scene == null): _notification_scene = load(oq_base_dir + "/OQ_UI2D/OQ_UI2DNotificationWindow.tscn");
 	var nw = _notification_scene.instance();
 	

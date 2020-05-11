@@ -9,11 +9,15 @@
 script = ExtResource( 3 )
 
 [node name="OQ_UI2DCanvas_Keyboard" parent="." instance=ExtResource( 1 )]
+editor_live_update = false
+transparent = false
 
 [node name="VirtualKeyboard" parent="OQ_UI2DCanvas_Keyboard" instance=ExtResource( 2 )]
 
 [node name="OQ_UI2DCanvas_TextInput" parent="." instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0 )
+editor_live_update = false
+transparent = false
 
 [node name="TextEdit" type="TextEdit" parent="OQ_UI2DCanvas_TextInput"]
 margin_right = 512.0
