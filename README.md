@@ -4,7 +4,7 @@ The toolkit in this repository requires (at the time of writing) a recent versio
 If you have questions or run into problems please open an issue here or contact me at the [official Godot Discord](https://discord.gg/zH7NUgz): @NeoSpark314 in the #XR channel.
 
 ## Showcases
-A list of some projects and prototypes that use the Oculus Quest Toolkit that I'm aware of. If you are using the toolkit and would like to be here you can ping me or open an issue with a link to your project and I will add it.
+A list of links to projects and prototypes that use the Oculus Quest Toolkit that I'm aware of. If you are using the toolkit and would like to be here you can ping me or open an issue with a link to your project and I will add it.
 
 | | | |
 | -- | -- | -- |
@@ -15,22 +15,32 @@ A list of some projects and prototypes that use the Oculus Quest Toolkit that I'
 
 
 
-## Features (so far... early alpha)
+## Features
 - Touch controller button handling and controller models
-- 2D UI canvas with controller interaction
-- Virtual Keyboard
-- Hand Tracking support with included hand models and basic gesture detection
-- VR Simulator and VR Recorder (for easier testing on desktop)
+- 2D UI canvas with controller interaction and Virtual Keyboard
 - Joystick locomotion and rotation (smooth and step)
-- Walk in Place detection
-- Falling and Climbing logic
 - Rigid body grab
-- Several utilities to accelerate prototyping and debugging (Log, Labels, ...)
+- Basic Player Collision
+- Falling and Climbing logic
 
 [![Feature Images](doc/images/feature_overview.jpg?raw=true)](https://youtu.be/-jzkHOum1kU)
-![Medieval City Test Scene](doc/images/medieval_city_screenshot.jpg?raw=true)
-[![Simple Hand Gestures](doc/images/hand_gestures.jpg?raw=true)](https://twitter.com/NeoSpark314/status/1213443646755934208)
 ![Feature Images 2](doc/images/feature_overview_2.jpg)
+
+- Oculus Mixed Reality Capture Integration
+
+[![Video of the Godot MRC Plugin in action](https://img.youtube.com/vi/LDKzn48-3cs/0.jpg)](https://www.youtube.com/watch?v=LDKzn48-3cs)
+
+- Hand Tracking support with included hand models and basic gesture detection
+
+[![Simple Hand Gestures](doc/images/hand_gestures.jpg?raw=true)](https://twitter.com/NeoSpark314/status/1213443646755934208)
+
+
+- VR Simulator and VR Recorder (for easier testing on desktop)
+- Several utilities to accelerate prototyping and debugging (Log, Labels, ...)
+- Jog in Place detection
+
+![Medieval City Test Scene](doc/images/medieval_city_screenshot.jpg?raw=true)
+
 
 # Documentation
 The documentation is in the [project wiki](https://github.com/NeoSpark314/godot_oculus_quest_toolkit/wiki). It includes

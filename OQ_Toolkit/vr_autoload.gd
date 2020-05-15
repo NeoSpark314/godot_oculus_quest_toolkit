@@ -1,3 +1,5 @@
+# This file needs to be set as AutoLoad script in your Project Settings and called 'vr'
+# It contains all the glue code and helper functions to make individual features work together.
 extends Node
 
 const UI_PIXELS_TO_METER = 1.0 / 1024; # defines the (auto) size of UI elements in 3D
