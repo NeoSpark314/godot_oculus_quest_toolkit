@@ -36,25 +36,29 @@ func _physics_process(_dt):
 				grabbed_object = b.get_parent();
 			else:
 				grabbed_object = b;
-			if (check_can_grab):
-				if (grabbed_object.has_method("oq_can_area_object_grab") &&
-					grabbed_object.oq_can_area_object_grab(controller)):
-						pass;
+
+			if (grabbed_object.has_method("oq_can_area_object_grab")):
+				if (grabbed_object.oq_can_area_object_grab(controller)):
+					pass;
 				else:
 					grabbed_object = null;
 					continue;
+			elif (check_can_grab): # if this variable is true we want to ignore all other objects
+				grabbed_object = null;
+				continue;
 
 			is_grabbing = true;
 			is_just_grabbing = true;
 
-					
-					
-			
+
 			var trafo = grabbed_object.global_transform;
 			grabbed_object_parent = grabbed_object.get_parent();
 			grabbed_object_parent.remove_child(grabbed_object);
 			add_child(grabbed_object);
 			grabbed_object.global_transform = trafo;
+			
+			if (grabbed_object.has_method("oq_area_object_grab_started")):
+				grabbed_object.oq_area_object_grab_started(controller);
 			
 			emit_signal("oq_area_object_grab_started", grabbed_object, controller)
 			break;
@@ -67,6 +71,8 @@ func _physics_process(_dt):
 			remove_child(grabbed_object);
 			grabbed_object_parent.add_child(grabbed_object);
 			grabbed_object.global_transform = trafo;
+			if (grabbed_object.has_method("oq_area_object_grab_ended")):
+				grabbed_object.oq_area_object_grab_ended(controller);
 			emit_signal("oq_area_object_grab_ended", grabbed_object, controller)
 			grabbed_object = null;
 			grabbed_object_parent = null;

@@ -3,17 +3,17 @@
 [ext_resource path="res://OQ_Toolkit/OQ_UI2D/scripts/OQ_UI2DLabel.gd" type="Script" id=1]
 [ext_resource path="res://OQ_Toolkit/OQ_UI2D/theme/oq_ui2d_standard.theme" type="Theme" id=2]
 
-[sub_resource type="ViewportTexture" id=2]
+[sub_resource type="ViewportTexture" id=1]
 viewport_path = NodePath("Viewport")
 
-[sub_resource type="SpatialMaterial" id=3]
+[sub_resource type="SpatialMaterial" id=2]
 resource_local_to_scene = true
 flags_unshaded = true
 params_cull_mode = 2
-albedo_texture = SubResource( 2 )
+albedo_texture = SubResource( 1 )
 
-[sub_resource type="QuadMesh" id=1]
-size = Vector2( 1.19531, 0.380859 )
+[sub_resource type="QuadMesh" id=3]
+size = Vector2( 0.148438, 0.0634766 )
 
 [node name="OQ_UILabel" type="Spatial"]
 script = ExtResource( 1 )
@@ -49,7 +49,7 @@ custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "I am a Label..."
 
 [node name="MeshInstance" type="MeshInstance" parent="."]
-material_override = SubResource( 3 )
+material_override = SubResource( 2 )
 cast_shadow = 0
-mesh = SubResource( 1 )
+mesh = SubResource( 3 )
 material/0 = null

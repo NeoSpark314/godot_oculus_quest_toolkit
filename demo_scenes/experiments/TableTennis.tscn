@@ -13,10 +13,6 @@
 [ext_resource path="res://demo_scenes/actors/TableTennisRacket.tscn" type="PackedScene" id=11]
 [ext_resource path="res://OQ_Toolkit/OQ_ARVROrigin/Feature_VRSimulator.tscn" type="PackedScene" id=12]
 
-
-
-
-
 [node name="TableTennis" type="Spatial"]
 script = ExtResource( 1 )
 
