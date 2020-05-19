@@ -24,6 +24,8 @@ func _ready():
 	vr.initialize();
 	
 	vr.scene_switch_root = self;
+	
+	vr.switch_scene("res://demo_scenes/experiments/BowAndArrow.tscn"); return;
 
 	# Always advertise Godot a bit in the beggining
 	if (vr.inVR): vr.switch_scene("res://demo_scenes/GodotSplash.tscn", 0.0, 0.0);
