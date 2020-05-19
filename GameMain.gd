@@ -15,15 +15,22 @@ var room_list = [
 var current_room = 0;
 
 func _process(_dt):
-	# switch back to the UIDemoScene when the menu button is pressed
-	if (vr.button_just_released(vr.BUTTON.ENTER) ||
-		(vr.leftController && vr.leftController.is_hand && vr.button_just_released(vr.BUTTON.Y))):
-		vr.switch_scene(room_list[0]);
+	pass;
+	# supress scene switch for some scenes (as they have there own switch)
+#	if (vr._active_scene_path == _beep_saber_scene_path): return;
+#
+#	# switch back to the UIDemoScene when the menu button is pressed
+#	if (vr.button_just_pressed(vr.BUTTON.ENTER) ||
+#		(vr.leftController && vr.leftController.is_hand && vr.button_just_released(vr.BUTTON.Y))):
+#		vr.switch_scene(room_list[0]);
 		
 func _ready():
 	vr.initialize();
 	
 	vr.scene_switch_root = self;
+	
+	#vr.switch_scene("res://demo_scenes/experiments/BowAndArrow.tscn"); return;
+	#	vr.switch_scene("res://demo_games/BeepSaber/BeepSaber_Game.tscn");  return;
 
 	# Always advertise Godot a bit in the beggining
 	if (vr.inVR): vr.switch_scene("res://demo_scenes/GodotSplash.tscn", 0.0, 0.0);

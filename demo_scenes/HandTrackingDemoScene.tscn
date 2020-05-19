@@ -54,11 +54,3 @@ material/0 = SubResource( 4 )
 
 [node name="Label_SimpleGesture" parent="." instance=ExtResource( 9 )]
 transform = Transform( 2, 0, 0, 0, 2, 0, 0, 0, 1, 0, 1.6, -1 )
-margin = 16
-billboard = false
-depth_test = true
-resize_mode = 0
-font_size_multiplier = 1.0
-font_color = Color( 1, 1, 1, 1 )
-background_color = Color( 0, 0, 0, 1 )
-transparent = false

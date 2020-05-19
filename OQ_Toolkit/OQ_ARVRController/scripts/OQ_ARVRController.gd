@@ -79,7 +79,7 @@ func _ready():
 	# check if we already have one of the models attached so autoload still works
 	_controller_model = find_node("Feature_ControllerModel*", false, false);
 	_hand_model = find_node("Feature_HandModel*", false, false);
-	
+
 	# heuristic to detect if we want hand behaviour
 	if (_hand_model != null): is_hand = true;
 
@@ -127,14 +127,14 @@ func get_hand_model():
 	if (_hand_model == null):
 		vr.log_warning("get_hand_model called but no hand model found.");
 	return _hand_model;
-	
+
 func _auto_update_controller_model():
 	var controller_name = get_controller_name();
-	
+
 	if (_last_controller_name == controller_name): return; # nothing to do
-	
+
 	_last_controller_name = controller_name;
-	
+
 	# in vr when we are not connected we hide all controllers (but not in desktop mode)
 	if (vr.inVR && controller_name == "Not connected"):
 		if (_hand_model != null): _hand_model.visible = false;
@@ -143,42 +143,42 @@ func _auto_update_controller_model():
 		return;
 
 	vr.log_info("Switching model for controller '%s' (id %d)" % [controller_name, controller_id]);
-	
+
 	if (controller_name == "Oculus Tracked Left Hand"):
 		is_hand = true;
 		if (_controller_model != null): _controller_model.visible = false;
-		if (autoload_model && _hand_model == null): 
+		if (autoload_model && _hand_model == null):
 			_hand_model = load(vr.oq_base_dir + "/OQ_ARVRController/Feature_HandModel_Left.tscn").instance();
 			add_child(_hand_model);
 		if (_hand_model != null): _hand_model.visible = true;
 	elif (controller_name == "Oculus Tracked Right Hand"):
 		is_hand = true;
 		if (_controller_model != null): _controller_model.visible = false;
-		if (autoload_model && _hand_model == null): 
+		if (autoload_model && _hand_model == null):
 			_hand_model = load(vr.oq_base_dir + "/OQ_ARVRController/Feature_HandModel_Right.tscn").instance();
 			add_child(_hand_model);
 		if (_hand_model != null): _hand_model.visible = true;
-	
+
 	# default models
 	# for now we do not perform more checks and assume that we have touch controllers if
 	# there are no hand controllers
 	elif (controller_id == 1):
 		is_hand = false;
 		if (_hand_model != null): _hand_model.visible = false;
-		if (autoload_model && _controller_model == null): 
+		if (autoload_model && _controller_model == null):
 			_controller_model = load(vr.oq_base_dir + "/OQ_ARVRController/Feature_ControllerModel_Left.tscn").instance();
 			add_child(_controller_model);
 		if (_controller_model != null): _controller_model.visible = true;
 	elif (controller_id == 2):
 		is_hand = false;
 		if (_hand_model != null): _hand_model.visible = false;
-		if (autoload_model && _controller_model == null): 
+		if (autoload_model && _controller_model == null):
 			_controller_model = load(vr.oq_base_dir + "/OQ_ARVRController/Feature_ControllerModel_Right.tscn").instance();
 			add_child(_controller_model);
 		if (_controller_model != null): _controller_model.visible = true;
 	else:
 		vr.log_warning("Unknown/Unsupported controller id in _auto_update_controller_model()")
-		
+
 	emit_signal("signal_controller_type_changed", self);
 
 
@@ -191,10 +191,10 @@ func _button_just_pressed(button_id):
 
 func _button_just_released(button_id):
 	return _buttons_just_released[button_id];
-	
-	
+
+
 func _hand_gesture_to_button(i):
-	
+
 	if (i == vr.CONTROLLER_BUTTON.GRIP_TRIGGER):
 		var current_gesture = _hand_model.detect_simple_gesture();
 		if (current_gesture == "Fist"):
@@ -203,33 +203,33 @@ func _hand_gesture_to_button(i):
 		else:
 			#vr.show_dbg_info("HandGesture"+str(controller_id), "");
 			pass;
-	
+
 	# keep the hand_pinch to button mapping
 	if (hand_pinch_to_button):
 		return is_button_pressed(i);
-	
+
 
 func _sim_is_button_pressed(i):
-	if (vr.inVR): 
-		if (is_hand): 
+	if (vr.inVR):
+		if (is_hand):
 			if (enable_gesture_to_button):
 				return _hand_gesture_to_button(i);
 			elif (!hand_pinch_to_button):
 				return 0;
-			 
+
 		return is_button_pressed(i); # is the button pressed
 	else: return _simulation_buttons_pressed[i];
-	
+
 func _sim_get_joystick_axis(i):
 	if (vr.inVR):
-		if (is_hand && !hand_pinch_to_axis): return 0.0; 
+		if (is_hand && !hand_pinch_to_axis): return 0.0;
 		return get_joystick_axis(i);
 	else: return _simulation_joystick_axis[i];
 
 func _update_buttons_and_sticks():
 	for i in range(0, 16):
 		var b = _sim_is_button_pressed(i);
-		
+
 		if (b != _buttons_pressed[i]): # the state of the button did change
 			_buttons_pressed[i] = b;   # update the main state of our button
 			if (b == 1):              # and check if it was just pressed or released
@@ -239,23 +239,41 @@ func _update_buttons_and_sticks():
 		else:                         # reset just pressed/released
 			_buttons_just_pressed[i] = 0;
 			_buttons_just_released[i] = 0;
-			
-			
+
+var _rumble_intensity = 0.0;
+var _rumble_duration = -128.0; #-1 means deactivated so applications can also set their own rumble
+
+func simple_rumble(intensity, duration):
+	_rumble_intensity = intensity;
+	_rumble_duration = duration;
+	
+func is_simple_rumbling():
+	return (_rumble_duration > 0.0);
+	
+func _update_rumble(dt):
+	if (_rumble_duration < - 100): return;
+	set_rumble(_rumble_intensity);
+	_rumble_duration -= dt;
+	if (_rumble_duration <= 0.0):
+		_rumble_duration = -128.0;
+		set_rumble(0.0);
 
 var first_time = true;
 
 func _physics_process(_dt):
-	
+
 	#vr.show_dbg_info(str(controller_id), str(_buttons_pressed));
 
 	_auto_update_controller_model();
-	
+
 	if (get_is_active() || !vr.inVR): # wait for active controller; or update if we are in simulation mode
 
 		_update_buttons_and_sticks();
 		
-		# this avoid getting just_pressed events when a key is pressed and the controller becomes 
+		_update_rumble(_dt);
+
+		# this avoid getting just_pressed events when a key is pressed and the controller becomes
 		# active (like it happens on vr.scene_change!)
-		if (first_time): 
+		if (first_time):
 			_update_buttons_and_sticks();
 			first_time = false;

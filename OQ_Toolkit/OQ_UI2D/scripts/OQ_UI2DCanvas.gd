@@ -84,8 +84,10 @@ func _process(_dt):
 		# if we are invisible we need to disable the collision shape to avoid interaction with the UIRayCast
 		if (!is_visible_in_tree()): 
 			ui_collisionshape.disabled = true;
+			ui_control.visible = false;
 		else:
 			ui_collisionshape.disabled = false;
+			ui_control.visible = true;
 		return;
 		
 

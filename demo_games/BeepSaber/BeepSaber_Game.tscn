@@ -1,0 +1,176 @@
+[gd_scene load_steps=24 format=2]
+
+[ext_resource path="res://demo_games/BeepSaber/BeepCube_Cut.material" type="Material" id=1]
+[ext_resource path="res://OQ_Toolkit/OQ_UI2D/OQ_UI2DLabel.tscn" type="PackedScene" id=2]
+[ext_resource path="res://OQ_Toolkit/OQ_UI2D/OQ_UI2DCanvas.tscn" type="PackedScene" id=3]
+[ext_resource path="res://OQ_Toolkit/OQ_ARVROrigin.tscn" type="PackedScene" id=4]
+[ext_resource path="res://OQ_Toolkit/OQ_ARVRCamera.tscn" type="PackedScene" id=5]
+[ext_resource path="res://OQ_Toolkit/OQ_ARVROrigin/Feature_VRSimulator.tscn" type="PackedScene" id=6]
+[ext_resource path="res://OQ_Toolkit/OQ_LeftController.tscn" type="PackedScene" id=7]
+[ext_resource path="res://OQ_Toolkit/OQ_RightController.tscn" type="PackedScene" id=8]
+[ext_resource path="res://demo_games/BeepSaber/BeepSaber_Game.gd" type="Script" id=9]
+[ext_resource path="res://demo_games/BeepSaber/LightSaber.tscn" type="PackedScene" id=10]
+[ext_resource path="res://demo_games/BeepSaber/BeepSaberMainMenu.tscn" type="PackedScene" id=11]
+[ext_resource path="res://OQ_Toolkit/OQ_ARVRController/Feature_UIRayCast.tscn" type="PackedScene" id=12]
+[ext_resource path="res://demo_games/BeepSaber/background.tres" type="Texture" id=13]
+
+[sub_resource type="PanoramaSky" id=1]
+panorama = ExtResource( 13 )
+
+[sub_resource type="Environment" id=2]
+background_mode = 3
+background_sky = SubResource( 1 )
+glow_enabled = true
+glow_intensity = 0.32
+glow_strength = 1.5
+glow_blend_mode = 0
+
+[sub_resource type="BoxShape" id=3]
+
+[sub_resource type="PlaneMesh" id=4]
+size = Vector2( 0.5, 0.5 )
+
+[sub_resource type="SpatialMaterial" id=5]
+flags_unshaded = true
+
+[sub_resource type="CubeMesh" id=6]
+material = SubResource( 5 )
+size = Vector3( 0.1, 0.1, 16 )
+
+[sub_resource type="SpatialMaterial" id=7]
+flags_unshaded = true
+albedo_color = Color( 0.262745, 0.388235, 0.964706, 1 )
+
+[sub_resource type="CubeMesh" id=8]
+material = SubResource( 7 )
+size = Vector3( 0.5, 2, 0.5 )
+
+[sub_resource type="SphereMesh" id=9]
+flip_faces = true
+radius = 512.0
+height = 256.0
+
+[sub_resource type="SpatialMaterial" id=10]
+flags_unshaded = true
+albedo_color = Color( 0, 0.0627451, 0.172549, 1 )
+albedo_texture = ExtResource( 13 )
+
+[node name="BeepSaber" type="Spatial"]
+script = ExtResource( 9 )
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource( 2 )
+
+[node name="SongPlayer" type="AudioStreamPlayer" parent="."]
+
+[node name="OQ_ARVROrigin" parent="." instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1 )
+
+[node name="OQ_ARVRCamera" parent="OQ_ARVROrigin" instance=ExtResource( 5 )]
+far = 1024.0
+
+[node name="OQ_LeftController" parent="OQ_ARVROrigin" instance=ExtResource( 7 )]
+autoload_model = false
+
+[node name="LeftLightSaber" parent="OQ_ARVROrigin/OQ_LeftController" instance=ExtResource( 10 )]
+
+[node name="OQ_RightController" parent="OQ_ARVROrigin" instance=ExtResource( 8 )]
+autoload_model = false
+
+[node name="RightLightSaber" parent="OQ_ARVROrigin/OQ_RightController" instance=ExtResource( 10 )]
+
+[node name="Feature_UIRayCast" parent="OQ_ARVROrigin/OQ_RightController" instance=ExtResource( 12 )]
+transform = Transform( 1, 0, 0, 0, 0.707107, -0.707107, 0, 0.707107, 0.707107, 0, 0, 0 )
+adjust_left_right = false
+ui_raycast_visible_button = -1
+
+[node name="Feature_VRSimulator" parent="OQ_ARVROrigin" instance=ExtResource( 6 )]
+
+[node name="Track" type="Spatial" parent="."]
+
+[node name="StandingGround" type="StaticBody" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1 )
+
+[node name="CollisionShape" type="CollisionShape" parent="StandingGround"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0 )
+shape = SubResource( 3 )
+
+[node name="Spatial" type="Spatial" parent="StandingGround"]
+transform = Transform( 4, 0, 0, 0, 1, 0, 0, 0, 4, 0, 0, 0 )
+
+[node name="MeshInstance" type="MeshInstance" parent="StandingGround/Spatial"]
+mesh = SubResource( 4 )
+material/0 = ExtResource( 1 )
+
+[node name="Level" type="Spatial" parent="."]
+
+[node name="Bar1" type="MeshInstance" parent="Level"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 2, 3, 0, -23 )
+mesh = SubResource( 6 )
+material/0 = null
+
+[node name="Bar2" type="MeshInstance" parent="Level"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 2, -3, 0, -23 )
+mesh = SubResource( 6 )
+material/0 = null
+
+[node name="Bar3" type="MeshInstance" parent="Level"]
+transform = Transform( 0.866025, -5.85622e-09, -0.5, -0.5, -2.18557e-08, -0.866025, -5.85622e-09, 1, -2.18557e-08, -6, 2.18557e-07, -18 )
+mesh = SubResource( 6 )
+material/0 = null
+
+[node name="Bar5" type="MeshInstance" parent="Level"]
+transform = Transform( 0.866025, -5.85622e-09, -0.5, -0.5, -2.18557e-08, -0.866025, -5.85622e-09, 1, -2.18557e-08, -6, 3.71547e-07, -25 )
+mesh = SubResource( 6 )
+material/0 = null
+
+[node name="Bar4" type="MeshInstance" parent="Level"]
+transform = Transform( 0.866025, 5.85622e-09, 0.5, 0.5, -2.18557e-08, -0.866025, 5.85622e-09, 1, -2.18557e-08, 5, 2.18557e-07, -18 )
+mesh = SubResource( 6 )
+material/0 = null
+
+[node name="Bar6" type="MeshInstance" parent="Level"]
+transform = Transform( 0.866025, 5.85622e-09, 0.5, 0.5, -2.18557e-08, -0.866025, 5.85622e-09, 1, -2.18557e-08, 5, 3.71547e-07, -25 )
+mesh = SubResource( 6 )
+material/0 = null
+
+[node name="SpectrumBar" type="Spatial" parent="Level"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -8.5, 0, -27 )
+
+[node name="Cube" type="MeshInstance" parent="Level/SpectrumBar"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0 )
+mesh = SubResource( 8 )
+material/0 = null
+
+[node name="Sphere" type="MeshInstance" parent="Level"]
+mesh = SubResource( 9 )
+material/0 = SubResource( 10 )
+
+[node name="MainMenu_OQ_UI2DCanvas" parent="." instance=ExtResource( 3 )]
+transform = Transform( 2, 0, 0, 0, 2, 0, 0, 0, 1, 0, 1.5, 0 )
+
+[node name="BeepSaberMainMenu" parent="MainMenu_OQ_UI2DCanvas" instance=ExtResource( 11 )]
+
+[node name="EndScore_OQ_UILabel" parent="." instance=ExtResource( 2 )]
+transform = Transform( 8, 0, 0, 0, 8, 0, 0, 0, 1, 0, 3, -3 )
+visible = false
+text = "Score"
+margin = 0
+background_color = Color( 0, 0, 0, 0 )
+transparent = true
+
+[node name="Multiplier_Label" parent="." instance=ExtResource( 2 )]
+transform = Transform( 4, 0, 0, 0, 4, 0, 0, 0, 1, -1, 2, -1 )
+text = "Score"
+margin = 0
+background_color = Color( 0, 0, 0, 0 )
+transparent = true
+
+[node name="Point_Label" parent="." instance=ExtResource( 2 )]
+transform = Transform( 4, 0, 0, 0, 4, 0, 0, 0, 1, 1, 2, -1 )
+text = "Score"
+margin = 0
+background_color = Color( 0, 0, 0, 0 )
+transparent = true
+[connection signal="area_entered" from="OQ_ARVROrigin/OQ_LeftController/LeftLightSaber" to="." method="_on_LeftLightSaber_area_entered"]
+[connection signal="area_entered" from="OQ_ARVROrigin/OQ_RightController/RightLightSaber" to="." method="_on_RightLightSaber_area_entered"]

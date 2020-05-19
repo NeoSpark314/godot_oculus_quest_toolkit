@@ -65,14 +65,6 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0654777, 0.606989, 0 )
 
 [node name="OQ_UILabel" parent="OQ_ARVROrigin/OQ_LeftController/OQ_VisibilityToggle" instance=ExtResource( 16 )]
 transform = Transform( 0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 0, 0.1, 0 )
-margin = 16
-billboard = false
-depth_test = true
-resize_mode = 0
-font_size_multiplier = 1.0
-font_color = Color( 1, 1, 1, 1 )
-background_color = Color( 0, 0, 0, 1 )
-transparent = false
 
 [node name="OQ_RightController" parent="OQ_ARVROrigin" instance=ExtResource( 11 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0704429, 0.606989, 0 )

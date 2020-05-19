@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/beepcube_cut.ogg-c53d5c32d642fc25030a37d9e6cd8c74.oggstr"
+
+[deps]
+
+source_file="res://demo_games/BeepSaber/data/beepcube_cut.ogg"
+dest_files=[ "res://.import/beepcube_cut.ogg-c53d5c32d642fc25030a37d9e6cd8c74.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0

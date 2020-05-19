@@ -11,5 +11,6 @@ script = ExtResource( 2 )
 [node name="PalmMarker" type="Spatial" parent="."]
 
 [node name="GrabMarker" type="Spatial" parent="."]
+transform = Transform( 1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0 )
 
 [node name="UIMarker" type="Spatial" parent="."]
