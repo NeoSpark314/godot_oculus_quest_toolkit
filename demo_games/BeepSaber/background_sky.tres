@@ -1,0 +1,6 @@
+[gd_resource type="PanoramaSky" load_steps=2 format=2]
+
+[ext_resource path="res://demo_games/BeepSaber/data/beepsaber_logo.png" type="Texture" id=1]
+
+[resource]
+panorama = ExtResource( 1 )

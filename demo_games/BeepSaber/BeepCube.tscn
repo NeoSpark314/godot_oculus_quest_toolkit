@@ -59,6 +59,7 @@ script = ExtResource( 2 )
 shape = SubResource( 1 )
 
 [node name="CubeMeshAnimation" type="Spatial" parent="CubeMeshOrientation"]
+transform = Transform( -0.1, -8.74228e-09, 0, 8.74228e-09, -0.1, 0, 0, 0, 0.1, 0, 0, -2 )
 
 [node name="BeepCube_Mesh" type="MeshInstance" parent="CubeMeshOrientation/CubeMeshAnimation"]
 transform = Transform( 0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 0, 0 )

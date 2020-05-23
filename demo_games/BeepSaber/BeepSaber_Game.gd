@@ -35,6 +35,7 @@ var _current_points = 0;
 var _current_multiplier = 1;
 var _current_combo = 0;
 
+
 func restart_map():
 	song_player.play(0.0);
 	_current_note = 0;
@@ -45,6 +46,7 @@ func restart_map():
 	_display_points();
 
 	for c in $Track.get_children():
+		c.visible = false;
 		$Track.remove_child(c);
 		c.queue_free();
 
@@ -55,6 +57,7 @@ func restart_map():
 	ui_raycast.visible = false;
 	$EndScore_OQ_UILabel.visible = false;
 
+
 func continue_map():
 	song_player.play(song_player.get_playback_position());
 	$MainMenu_OQ_UI2DCanvas.visible = false;
@@ -63,13 +66,13 @@ func continue_map():
 	right_saber.show();
 	ui_raycast.visible = false;
 
+
 func start_map(path, info, map_data):
 	_current_map = map_data;
 	_current_info = info;
-
-
 	song_player.stream = load(path + info._songFilename);
 	restart_map();
+
 
 func show_menu():
 	if ($MainMenu_OQ_UI2DCanvas.visible): return;
@@ -83,10 +86,10 @@ func show_menu():
 		right_saber.visible = false;
 
 	ui_raycast.visible = true;
-
 	$MainMenu_OQ_UI2DCanvas.visible = true;
 
-
+# when the song ended we want to display the current score and
+# the high score
 func _end_song_display():
 	if (_current_points > _high_score):
 		_high_score = _current_points;
@@ -94,11 +97,10 @@ func _end_song_display():
 	$EndScore_OQ_UILabel.set_label_text("Concratulations\nYour Score: %d\nHigh Score: %d" %[_current_points, _high_score]);
 	$EndScore_OQ_UILabel.visible = true;
 
-var beat_distance = 4.0;
-var beats_ahead = 4.0;
 
+const beat_distance = 4.0;
+const beats_ahead = 4.0;
 const CUBE_DISTANCE = 0.5;
-
 const CUBE_ROTATIONS = [180, 0, 270, 90, -135, 135, -45, 45];
 
 func _spawn_cube(note, current_beat):
@@ -131,7 +133,7 @@ func _process_map(dt):
 		return;
 
 	var current_time = song_player.get_playback_position();
-
+	
 	var current_beat = current_time * _current_info._beatsPerMinute / 60.0;
 
 	var n =_current_map._notes;
@@ -154,19 +156,19 @@ func _process_map(dt):
 		_end_song_display();
 
 # with this variable we track the movement volume of the controller
-# since the last cut
+# since the last cut (used to give a higher score when moved a lot)
 var _controller_movement_aabb = [
 	AABB(), AABB(), AABB()
 ]
 
-func _update_controller_data(controller : ARVRController):
+func _update_controller_movement_aabb(controller : ARVRController):
 	var id = controller.controller_id
 	var aabb = _controller_movement_aabb[id].expand(controller.global_transform.origin);
 	_controller_movement_aabb[id] = aabb;
-	
+
+
 func _check_and_update_saber(controller : ARVRController, saber: Area):
-	
-	# to play around with the saber extend while not playing a song
+	# to allow extending/sheething the saber while not playing a song
 	if (!song_player.playing):
 		if (controller._button_just_pressed(vr.CONTROLLER_BUTTON.XA) ||
 			controller._button_just_pressed(vr.CONTROLLER_BUTTON.YB)):
@@ -183,28 +185,27 @@ func _check_and_update_saber(controller : ARVRController, saber: Area):
 		else:
 			controller.set_rumble(0.0);
 
+
 func _physics_process(dt):
 	if (vr.button_just_released(vr.BUTTON.ENTER)):
 		show_menu();
 
 	if (song_player.playing):
 		_process_map(dt);
-		_update_controller_data(left_controller);
-		_update_controller_data(right_controller);
+		_update_controller_movement_aabb(left_controller);
+		_update_controller_movement_aabb(right_controller);
 	
 	_check_and_update_saber(left_controller, left_saber);
 	_check_and_update_saber(right_controller, right_saber);
 
-	#vr.show_dbg_info("aabb", str(_controller_movement_aabb[left_controller.controller_id]))
-	#_process_controllers(dt);
-
-	#vr.show_dbg_info("spectrum", str(_spectrum.get_magnitude_for_frequency_range(300, 400)));
 	_update_level(dt);
 
 var _main_menu = null;
 var _spectrum = null;
 var _spectrum_nodes = [];
 
+# update the level animations; at the moment this is only the basic
+# spectrum analyzer
 func _update_level(dt):
 	var VU_COUNT = _spectrum_nodes.size();
 	var FREQ_MAX = 11050.0
@@ -219,11 +220,15 @@ func _update_level(dt):
 		_spectrum_nodes[i-1].translation.y = energy * 10.0;
 
 		prev_hz = hz
-	pass;
 
+# create the level data that is displayed
 func _setup_level():
+	
+	# create a specrum analyzer
+	AudioServer.add_bus_effect(0, AudioEffectSpectrumAnalyzer.new());
+	_spectrum = AudioServer.get_bus_effect_instance(0,0);
+	# and create some cubes to display it in the level (updated in _update_level(dt))
 	var s = $Level/SpectrumBar;
-
 	_spectrum_nodes.push_back(s);
 	for  i in range(0, 7):
 		s = s.duplicate()
@@ -248,31 +253,20 @@ func _ready():
 
 	$MainMenu_OQ_UI2DCanvas.visible = false;
 	show_menu();
-
-
-	AudioServer.add_bus_effect(0, AudioEffectSpectrumAnalyzer.new());
-	_spectrum = AudioServer.get_bus_effect_instance(0,0);
-
 	_setup_level();
 
-#	var test = cube_left.duplicate();
-#	add_child(test);
-#	test._cube_mesh_orientation.rotation.z = 0.3
-#	test.global_transform.origin = Vector3(0,2,0);
 
-
-	#_cut_cube(null, cube_left);
-
-
-
+# cut the cube by creating two rigid bodies and using a CSGBox to create
+# the cut plane
 func _create_cut_rigid_body(_sign, cube : Spatial, cutplane : Plane, cut_distance, controller_speed):
 	var rigid_body_half = RigidBody.new();
-
-
+	
+	# the original cube mesh
 	var csg_cube = CSGMesh.new();
-
 	csg_cube.mesh = cube._mesh;
 	csg_cube.transform = cube._cube_mesh_orientation.transform;
+	
+	# using a box to cut away part of the mesh
 	var csg_cut = CSGBox.new();
 	csg_cut.operation = CSGShape.OPERATION_SUBTRACTION;
 	csg_cut.material = load("res://demo_games/BeepSaber/BeepCube_Cut.material");
@@ -281,8 +275,6 @@ func _create_cut_rigid_body(_sign, cube : Spatial, cutplane : Plane, cut_distanc
 	# transform the normal into the orientation of the actual cube mesh
 	var normal = csg_cube.transform.basis.inverse() * cutplane.normal;
 	csg_cut.look_at_from_position(-(cut_distance - _sign*0.5) * normal, normal, Vector3(0,1,0));
-
-
 	csg_cube.add_child(csg_cut);
 
 	# Next we are adding a simple collision cube to the rigid body. Note that
@@ -298,14 +290,16 @@ func _create_cut_rigid_body(_sign, cube : Spatial, cutplane : Plane, cut_distanc
 	rigid_body_half.physics_material_override = load("res://demo_games/BeepSaber/BeepCube_Cut.phymat");
 
 	rigid_body_half.add_child(csg_cube);
-
 	add_child(rigid_body_half);
 	rigid_body_half.global_transform = cube.global_transform;
 
+	# some impulse so the cube halfs get some movement
 	rigid_body_half.apply_central_impulse(-_sign * cutplane.normal +  controller_speed);
 
+	# attach the sound effect only to one of the halfs; I attach them here so
+	# it gets deleted when the body is deleted later
 	if (_sign == 1):
-		var snd = AudioStreamPlayer3D.new();
+		var snd = AudioStreamPlayer.new();
 		snd.stream = preload("res://demo_games/BeepSaber/data/beepcube_cut.ogg");
 		rigid_body_half.add_child(snd);
 		snd.play();
@@ -322,20 +316,21 @@ func _reset_combo():
 	_current_combo = 0;
 	_display_points();
 
-func _update_points_from_cut(saber, cube, beat_accuracy, cut_angle_accuracy, cut_distance_accuracy, travel_distance_factor):
 
+func _update_points_from_cut(saber, cube, beat_accuracy, cut_angle_accuracy, cut_distance_accuracy, travel_distance_factor):
 	#if (beat_accuracy == 0.0 || cut_angle_accuracy == 0.0 || cut_distance_accuracy == 0.0):
 	#	_reset_combo();
 	#	return;
-	
+
+	# check if we hit the cube with the correctly colored saber
 	if (saber.type != cube._note._type):
 		_reset_combo();
 		return;
 
-
 	_current_combo += 1;
 	_current_multiplier = 1 + round(min((_current_combo / 10), 7.0));
 
+	# point computation based on the accuracy of the swing
 	var points = 0;
 	points += beat_accuracy * 50;
 	points += cut_angle_accuracy * 50;
@@ -347,21 +342,23 @@ func _update_points_from_cut(saber, cube, beat_accuracy, cut_angle_accuracy, cut
 
 	_display_points();
 
+
 func _display_points():
 	$Point_Label.set_label_text("Score: %6d" % _current_points);
 	$Multiplier_Label.set_label_text("x %d\nCombo %d" %[_current_multiplier, _current_combo])
 
-
+# perform the necessay computations to cut a cube with the saber
 func _cut_cube(controller : ARVRController, saber : Area, cube : Spatial):
+	# perform haptic feedback for the cut
+	controller.simple_rumble(0.75, 0.1);
+	
 	# compute the "cut plane" from the controller movement and saber direction
 	var controller_speed : Vector3 = controller.get_linear_velocity();
+	# if we don't move enough we just use a cut upwards
 	if (controller_speed.length_squared() < 0.01):
 		controller_speed = Vector3(0.0,1.0,0);
 
 	var saber_direction : Vector3 = saber.global_transform.basis.y;
-
-	controller.simple_rumble(0.5, 0.1);
-
 	var o = controller.global_transform.origin;
 	var cutplane := Plane(o, o+saber_direction, o+controller_speed);
 	var cut_distance = cutplane.distance_to(cube.global_transform.origin);
@@ -382,11 +379,13 @@ func _cut_cube(controller : ARVRController, saber : Area, cube : Spatial):
 
 	_update_points_from_cut(saber, cube, beat_accuracy, cut_angle_accuracy, cut_distance_accuracy, travel_distance_factor);
 
+	# reset the movement tracking volume for the next cut
 	_controller_movement_aabb[controller.controller_id] = AABB(controller.global_transform.origin, Vector3(0,0,0));
 
 	#vr.show_dbg_info("cut_accuracy", str(beat_accuracy) + ", " + str(cut_angle_accuracy) + ", " + str(cut_distance_accuracy) + ", " + str(travel_distance_factor));
-
+	# delete the original cube; we have two new halfs created above
 	cube.queue_free();
+
 
 func _on_LeftLightSaber_area_entered(area : Area):
 	if (area.is_in_group("beepcube")):

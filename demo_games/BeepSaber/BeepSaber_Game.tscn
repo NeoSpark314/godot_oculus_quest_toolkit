@@ -13,13 +13,11 @@
 [ext_resource path="res://demo_games/BeepSaber/BeepSaberMainMenu.tscn" type="PackedScene" id=11]
 [ext_resource path="res://OQ_Toolkit/OQ_ARVRController/Feature_UIRayCast.tscn" type="PackedScene" id=12]
 [ext_resource path="res://demo_games/BeepSaber/background.tres" type="Texture" id=13]
-
-[sub_resource type="PanoramaSky" id=1]
-panorama = ExtResource( 13 )
+[ext_resource path="res://demo_games/BeepSaber/background_sky.tres" type="PanoramaSky" id=14]
 
 [sub_resource type="Environment" id=2]
 background_mode = 3
-background_sky = SubResource( 1 )
+background_sky = ExtResource( 14 )
 glow_enabled = true
 glow_intensity = 0.32
 glow_strength = 1.5

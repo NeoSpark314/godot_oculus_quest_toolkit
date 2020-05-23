@@ -1,5 +1,5 @@
 # Godot Oculus Quest Toolkit <!-- omit in toc --> 
-This is an early alpha version of a toolkit for basic VR interactions with the Oculus Quest using the Godot game engine.
+This is an in-development toolkit for basic VR interactions with the Oculus Quest using the Godot game engine.
 The toolkit in this repository requires (at the time of writing) a recent version of Godot 3.2.
 If you have questions or run into problems please open an issue here or contact me at the [official Godot Discord](https://discord.gg/zH7NUgz): @NeoSpark314 in the #XR channel.
 
@@ -13,7 +13,12 @@ A list of links to projects and prototypes that use the Oculus Quest Toolkit tha
 |[![Blocks](doc/images/showcase/blocks.jpg)](https://kosmosschool.itch.io/blocks) | [![The Impossible Crypt](doc/images/showcase/impossible_crypt.jpg)](https://neospark314.itch.io/the-impossible-crypt)  | [![SpaceToys](doc/images/showcase/spacetoys.jpg)](https://github.com/ssj71/SpaceToys)|
 | | | |
 
+## Demo Scenes and Games
+The toolkit contains several demo scenes in the [Demo Scene Folder](demo_scenes/) that can be inspected to see how the individual features work.
 
+In addition there is also a more complete example in the [Demo Games Folder](dmeo_games/). It is a beat saber clone called BeepSaber:
+
+[![BeepSaber Demo Video](https://img.youtube.com/vi/kg3yiwaphlk/0.jpg)](https://www.youtube.com/watch?v=kg3yiwaphlk)
 
 ## Features
 - Touch controller button handling and controller models
@@ -68,6 +73,7 @@ There are a lot of potential extensions and missing features. Some of the things
 
 # Credits
 - The Medieval Town scene was created by fangzhangmnm: [Sketchfab Page](https://sketchfab.com/3d-models/medieval-town-a174a1449da345b8ab51308032587e71); released under [CC Attribution] (https://creativecommons.org/licenses/by/4.0/). The lightmap applied to the scene was baked in Blender.
+- The Music Track used in the BeepSaber demo game is Time Lapse by TheFatRat (https://www.youtube.com/watch?v=3fxq7kqyWO8)
 
 
 # Licensing

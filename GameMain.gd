@@ -27,6 +27,9 @@ func _process(_dt):
 func _ready():
 	vr.initialize();
 	
+	#vr.set_display_refresh_rate(60);
+	#Engine.target_fps = 60;
+	
 	vr.scene_switch_root = self;
 	
 	#vr.switch_scene("res://demo_scenes/experiments/BowAndArrow.tscn"); return;
