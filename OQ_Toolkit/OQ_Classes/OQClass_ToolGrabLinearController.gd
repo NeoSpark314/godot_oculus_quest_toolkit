@@ -24,9 +24,10 @@ var _distance = 0.0
 var _slide_extension = 0.0
 var _original_part_posiiton = null
 
-func pose_part(part: Spatial, start_grab_pos: Vector3, new_grab_pos: Vector3):
-	if _original_part_posiiton == null:
-		_original_part_posiiton = part.transform.origin
+func _ready():
+	_original_part_posiiton = get_parent().transform.origin
+
+func pose_part(start_grab_pos: Vector3, new_grab_pos: Vector3):
 	# Determine how the extension of this sliding part.
 	var projected_start_pos = start_grab_pos.project(slide_axis)
 	var projected_end_pos = new_grab_pos.project(slide_axis)
@@ -40,10 +41,10 @@ func pose_part(part: Spatial, start_grab_pos: Vector3, new_grab_pos: Vector3):
 		return
 	# Actually pose the part.
 	var new_pos = slide_axis.normalized() * actual_extension
-	part.transform.origin = _original_part_posiiton + new_pos
+	get_parent().transform.origin = _original_part_posiiton + new_pos
 
 func process_release(part: Spatial):
 	if not should_snap_back:
 		return
 	var new_pos = slide_axis.normalized() * rest_position
-	part.transform.origin = _original_part_posiiton + new_pos
+	get_parent().transform.origin = _original_part_posiiton + new_pos

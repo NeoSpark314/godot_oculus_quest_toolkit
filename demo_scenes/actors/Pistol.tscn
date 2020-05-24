@@ -31,12 +31,10 @@ transform = Transform( 0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0 )
 script = ExtResource( 5 )
 slide_axis = Vector3( 0, 0, 1 )
 upper_limit = 0.06
+slip_threshold = 0.05
 
 [node name="FrameArea" type="Area" parent="."]
 script = ExtResource( 3 )
-
-[node name="GrabPosition" type="Position3D" parent="FrameArea"]
-transform = Transform( 1, 0, 0, 0, 0.988372, 0.152054, 0, -0.152054, 0.988372, 0, -0.0126177, 0.00726935 )
 
 [node name="GripCollisionShape" type="CollisionShape" parent="FrameArea"]
 transform = Transform( 0.5, 0, 0, 0, 0.119614, -0.485482, 0, 0.485482, 0.119614, 0, -0.0378358, 0.0272147 )

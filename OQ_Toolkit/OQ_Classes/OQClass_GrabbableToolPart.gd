@@ -28,9 +28,9 @@ func notify_hand_slipped():
 func get_grab_transform():
 	return null
 
-func pose_part(part: Spatial, start_grab_pos: Vector3, new_grab_pos: Vector3):
+func pose_part(start_grab_pos: Vector3, new_grab_pos: Vector3):
 	if motion_controller != null:
-		motion_controller.pose_part(part, start_grab_pos, new_grab_pos)
+		motion_controller.pose_part(start_grab_pos, new_grab_pos)
 
 func _ready():
 	for child in get_children():

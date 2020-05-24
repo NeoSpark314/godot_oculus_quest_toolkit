@@ -2,7 +2,7 @@ extends Spatial
 
 class_name OQClass_ToolGrabController
 
-func pose_part(part: Spatial, start_grab_pos: Vector3, new_grab_pos: Vector3):
+func pose_part(start_grab_pos: Vector3, new_grab_pos: Vector3):
 	pass
 
 func hand_slipped():

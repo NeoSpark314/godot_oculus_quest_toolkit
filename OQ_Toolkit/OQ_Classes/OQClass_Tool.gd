@@ -71,7 +71,7 @@ func pose_grabbed_parts():
 	var part = _controllers_to_parts[second_controller]
 	var controller_xform: Transform = second_controller.global_transform
 	var relative_xform = controller_xform.xform_inv(global_transform.origin)
-	part.pose_part(part, _controller_grab_transforms[second_controller], relative_xform)
+	part.pose_part(_controller_grab_transforms[second_controller], relative_xform)
 
 func pose_root():
 	var first_controller = _controllers_grabbing.front()
