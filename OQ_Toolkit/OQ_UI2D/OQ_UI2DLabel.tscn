@@ -14,7 +14,8 @@ params_cull_mode = 2
 albedo_texture = SubResource( 1 )
 
 [sub_resource type="QuadMesh" id=3]
-size = Vector2( 0.148438, 0.0634766 )
+resource_local_to_scene = true
+size = Vector2( 0.199219, 0.0634766 )
 
 [node name="OQ_UILabel" type="Spatial"]
 script = ExtResource( 1 )

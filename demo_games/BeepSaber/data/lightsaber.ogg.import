@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/lightsaber.ogg-3a6f9fc125dac9ea7996991a3f7fd514.oggstr"
+
+[deps]
+
+source_file="res://demo_games/BeepSaber/data/lightsaber.ogg"
+dest_files=[ "res://.import/lightsaber.ogg-3a6f9fc125dac9ea7996991a3f7fd514.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0

@@ -3,6 +3,9 @@ extends Spatial
 export var active := true;
 export var ui_raycast_length := 3.0;
 export var ui_mesh_length := 1.0;
+
+export var adjust_left_right := true;
+
 export(vr.CONTROLLER_BUTTON) var ui_raycast_visible_button := vr.CONTROLLER_BUTTON.TOUCH_INDEX_TRIGGER;
 export(vr.CONTROLLER_BUTTON) var ui_raycast_click_button := vr.CONTROLLER_BUTTON.INDEX_TRIGGER;
 
@@ -31,13 +34,15 @@ func _set_raycast_transform():
 	else:
 		ui_raycast_position.transform.basis = Basis();
 		
-		ui_raycast_position.translation.y = -0.005;
-		ui_raycast_position.translation.z = -0.01;
 		# center the ray cast better to the actual controller position
-		if (controller.controller_id == 1):
-			ui_raycast_position.translation.x = -0.01;
-		if (controller.controller_id == 2):
-			ui_raycast_position.translation.x =  0.01;
+		if (adjust_left_right):
+			ui_raycast_position.translation.y = -0.005;
+			ui_raycast_position.translation.z = -0.01;
+		
+			if (controller.controller_id == 1):
+				ui_raycast_position.translation.x = -0.01;
+			if (controller.controller_id == 2):
+				ui_raycast_position.translation.x =  0.01;
 		
 	
 		

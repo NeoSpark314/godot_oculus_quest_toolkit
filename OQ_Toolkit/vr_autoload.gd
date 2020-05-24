@@ -116,6 +116,18 @@ func get_current_player_height():
 func randomArrayElement(rng, array):
 	return array[rng.randi_range(0, array.size()-1)];
 
+
+func load_json_file(filename):
+	var save = File.new();
+	var err = save.open(filename, File.READ)
+	if (err == OK):
+		var r = JSON.parse(save.get_as_text()).result;
+		save.close();
+		return r;
+	else:
+		vr.log_error("Could not load_json_file from " + filename);
+		return null;
+
 ###############################################################################
 # Controller Handling
 ###############################################################################
@@ -586,14 +598,13 @@ func set_clock_levels(cpu_level, gpu_level):
 # Scene Switching Helper Logic
 ###############################################################################
 
-var _active_scene_path = null; # this assumes that only a single scene will every be switched
+var _active_scene_path = null; # this assumes that only a single scene will ever be switched
 var scene_switch_root = null;
 
 # helper function to switch different scenes; this will be in the
 # future extend to allow for some transtioning to happen as well as maybe some shader caching
 func _perform_switch_scene(scene_path):
-	print("_perform_switch_scene")
-	print(scene_path)
+	print("_perform_switch_scene to " + scene_path);
 	
 	if scene_switch_root != null:
 		for s in scene_switch_root.get_children():

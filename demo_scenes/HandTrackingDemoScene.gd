@@ -2,6 +2,11 @@ extends Spatial
 
 onready var label_gesture = $Label_SimpleGesture;
 
+func _physics_process(_dt):
+	if (vr.button_just_pressed(vr.BUTTON.ENTER)): # switch back to main menu
+		vr.switch_scene("res://demo_scenes/UIDemoScene.tscn");
+
+
 func _process(_dt):
 	
 	if (!vr.rightController.is_hand):
