@@ -16,9 +16,9 @@ A list of links to projects and prototypes that use the Oculus Quest Toolkit tha
 ## Demo Scenes and Games
 The toolkit contains several demo scenes in the [Demo Scene Folder](demo_scenes/) that can be inspected to see how the individual features work.
 
-In addition there is also a more complete example in the [Demo Games Folder](dmeo_games/). It is a beat saber clone called BeepSaber:
+In addition there is also a more complete example in the [Demo Games Folder](dmeo_games/). It is a beat saber clone called BeepSaber; you can watch [a video here](https://www.youtube.com/watch?v=kg3yiwaphlk):
 
-[![BeepSaber Demo Video](https://img.youtube.com/vi/kg3yiwaphlk/0.jpg)](https://www.youtube.com/watch?v=kg3yiwaphlk)
+[![BeepSaber Demo Video](doc/images/showcase/beepsaber.jpg)](https://www.youtube.com/watch?v=kg3yiwaphlk)
 
 ## Features
 - Touch controller button handling and controller models
