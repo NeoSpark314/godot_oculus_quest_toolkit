@@ -31,7 +31,6 @@ transform = Transform( 0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0 )
 script = ExtResource( 5 )
 slide_axis = Vector3( 0, 0, 1 )
 upper_limit = 0.06
-slip_threshold = 0.05
 
 [node name="FrameArea" type="Area" parent="."]
 script = ExtResource( 3 )

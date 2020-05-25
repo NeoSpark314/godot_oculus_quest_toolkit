@@ -82,3 +82,7 @@ func _on_PlayerCollision_pressed():
 
 func _on_Button_PlayBeepSaber_pressed():
 	vr.switch_scene("res://demo_games/BeepSaber/BeepSaber_Game.tscn");
+
+
+func _on_ObjectInteraction_pressed():
+	vr.switch_scene("res://demo_scenes/PistolScene.tscn");

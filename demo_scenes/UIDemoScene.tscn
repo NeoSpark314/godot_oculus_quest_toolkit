@@ -439,7 +439,7 @@ transform = Transform( 1.67744, -0.544566, 0.471608, 0, 1.73205, 0.5, -1.08913, 
 
 [node name="ReferenceRect" type="ReferenceRect" parent="OQ_UI2DCanvas_LevelSelector"]
 margin_right = 544.0
-margin_bottom = 192.0
+margin_bottom = 256.0
 theme = ExtResource( 5 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -471,6 +471,16 @@ margin_top = 128.0
 margin_right = 256.0
 margin_bottom = 176.0
 text = "HandTracking"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ObjectInteraction" type="Button" parent="OQ_UI2DCanvas_LevelSelector/ReferenceRect"]
+margin_left = 16.0
+margin_top = 192.0
+margin_right = 288.0
+margin_bottom = 240.0
+text = "ObjectInteraction"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -509,6 +519,7 @@ __meta__ = {
 transform = Transform( 2, 0, 0, 0, 2, 0, 0, 0, 1, 0.084929, 1.17961, -1.52167 )
 
 [node name="ReferenceRect" type="Panel" parent="OQ_UI2DCanvas_DemoGameSelect"]
+visible = false
 margin_right = 336.0
 margin_bottom = 512.0
 theme = ExtResource( 5 )
@@ -563,6 +574,7 @@ text = "Input Log"
 [connection signal="item_selected" from="OQ_UI2DCanvas_MovementOptions/Control/RotationOptionButton" to="." method="_on_RotationOptionButton_item_selected"]
 [connection signal="pressed" from="OQ_UI2DCanvas_LevelSelector/ReferenceRect/ButtonPhysics" to="." method="_on_ButtonPhysics_pressed"]
 [connection signal="pressed" from="OQ_UI2DCanvas_LevelSelector/ReferenceRect/HandTracking" to="." method="_on_HandTracking_pressed"]
+[connection signal="pressed" from="OQ_UI2DCanvas_LevelSelector/ReferenceRect/ObjectInteraction" to="." method="_on_ObjectInteraction_pressed"]
 [connection signal="pressed" from="OQ_UI2DCanvas_LevelSelector/ReferenceRect/PlayerCollision" to="." method="_on_PlayerCollision_pressed"]
 [connection signal="pressed" from="OQ_UI2DCanvas_LevelSelector/ReferenceRect/ButtonClimbing" to="." method="_on_ButtonClimbing_pressed"]
 [connection signal="pressed" from="OQ_UI2DCanvas_LevelSelector/ReferenceRect/ButtonWalkInPlace" to="." method="_on_ButtonWalkInPlace_pressed"]
