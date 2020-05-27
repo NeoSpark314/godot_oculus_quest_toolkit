@@ -41,7 +41,7 @@ func _show_debug_information():
 
 func _ready():
 	if (not get_parent() is ARVROrigin):
-		vr.log_error("Feature_StickMovement: parent is not ARVROrigin");
+		vr.log_error("Locomotion_Stick: parent is not ARVROrigin");
 
 	movement_vignette_rect.material.set_shader_param("r0", vignette_radius_0);
 	movement_vignette_rect.material.set_shader_param("r1", vignette_radius_1);
