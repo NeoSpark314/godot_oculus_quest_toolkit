@@ -17,7 +17,7 @@ code = "shader_type spatial;
 
 void fragment() {
 	vec3 color = vec3(1.0,0.0,0.0);
-	float v = PROJECTION_MATRIX[0][2];
+	float v = PROJECTION_MATRIX[2][0];
 	if (v < 0.0) color = vec3(0.0,1.0,0.0);
 	ALBEDO = color;
 }"
