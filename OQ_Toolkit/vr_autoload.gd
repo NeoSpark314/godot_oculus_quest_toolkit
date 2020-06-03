@@ -294,7 +294,7 @@ enum LocomotionStickTurnType {
 var ovrDisplayRefreshRate = null;
 var ovrGuardianSystem = null;
 var ovrInitConfig = null;
-var ovrPerfromance = null;
+var ovrPerformance = null;
 var ovrTrackingTransform = null;
 var ovrUtilities = null;
 var ovrHandTracking = null;
@@ -322,7 +322,7 @@ func _initialize_OVR_API():
 	else: log_error("Failed to load OvrGuardianSystem.gdns");
 	if (OvrInitConfig): ovrInitConfig = OvrInitConfig.new();
 	else: log_error("Failed to load OvrInitConfig.gdns");
-	if (OvrPerformance): ovrPerfromance = OvrPerformance.new();
+	if (OvrPerformance): ovrPerformance = OvrPerformance.new();
 	else: log_error("Failed to load OvrPerformance.gdns");
 	if (OvrTrackingTransform): ovrTrackingTransform = OvrTrackingTransform.new();
 	else: log_error("Failed to load OvrTrackingTransform.gdns");
@@ -544,12 +544,12 @@ func set_default_layer_color_scale(color : Color):
 
 
 func set_extra_latency_mode(latency_mode):
-	if (!ovrPerfromance):
-		log_error("set_tracking_space(): no ovrPerfromance object.");
+	if (!ovrPerformance):
+		log_error("set_tracking_space(): no ovrPerformance object.");
 		return false;
 	else:
 		oculus_mobile_settings_cache["extra_latency_mode"] = latency_mode;
-		return ovrPerfromance.set_extra_latency_mode(latency_mode);
+		return ovrPerformance.set_extra_latency_mode(latency_mode);
 
 
 enum FoveatedRenderingLevel {
@@ -561,37 +561,37 @@ enum FoveatedRenderingLevel {
 }
 
 func set_foveation_level(ffr_level):
-	if (!ovrPerfromance):
-		log_error("set_foveation_level(): no ovrPerfromance object.");
+	if (!ovrPerformance):
+		log_error("set_foveation_level(): no ovrPerformance object.");
 		return false;
 	else:
 		oculus_mobile_settings_cache["foveation_level"] = ffr_level;
-		return ovrPerfromance.set_foveation_level(ffr_level);
+		return ovrPerformance.set_foveation_level(ffr_level);
 
 func set_enable_dynamic_foveation(ffr_dynamic):
-	if (!ovrPerfromance):
-		log_error("set_enable_dynamic_foveation(): no ovrPerfromance object.");
+	if (!ovrPerformance):
+		log_error("set_enable_dynamic_foveation(): no ovrPerformance object.");
 		return false;
 	else:
 		oculus_mobile_settings_cache["foveation_dynamic"] = ffr_dynamic;
-		return ovrPerfromance.set_enable_dynamic_foveation(ffr_dynamic);
+		return ovrPerformance.set_enable_dynamic_foveation(ffr_dynamic);
 
 func set_swap_interval(interval):
-	if (!ovrPerfromance):
-		log_error("set_swap_interval(): no ovrPerfromance object.");
+	if (!ovrPerformance):
+		log_error("set_swap_interval(): no ovrPerformance object.");
 		return false;
 	else:
 		oculus_mobile_settings_cache["swap_interval"] = interval;
-		return ovrPerfromance.set_swap_interval(interval);
+		return ovrPerformance.set_swap_interval(interval);
 	
 func set_clock_levels(cpu_level, gpu_level):
-	if (!ovrPerfromance):
-		log_error("set_clock_levels(): no ovrPerfromance object.");
+	if (!ovrPerformance):
+		log_error("set_clock_levels(): no ovrPerformance object.");
 		return false;
 	else:
 		oculus_mobile_settings_cache["clock_levels_cpu"] = cpu_level;
 		oculus_mobile_settings_cache["clock_levels_gpu"] = gpu_level;
-		return ovrPerfromance.set_clock_levels(cpu_level, gpu_level);
+		return ovrPerformance.set_clock_levels(cpu_level, gpu_level);
 
 
 ###############################################################################
