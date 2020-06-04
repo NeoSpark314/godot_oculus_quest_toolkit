@@ -34,7 +34,7 @@ func _ready():
 	
 	#vr.switch_scene("res://demo_scenes/experiments/BowAndArrow.tscn"); return;
 	#vr.switch_scene("res://demo_scenes/experiments/TestRoom.tscn"); return;
-	vr.switch_scene("res://demo_scenes/experiments/StereoPanorama.tscn"); return;
+	vr.switch_scene("res://demo_scenes/StereoPanoramaDemoScene.tscn"); return;
 	#	vr.switch_scene("res://demo_games/BeepSaber/BeepSaber_Game.tscn");  return;
 
 	# Always advertise Godot a bit in the beggining
