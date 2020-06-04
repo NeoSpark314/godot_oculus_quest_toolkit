@@ -86,3 +86,7 @@ func _on_Button_PlayBeepSaber_pressed():
 
 func _on_ObjectInteraction_pressed():
 	vr.switch_scene("res://demo_scenes/PistolScene.tscn");
+
+
+func _on_StereoPanorama_pressed():
+	vr.switch_scene("res://demo_scenes/StereoPanoramaDemoScene.tscn");

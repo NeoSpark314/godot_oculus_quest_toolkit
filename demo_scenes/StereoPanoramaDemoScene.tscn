@@ -1,12 +1,16 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://OQ_Toolkit/OQ_ARVROrigin.tscn" type="PackedScene" id=1]
 [ext_resource path="res://OQ_Toolkit/OQ_ARVRCamera.tscn" type="PackedScene" id=2]
-[ext_resource path="res://demo_scenes/data/image4-1.jpg" type="Texture" id=3]
+[ext_resource path="res://demo_scenes/data/sponza_2k_ods.webp" type="Texture" id=3]
 [ext_resource path="res://OQ_Toolkit/OQ_ARVRCamera/Feature_StereoPanorama.tscn" type="PackedScene" id=4]
 [ext_resource path="res://OQ_Toolkit/OQ_ARVROrigin/Feature_VRSimulator.tscn" type="PackedScene" id=5]
+[ext_resource path="res://demo_scenes/StereoPanoramaDemoScene.gd" type="Script" id=6]
+[ext_resource path="res://OQ_Toolkit/OQ_RightController.tscn" type="PackedScene" id=7]
+[ext_resource path="res://OQ_Toolkit/OQ_LeftController.tscn" type="PackedScene" id=8]
 
 [node name="StereoPanoramaTest" type="Spatial"]
+script = ExtResource( 6 )
 
 [node name="OQ_ARVROrigin" parent="." instance=ExtResource( 1 )]
 
@@ -17,3 +21,9 @@ transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 1.8,
 stereo_texture = ExtResource( 3 )
 
 [node name="Feature_VRSimulator" parent="OQ_ARVROrigin" instance=ExtResource( 5 )]
+
+[node name="OQ_LeftController" parent="OQ_ARVROrigin" instance=ExtResource( 8 )]
+autoload_model = false
+
+[node name="OQ_RightController" parent="OQ_ARVROrigin" instance=ExtResource( 7 )]
+autoload_model = false

@@ -485,6 +485,16 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="StereoPanorama" type="Button" parent="OQ_UI2DCanvas_LevelSelector/ReferenceRect"]
+margin_left = 304.0
+margin_top = 192.0
+margin_right = 528.0
+margin_bottom = 240.0
+text = "Stereo Pano"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="PlayerCollision" type="Button" parent="OQ_UI2DCanvas_LevelSelector/ReferenceRect"]
 margin_left = 272.0
 margin_top = 128.0
@@ -575,6 +585,7 @@ text = "Input Log"
 [connection signal="pressed" from="OQ_UI2DCanvas_LevelSelector/ReferenceRect/ButtonPhysics" to="." method="_on_ButtonPhysics_pressed"]
 [connection signal="pressed" from="OQ_UI2DCanvas_LevelSelector/ReferenceRect/HandTracking" to="." method="_on_HandTracking_pressed"]
 [connection signal="pressed" from="OQ_UI2DCanvas_LevelSelector/ReferenceRect/ObjectInteraction" to="." method="_on_ObjectInteraction_pressed"]
+[connection signal="pressed" from="OQ_UI2DCanvas_LevelSelector/ReferenceRect/StereoPanorama" to="." method="_on_StereoPanorama_pressed"]
 [connection signal="pressed" from="OQ_UI2DCanvas_LevelSelector/ReferenceRect/PlayerCollision" to="." method="_on_PlayerCollision_pressed"]
 [connection signal="pressed" from="OQ_UI2DCanvas_LevelSelector/ReferenceRect/ButtonClimbing" to="." method="_on_ButtonClimbing_pressed"]
 [connection signal="pressed" from="OQ_UI2DCanvas_LevelSelector/ReferenceRect/ButtonWalkInPlace" to="." method="_on_ButtonWalkInPlace_pressed"]

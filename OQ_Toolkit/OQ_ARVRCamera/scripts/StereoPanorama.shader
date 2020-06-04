@@ -6,7 +6,7 @@ uniform sampler2D stereo_image;
 const float M_PI = 3.1415926535897932384626433832795;
 
 void fragment() {
-	bool is_right_eye = (PROJECTION_MATRIX[2][0] < 0.0); // use the asymetric projection matrix to figure out what eye we are rendering
+	bool is_right_eye = (PROJECTION_MATRIX[2][0] > 0.0); // use the asymetric projection matrix to figure out what eye we are rendering
 
 	// compute the view direction from the (asymetric) projection matrix
 	vec2 uv_interp = FRAGCOORD.xy / VIEWPORT_SIZE * 2.0 - vec2(1.0);
