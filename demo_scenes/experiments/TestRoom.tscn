@@ -2,7 +2,7 @@
 
 [ext_resource path="res://OQ_Toolkit/OQ_ARVRCamera.tscn" type="PackedScene" id=1]
 [ext_resource path="res://demo_scenes/experiments/TestRoom.gd" type="Script" id=2]
-[ext_resource path="res://OQ_Toolkit/OQ_ARVRController/Feature_AreaObjectGrab.tscn" type="PackedScene" id=4]
+[ext_resource path="res://OQ_Toolkit/OQ_ARVROrigin/Locomotion_Teleport.tscn" type="PackedScene" id=3]
 [ext_resource path="res://demo_scenes/static_objects/TableTennisRoom.tscn" type="PackedScene" id=5]
 [ext_resource path="res://OQ_Toolkit/OQ_LeftController.tscn" type="PackedScene" id=6]
 [ext_resource path="res://OQ_Toolkit/OQ_ARVROrigin.tscn" type="PackedScene" id=7]
@@ -20,13 +20,11 @@ transform = Transform( -1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 1.36
 [node name="OQ_LeftController" parent="OQ_ARVROrigin" instance=ExtResource( 6 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.37551, 0.0958476 )
 
-[node name="Feature_AreaObjectGrab" parent="OQ_ARVROrigin/OQ_LeftController" instance=ExtResource( 4 )]
-
 [node name="OQ_RightController" parent="OQ_ARVROrigin" instance=ExtResource( 8 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.37551, 0.0958476 )
 
-[node name="Feature_AreaObjectGrab" parent="OQ_ARVROrigin/OQ_RightController" instance=ExtResource( 4 )]
-
 [node name="Feature_VRSimulator" parent="OQ_ARVROrigin" instance=ExtResource( 12 )]
+
+[node name="Locomotion_Teleport" parent="OQ_ARVROrigin" instance=ExtResource( 3 )]
 
 [node name="TableTennisRoom" parent="." instance=ExtResource( 5 )]

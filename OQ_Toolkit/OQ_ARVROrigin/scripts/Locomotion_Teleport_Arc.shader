@@ -5,9 +5,9 @@ render_mode skip_vertex_transform, cull_disabled, unshaded;
 // the positions are in world space; this was a deliberate choice as I personally find
 // world space computations much easier to understand and debug; I hope this makes
 // tweaking this to your own needs easier
-uniform vec3 start_position = vec3(1.0, 1.0, 0.0);
-uniform vec3 direction = vec3(-0.7, 0.1, 0.3);
-uniform float arc_length = 4.0;
+uniform vec3 start_position = vec3(3.0, 1.0, 0.0);
+uniform vec3 direction = vec3(-1.25, 2.0, 0.0);
+uniform float arc_length = 3.0;
 
 uniform vec4 color = vec4(1.0, 1.0, 0.0, 1.0);
 

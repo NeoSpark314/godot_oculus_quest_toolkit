@@ -16,7 +16,11 @@ export var valid_angle_cos := 0.9;
 export var valid_color := Color(0.5,1.0,0.5, 1.0);
 export var invalid_color := Color(1.0, 0.5, 0.5, 1.0);
 
-export var distance_mult = 1.8;
+export var distance_mult := 1.5;
+export var num_steps := 20;
+
+export (int, FLAGS) var collision_mask = 1 setget set_collision_mask, get_collision_mask;
+
 
 export(vr.BUTTON) var show_teleport_button = vr.BUTTON.RIGHT_TOUCH_INDEX_TRIGGER;
 export(vr.BUTTON) var perform_teleport_button = vr.BUTTON.RIGHT_INDEX_TRIGGER;
@@ -33,8 +37,15 @@ onready var arc_material = $arc_mesh.get_surface_material(0);
 onready var arc_ray = $arc_raycast;
 
 func _show_debug_information():
-	pass;
+	vr.show_dbg_info("teleport_position", teleport_position);
+	vr.show_dbg_info("teleport_normal", teleport_normal);
 	
+func set_collision_mask(_mask):
+	collision_mask = _mask
+	arc_ray.collision_mask = collision_mask
+
+func get_collision_mask():
+	return collision_mask
 
 func _ready():
 	if (not get_parent() is ARVROrigin):
@@ -56,13 +67,13 @@ func _update_arc():
 
 	
 	var step_distance = 0.125;
-	var num_steps = 32;
 	
 	var p0 = start_position;
 	var t = 0.0;
 	
+	arc_ray.global_transform.basis = Basis(); # reset orientation as we do all calculations in world space
+	
 	# now we cast several ray segments to figure out where the arc hits
-	arc_ray.enabled = true;
 	for i in range(num_steps):
 		t = (i+1)*step_distance;
 		var p1 = start_position + t * direction - t*t*Vector3(0,1,0);
@@ -70,6 +81,8 @@ func _update_arc():
 		arc_ray.global_transform.origin = p0;
 		arc_ray.cast_to = p1 - p0;
 		arc_ray.force_raycast_update();
+
+		p0 = p1;
 
 		if (arc_ray.is_colliding()):
 			teleport_normal = arc_ray.get_collision_normal();
@@ -88,9 +101,7 @@ func _update_arc():
 #				if (arc_ray.is_colliding()):
 #					t -= step_distance;
 			break;
-
-		p0 = p1;
-	arc_ray.enabled = false;
+	
 	
 	var arc_length = t;
 	arc_material.set_shader_param("start_position", start_position);
