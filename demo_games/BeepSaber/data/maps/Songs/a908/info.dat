@@ -1,0 +1,172 @@
+{
+  "_version" : "2.0.0",
+  "_songName" : "Unity",
+  "_songSubName" : "",
+  "_songAuthorName" : "TheFatRat",
+  "_levelAuthorName" : "Timeweaver",
+  "_beatsPerMinute" : 105,
+  "_shuffle" : 0,
+  "_shufflePeriod" : 0.5,
+  "_previewStartTime" : 46,
+  "_previewDuration" : 10,
+  "_songFilename" : "song.egg",
+  "_coverImageFilename" : "cover.jpg",
+  "_environmentName" : "Origins",
+  "_songTimeOffset" : 0,
+  "_customData" : {
+    "_editor" : "chromapper"
+  },
+  "_difficultyBeatmapSets" : [
+    {
+      "_beatmapCharacteristicName" : "Standard",
+      "_difficultyBeatmaps" : [
+        {
+          "_difficulty" : "Easy",
+          "_difficultyRank" : 1,
+          "_beatmapFilename" : "EasyStandard.dat",
+          "_noteJumpMovementSpeed" : 10,
+          "_noteJumpStartBeatOffset" : 1,
+          "_customData" : {
+            "_obstacleColor" : {
+              "r" : 0.462745100259781,
+              "g" : 0.407843142747879,
+              "b" : 1
+            },
+            "_envColorRight" : {
+              "r" : 0,
+              "g" : 0.537254929542542,
+              "b" : 1
+            },
+            "_colorRight" : {
+              "r" : 0.462745100259781,
+              "g" : 0.407843142747879,
+              "b" : 1
+            },
+            "_colorLeft" : {
+              "r" : 0.721568644046783,
+              "g" : 0.152941182255745,
+              "b" : 0.678431391716003
+            }
+          }
+        },
+        {
+          "_difficulty" : "Normal",
+          "_difficultyRank" : 3,
+          "_beatmapFilename" : "NormalStandard.dat",
+          "_noteJumpMovementSpeed" : 10,
+          "_noteJumpStartBeatOffset" : 1,
+          "_customData" : {
+            "_obstacleColor" : {
+              "r" : 0.462745100259781,
+              "g" : 0.407843142747879,
+              "b" : 1
+            },
+            "_envColorRight" : {
+              "r" : 0,
+              "g" : 0.537254929542542,
+              "b" : 1
+            },
+            "_colorRight" : {
+              "r" : 0.462745100259781,
+              "g" : 0.407843142747879,
+              "b" : 1
+            },
+            "_colorLeft" : {
+              "r" : 0.721568644046783,
+              "g" : 0.152941182255745,
+              "b" : 0.678431391716003
+            }
+          }
+        },
+        {
+          "_difficulty" : "Hard",
+          "_difficultyRank" : 5,
+          "_beatmapFilename" : "HardStandard.dat",
+          "_noteJumpMovementSpeed" : 12.5,
+          "_noteJumpStartBeatOffset" : 0,
+          "_customData" : {
+            "_obstacleColor" : {
+              "r" : 0.462745100259781,
+              "g" : 0.407843142747879,
+              "b" : 1
+            },
+            "_envColorRight" : {
+              "r" : 0,
+              "g" : 0.537254929542542,
+              "b" : 1
+            },
+            "_colorRight" : {
+              "r" : 0.462745100259781,
+              "g" : 0.407843142747879,
+              "b" : 1
+            },
+            "_colorLeft" : {
+              "r" : 0.721568644046783,
+              "g" : 0.152941182255745,
+              "b" : 0.678431391716003
+            }
+          }
+        },
+        {
+          "_difficulty" : "Expert",
+          "_difficultyRank" : 7,
+          "_beatmapFilename" : "ExpertStandard.dat",
+          "_noteJumpMovementSpeed" : 15,
+          "_noteJumpStartBeatOffset" : -0.25,
+          "_customData" : {
+            "_obstacleColor" : {
+              "r" : 0.462745100259781,
+              "g" : 0.407843142747879,
+              "b" : 1
+            },
+            "_envColorRight" : {
+              "r" : 0,
+              "g" : 0.537254929542542,
+              "b" : 1
+            },
+            "_colorRight" : {
+              "r" : 0.462745100259781,
+              "g" : 0.407843142747879,
+              "b" : 1
+            },
+            "_colorLeft" : {
+              "r" : 0.721568644046783,
+              "g" : 0.152941182255745,
+              "b" : 0.678431391716003
+            }
+          }
+        },
+        {
+          "_difficulty" : "ExpertPlus",
+          "_difficultyRank" : 9,
+          "_beatmapFilename" : "ExpertPlusStandard.dat",
+          "_noteJumpMovementSpeed" : 16,
+          "_noteJumpStartBeatOffset" : 0.5,
+          "_customData" : {
+            "_obstacleColor" : {
+              "r" : 0.462745100259781,
+              "g" : 0.407843142747879,
+              "b" : 1
+            },
+            "_envColorRight" : {
+              "r" : 0,
+              "g" : 0.537254929542542,
+              "b" : 1
+            },
+            "_colorRight" : {
+              "r" : 0.462745100259781,
+              "g" : 0.407843142747879,
+              "b" : 1
+            },
+            "_colorLeft" : {
+              "r" : 0.721568644046783,
+              "g" : 0.152941182255745,
+              "b" : 0.678431391716003
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "_allDirectionsEnvironmentName" : "GlassDesertEnvironment"
+}

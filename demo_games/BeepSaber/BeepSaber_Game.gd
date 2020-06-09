@@ -70,7 +70,12 @@ func continue_map():
 func start_map(path, info, map_data):
 	_current_map = map_data;
 	_current_info = info;
-	song_player.stream = load(path + info._songFilename);
+	var snd_file = File.new()
+	snd_file.open(path + info._songFilename, File.READ)
+	var stream = AudioStreamOGGVorbis.new()
+	stream.data = snd_file.get_buffer(snd_file.get_len())
+	snd_file.close()
+	song_player.stream = stream;
 	restart_map();
 
 
@@ -101,7 +106,7 @@ func _end_song_display():
 const beat_distance = 4.0;
 const beats_ahead = 4.0;
 const CUBE_DISTANCE = 0.5;
-const CUBE_ROTATIONS = [180, 0, 270, 90, -135, 135, -45, 45];
+const CUBE_ROTATIONS = [180, 0, 270, 90, -135, 135, -45, 45, 202]; # The last 202 should be the dot cube
 
 func _spawn_cube(note, current_beat):
 	var cube = null;
@@ -186,6 +191,21 @@ func _check_and_update_saber(controller : ARVRController, saber: Area):
 			controller.set_rumble(0.0);
 
 
+var left_saber_end = Vector3()
+var right_saber_end = Vector3()
+var left_saber_end_past = Vector3()
+var right_saber_end_past = Vector3()
+var last_dt = 0.0
+
+
+func _update_saber_end_variabless(dt):
+	left_saber_end_past = left_saber_end
+	right_saber_end_past = right_saber_end
+	left_saber_end = left_controller.global_transform.origin + left_saber.global_transform.basis.y
+	right_saber_end = right_controller.global_transform.origin + right_saber.global_transform.basis.y
+	last_dt = dt
+
+
 func _physics_process(dt):
 	if (vr.button_just_released(vr.BUTTON.ENTER)):
 		show_menu();
@@ -197,7 +217,9 @@ func _physics_process(dt):
 	
 	_check_and_update_saber(left_controller, left_saber);
 	_check_and_update_saber(right_controller, right_saber);
-
+	
+	_update_saber_end_variabless(dt)
+	
 	_update_level(dt);
 
 var _main_menu = null;
@@ -351,18 +373,21 @@ func _display_points():
 func _cut_cube(controller : ARVRController, saber : Area, cube : Spatial):
 	# perform haptic feedback for the cut
 	controller.simple_rumble(0.75, 0.1);
-	
-	# compute the "cut plane" from the controller movement and saber direction
-	var controller_speed : Vector3 = controller.get_linear_velocity();
-	# if we don't move enough we just use a cut upwards
-	if (controller_speed.length_squared() < 0.01):
-		controller_speed = Vector3(0.0,1.0,0);
-
-	var saber_direction : Vector3 = saber.global_transform.basis.y;
 	var o = controller.global_transform.origin;
-	var cutplane := Plane(o, o+saber_direction, o+controller_speed);
+	var saber_end : Vector3
+	var saber_end_past : Vector3
+	if(controller.controller_id == 1): # Check if it's the left controller
+		saber_end = left_saber_end
+		saber_end_past = left_saber_end_past
+	else:
+		saber_end = right_saber_end
+		saber_end_past = right_saber_end_past
+	
+	var cutplane := Plane(o, saber_end, saber_end_past + (beat_distance *_current_info._beatsPerMinute * last_dt / 30) * Vector3(0, 0, 1)); # Account for relative position to track speed
 	var cut_distance = cutplane.distance_to(cube.global_transform.origin);
-
+	
+	var controller_speed : Vector3 = (saber_end - saber_end_past) / (5*last_dt) + 0.2*(beat_distance *_current_info._beatsPerMinute / 60) * Vector3(0, 0, 1) # Account for inertial track speed
+	
 	_create_cut_rigid_body(-1, cube, cutplane, cut_distance, controller_speed);
 	_create_cut_rigid_body( 1, cube, cutplane, cut_distance, controller_speed);
 

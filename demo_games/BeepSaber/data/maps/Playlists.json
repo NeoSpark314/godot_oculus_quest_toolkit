@@ -1,0 +1,20 @@
+[
+  {
+    "Name": "TheFatRat Pack",
+    "Description": "Test",
+    "Songs": [
+      "a907",
+      "a908",
+      "a909",
+      "a90a",
+      "a90b"
+    ]
+  },
+  {
+    "Name": "Only Time Lapse",
+    "Description": "It only has this song",
+    "Songs": [
+      "a909"
+    ]
+  }
+]

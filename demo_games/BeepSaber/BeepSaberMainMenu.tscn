@@ -13,8 +13,8 @@ border_width_bottom = 8
 border_color = Color( 1, 1, 1, 1 )
 
 [node name="BeepSaberMainMenu" type="Panel"]
-margin_right = 512.0
-margin_bottom = 512.0
+margin_right = 1713.0
+margin_bottom = 540.0
 theme = ExtResource( 1 )
 custom_styles/panel = SubResource( 1 )
 script = ExtResource( 3 )
@@ -23,62 +23,106 @@ __meta__ = {
 }
 
 [node name="Play_Button" type="Button" parent="."]
-margin_left = 16.0
-margin_top = 448.0
-margin_right = 368.0
-margin_bottom = 496.0
+margin_left = 491.727
+margin_top = 462.354
+margin_right = 843.727
+margin_bottom = 510.354
 text = "Play"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Continue_Button" type="Button" parent="."]
-margin_left = 16.0
-margin_top = 448.0
-margin_right = 176.0
-margin_bottom = 496.0
+margin_left = 491.727
+margin_top = 462.354
+margin_right = 651.727
+margin_bottom = 510.354
 text = "Continue"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Restart_Button" type="Button" parent="."]
-margin_left = 192.0
-margin_top = 448.0
-margin_right = 368.0
-margin_bottom = 496.0
+margin_left = 667.727
+margin_top = 462.354
+margin_right = 843.727
+margin_bottom = 510.354
 text = "Restart"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Exit_Button" type="Button" parent="."]
-margin_left = 384.0
-margin_top = 448.0
-margin_right = 496.0
-margin_bottom = 496.0
+margin_left = 859.727
+margin_top = 462.354
+margin_right = 971.727
+margin_bottom = 510.354
 text = "Exit"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="beepsaber_logo" type="Sprite" parent="."]
-position = Vector2( 144, 144 )
+position = Vector2( 619.727, 158.354 )
 texture = ExtResource( 2 )
 
-[node name="cover" type="Sprite" parent="."]
-position = Vector2( 384, 144 )
-scale = Vector2( 0.325, 0.325 )
+[node name="cover" type="TextureRect" parent="."]
+margin_left = 744.0
+margin_top = 64.0
+margin_right = 944.0
+margin_bottom = 264.0
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="SongInfo_Label" type="Label" parent="."]
-margin_left = 32.0
-margin_top = 256.0
-margin_right = 496.0
-margin_bottom = 384.0
+margin_left = 507.727
+margin_top = 270.354
+margin_right = 971.727
+margin_bottom = 398.354
 text = "Song Author: TheFatRat
 Song Title: Time Lapse
 Beatmap Author: Timeweaver"
 valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Playlist" type="ScrollContainer" parent="."]
+margin_left = 25.0
+margin_top = 96.0
+margin_right = 439.0
+margin_bottom = 498.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Songs" type="VBoxContainer" parent="Playlist"]
+
+[node name="PlaylistMenu" type="ScrollContainer" parent="."]
+margin_left = 1250.0
+margin_top = 96.0
+margin_right = 1664.0
+margin_bottom = 498.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Playlists" type="VBoxContainer" parent="PlaylistMenu"]
+
+[node name="DifficultyMenu" type="ScrollContainer" parent="."]
+margin_left = 960.0
+margin_top = 96.0
+margin_right = 1216.0
+margin_bottom = 398.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Playlists" type="VBoxContainer" parent="DifficultyMenu"]
+
+[node name="HTTPRequests" type="Node" parent="."]
 [connection signal="pressed" from="Play_Button" to="." method="_on_Play_Button_pressed"]
 [connection signal="pressed" from="Continue_Button" to="." method="_on_Continue_Button_pressed"]
 [connection signal="pressed" from="Restart_Button" to="." method="_on_Restart_Button_pressed"]

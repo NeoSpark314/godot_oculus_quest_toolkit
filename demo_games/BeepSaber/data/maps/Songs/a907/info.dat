@@ -1,0 +1,172 @@
+{
+  "_version" : "2.0.0",
+  "_songName" : "Monody",
+  "_songSubName" : "ft. Laura Brehm",
+  "_songAuthorName" : "TheFatRat",
+  "_levelAuthorName" : "Timeweaver",
+  "_beatsPerMinute" : 107,
+  "_shuffle" : 0,
+  "_shufflePeriod" : 0.5,
+  "_previewStartTime" : 54,
+  "_previewDuration" : 10,
+  "_songFilename" : "song.egg",
+  "_coverImageFilename" : "cover.jpg",
+  "_environmentName" : "Origins",
+  "_songTimeOffset" : 0,
+  "_customData" : {
+    "_editor" : "chromapper"
+  },
+  "_difficultyBeatmapSets" : [
+    {
+      "_beatmapCharacteristicName" : "Standard",
+      "_difficultyBeatmaps" : [
+        {
+          "_difficulty" : "Easy",
+          "_difficultyRank" : 1,
+          "_beatmapFilename" : "EasyStandard.dat",
+          "_noteJumpMovementSpeed" : 10,
+          "_noteJumpStartBeatOffset" : 1,
+          "_customData" : {
+            "_colorLeft" : {
+              "r" : 0.521568655967712,
+              "g" : 0.521568655967712,
+              "b" : 0.521568655967712
+            },
+            "_colorRight" : {
+              "r" : 0.282352954149246,
+              "g" : 0.584313750267029,
+              "b" : 0.415686279535294
+            },
+            "_envColorLeft" : {
+              "r" : 0.788235306739807,
+              "g" : 0.788235306739807,
+              "b" : 0.788235306739807
+            },
+            "_obstacleColor" : {
+              "r" : 0.18823529779911,
+              "g" : 0.18823529779911,
+              "b" : 0.18823529779911
+            }
+          }
+        },
+        {
+          "_difficulty" : "Normal",
+          "_difficultyRank" : 3,
+          "_beatmapFilename" : "NormalStandard.dat",
+          "_noteJumpMovementSpeed" : 10,
+          "_noteJumpStartBeatOffset" : 1,
+          "_customData" : {
+            "_colorLeft" : {
+              "r" : 0.521568655967712,
+              "g" : 0.521568655967712,
+              "b" : 0.521568655967712
+            },
+            "_colorRight" : {
+              "r" : 0.282352954149246,
+              "g" : 0.584313750267029,
+              "b" : 0.415686279535294
+            },
+            "_envColorLeft" : {
+              "r" : 0.788235306739807,
+              "g" : 0.788235306739807,
+              "b" : 0.788235306739807
+            },
+            "_obstacleColor" : {
+              "r" : 0.18823529779911,
+              "g" : 0.18823529779911,
+              "b" : 0.18823529779911
+            }
+          }
+        },
+        {
+          "_difficulty" : "Hard",
+          "_difficultyRank" : 5,
+          "_beatmapFilename" : "HardStandard.dat",
+          "_noteJumpMovementSpeed" : 12,
+          "_noteJumpStartBeatOffset" : 0.25,
+          "_customData" : {
+            "_colorLeft" : {
+              "r" : 0.521568655967712,
+              "g" : 0.521568655967712,
+              "b" : 0.521568655967712
+            },
+            "_colorRight" : {
+              "r" : 0.282352954149246,
+              "g" : 0.584313750267029,
+              "b" : 0.415686279535294
+            },
+            "_envColorLeft" : {
+              "r" : 0.788235306739807,
+              "g" : 0.788235306739807,
+              "b" : 0.788235306739807
+            },
+            "_obstacleColor" : {
+              "r" : 0.18823529779911,
+              "g" : 0.18823529779911,
+              "b" : 0.18823529779911
+            }
+          }
+        },
+        {
+          "_difficulty" : "Expert",
+          "_difficultyRank" : 7,
+          "_beatmapFilename" : "ExpertStandard.dat",
+          "_noteJumpMovementSpeed" : 15,
+          "_noteJumpStartBeatOffset" : -0.300000011920929,
+          "_customData" : {
+            "_colorLeft" : {
+              "r" : 0.521568655967712,
+              "g" : 0.521568655967712,
+              "b" : 0.521568655967712
+            },
+            "_colorRight" : {
+              "r" : 0.282352954149246,
+              "g" : 0.584313750267029,
+              "b" : 0.415686279535294
+            },
+            "_envColorLeft" : {
+              "r" : 0.788235306739807,
+              "g" : 0.788235306739807,
+              "b" : 0.788235306739807
+            },
+            "_obstacleColor" : {
+              "r" : 0.18823529779911,
+              "g" : 0.18823529779911,
+              "b" : 0.18823529779911
+            }
+          }
+        },
+        {
+          "_difficulty" : "ExpertPlus",
+          "_difficultyRank" : 9,
+          "_beatmapFilename" : "ExpertPlusStandard.dat",
+          "_noteJumpMovementSpeed" : 18,
+          "_noteJumpStartBeatOffset" : 0.400000005960464,
+          "_customData" : {
+            "_colorLeft" : {
+              "r" : 0.521568655967712,
+              "g" : 0.521568655967712,
+              "b" : 0.521568655967712
+            },
+            "_colorRight" : {
+              "r" : 0.282352954149246,
+              "g" : 0.584313750267029,
+              "b" : 0.415686279535294
+            },
+            "_envColorLeft" : {
+              "r" : 0.788235306739807,
+              "g" : 0.788235306739807,
+              "b" : 0.788235306739807
+            },
+            "_obstacleColor" : {
+              "r" : 0.788235306739807,
+              "g" : 0.788235306739807,
+              "b" : 0.788235306739807
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "_allDirectionsEnvironmentName" : "GlassDesertEnvironment"
+}

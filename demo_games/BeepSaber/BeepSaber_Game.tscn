@@ -15,7 +15,7 @@
 [ext_resource path="res://demo_games/BeepSaber/background.tres" type="Texture" id=13]
 [ext_resource path="res://demo_games/BeepSaber/background_sky.tres" type="PanoramaSky" id=14]
 
-[sub_resource type="Environment" id=2]
+[sub_resource type="Environment" id=1]
 background_mode = 3
 background_sky = ExtResource( 14 )
 glow_enabled = true
@@ -23,32 +23,32 @@ glow_intensity = 0.32
 glow_strength = 1.5
 glow_blend_mode = 0
 
-[sub_resource type="BoxShape" id=3]
+[sub_resource type="BoxShape" id=2]
 
-[sub_resource type="PlaneMesh" id=4]
+[sub_resource type="PlaneMesh" id=3]
 size = Vector2( 0.5, 0.5 )
 
-[sub_resource type="SpatialMaterial" id=5]
+[sub_resource type="SpatialMaterial" id=4]
 flags_unshaded = true
 
-[sub_resource type="CubeMesh" id=6]
-material = SubResource( 5 )
+[sub_resource type="CubeMesh" id=5]
+material = SubResource( 4 )
 size = Vector3( 0.1, 0.1, 16 )
 
-[sub_resource type="SpatialMaterial" id=7]
+[sub_resource type="SpatialMaterial" id=6]
 flags_unshaded = true
 albedo_color = Color( 0.262745, 0.388235, 0.964706, 1 )
 
-[sub_resource type="CubeMesh" id=8]
-material = SubResource( 7 )
+[sub_resource type="CubeMesh" id=7]
+material = SubResource( 6 )
 size = Vector3( 0.5, 2, 0.5 )
 
-[sub_resource type="SphereMesh" id=9]
+[sub_resource type="SphereMesh" id=8]
 flip_faces = true
 radius = 512.0
 height = 256.0
 
-[sub_resource type="SpatialMaterial" id=10]
+[sub_resource type="SpatialMaterial" id=9]
 flags_unshaded = true
 albedo_color = Color( 0, 0.0627451, 0.172549, 1 )
 albedo_texture = ExtResource( 13 )
@@ -57,7 +57,7 @@ albedo_texture = ExtResource( 13 )
 script = ExtResource( 9 )
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource( 2 )
+environment = SubResource( 1 )
 
 [node name="SongPlayer" type="AudioStreamPlayer" parent="."]
 
@@ -71,14 +71,15 @@ far = 1024.0
 autoload_model = false
 
 [node name="LeftLightSaber" parent="OQ_ARVROrigin/OQ_LeftController" instance=ExtResource( 10 )]
+transform = Transform( 1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, 0, 0, 0 )
 
 [node name="OQ_RightController" parent="OQ_ARVROrigin" instance=ExtResource( 8 )]
 autoload_model = false
 
 [node name="RightLightSaber" parent="OQ_ARVROrigin/OQ_RightController" instance=ExtResource( 10 )]
+transform = Transform( 1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, 0, 0, 0 )
 
 [node name="Feature_UIRayCast" parent="OQ_ARVROrigin/OQ_RightController" instance=ExtResource( 12 )]
-transform = Transform( 1, 0, 0, 0, 0.707107, -0.707107, 0, 0.707107, 0.707107, 0, 0, 0 )
 adjust_left_right = false
 ui_raycast_visible_button = -1
 
@@ -91,45 +92,45 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1 )
 
 [node name="CollisionShape" type="CollisionShape" parent="StandingGround"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0 )
-shape = SubResource( 3 )
+shape = SubResource( 2 )
 
 [node name="Spatial" type="Spatial" parent="StandingGround"]
 transform = Transform( 4, 0, 0, 0, 1, 0, 0, 0, 4, 0, 0, 0 )
 
 [node name="MeshInstance" type="MeshInstance" parent="StandingGround/Spatial"]
-mesh = SubResource( 4 )
+mesh = SubResource( 3 )
 material/0 = ExtResource( 1 )
 
 [node name="Level" type="Spatial" parent="."]
 
 [node name="Bar1" type="MeshInstance" parent="Level"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 2, 3, 0, -23 )
-mesh = SubResource( 6 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="Bar2" type="MeshInstance" parent="Level"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 2, -3, 0, -23 )
-mesh = SubResource( 6 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="Bar3" type="MeshInstance" parent="Level"]
 transform = Transform( 0.866025, -5.85622e-09, -0.5, -0.5, -2.18557e-08, -0.866025, -5.85622e-09, 1, -2.18557e-08, -6, 2.18557e-07, -18 )
-mesh = SubResource( 6 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="Bar5" type="MeshInstance" parent="Level"]
 transform = Transform( 0.866025, -5.85622e-09, -0.5, -0.5, -2.18557e-08, -0.866025, -5.85622e-09, 1, -2.18557e-08, -6, 3.71547e-07, -25 )
-mesh = SubResource( 6 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="Bar4" type="MeshInstance" parent="Level"]
 transform = Transform( 0.866025, 5.85622e-09, 0.5, 0.5, -2.18557e-08, -0.866025, 5.85622e-09, 1, -2.18557e-08, 5, 2.18557e-07, -18 )
-mesh = SubResource( 6 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="Bar6" type="MeshInstance" parent="Level"]
 transform = Transform( 0.866025, 5.85622e-09, 0.5, 0.5, -2.18557e-08, -0.866025, 5.85622e-09, 1, -2.18557e-08, 5, 3.71547e-07, -25 )
-mesh = SubResource( 6 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="SpectrumBar" type="Spatial" parent="Level"]
@@ -137,15 +138,15 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -8.5, 0, -27 )
 
 [node name="Cube" type="MeshInstance" parent="Level/SpectrumBar"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0 )
-mesh = SubResource( 8 )
+mesh = SubResource( 7 )
 material/0 = null
 
 [node name="Sphere" type="MeshInstance" parent="Level"]
-mesh = SubResource( 9 )
-material/0 = SubResource( 10 )
+mesh = SubResource( 8 )
+material/0 = SubResource( 9 )
 
 [node name="MainMenu_OQ_UI2DCanvas" parent="." instance=ExtResource( 3 )]
-transform = Transform( 2, 0, 0, 0, 2, 0, 0, 0, 1, 0, 1.5, 0 )
+transform = Transform( 2, 0, 0, 0, 2, 0, 0, 0, 1, 0, 1.5, -1.25494 )
 
 [node name="BeepSaberMainMenu" parent="MainMenu_OQ_UI2DCanvas" instance=ExtResource( 11 )]
 
@@ -154,6 +155,11 @@ transform = Transform( 8, 0, 0, 0, 8, 0, 0, 0, 1, 0, 3, -3 )
 visible = false
 text = "Score"
 margin = 0
+billboard = false
+depth_test = true
+resize_mode = 0
+font_size_multiplier = 1.0
+font_color = Color( 1, 1, 1, 1 )
 background_color = Color( 0, 0, 0, 0 )
 transparent = true
 
@@ -161,6 +167,11 @@ transparent = true
 transform = Transform( 4, 0, 0, 0, 4, 0, 0, 0, 1, -1, 2, -1 )
 text = "Score"
 margin = 0
+billboard = false
+depth_test = true
+resize_mode = 0
+font_size_multiplier = 1.0
+font_color = Color( 1, 1, 1, 1 )
 background_color = Color( 0, 0, 0, 0 )
 transparent = true
 
@@ -168,6 +179,11 @@ transparent = true
 transform = Transform( 4, 0, 0, 0, 4, 0, 0, 0, 1, 1, 2, -1 )
 text = "Score"
 margin = 0
+billboard = false
+depth_test = true
+resize_mode = 0
+font_size_multiplier = 1.0
+font_color = Color( 1, 1, 1, 1 )
 background_color = Color( 0, 0, 0, 0 )
 transparent = true
 [connection signal="area_entered" from="OQ_ARVROrigin/OQ_LeftController/LeftLightSaber" to="." method="_on_LeftLightSaber_area_entered"]

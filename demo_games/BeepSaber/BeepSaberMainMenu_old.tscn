@@ -1,0 +1,85 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://OQ_Toolkit/OQ_UI2D/theme/oq_ui2d_standard.theme" type="Theme" id=1]
+[ext_resource path="res://demo_games/BeepSaber/data/beepsaber_logo.png" type="Texture" id=2]
+[ext_resource path="res://demo_games/BeepSaber/BeepSaberMainMenu.gd" type="Script" id=3]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0, 0, 0, 1 )
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color( 1, 1, 1, 1 )
+
+[node name="BeepSaberMainMenu" type="Panel"]
+margin_right = 920.0
+margin_bottom = 698.0
+theme = ExtResource( 1 )
+custom_styles/panel = SubResource( 1 )
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Play_Button" type="Button" parent="."]
+margin_left = 16.0
+margin_top = 448.0
+margin_right = 368.0
+margin_bottom = 496.0
+text = "Play"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Continue_Button" type="Button" parent="."]
+margin_left = 16.0
+margin_top = 448.0
+margin_right = 176.0
+margin_bottom = 496.0
+text = "Continue"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Restart_Button" type="Button" parent="."]
+margin_left = 192.0
+margin_top = 448.0
+margin_right = 368.0
+margin_bottom = 496.0
+text = "Restart"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Exit_Button" type="Button" parent="."]
+margin_left = 617.241
+margin_top = 94.1718
+margin_right = 729.241
+margin_bottom = 142.172
+text = "Exit"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="beepsaber_logo" type="Sprite" parent="."]
+position = Vector2( 144, 144 )
+texture = ExtResource( 2 )
+
+[node name="cover" type="Sprite" parent="."]
+position = Vector2( 384, 144 )
+scale = Vector2( 0.325, 0.325 )
+
+[node name="SongInfo_Label" type="Label" parent="."]
+margin_left = 32.0
+margin_top = 256.0
+margin_right = 496.0
+margin_bottom = 384.0
+text = "Song Author: TheFatRat
+Song Title: Time Lapse
+Beatmap Author: Timeweaver"
+valign = 1
+[connection signal="pressed" from="Play_Button" to="." method="_on_Play_Button_pressed"]
+[connection signal="pressed" from="Continue_Button" to="." method="_on_Continue_Button_pressed"]
+[connection signal="pressed" from="Restart_Button" to="." method="_on_Restart_Button_pressed"]
+[connection signal="pressed" from="Exit_Button" to="." method="_on_Exit_Button_pressed"]

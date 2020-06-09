@@ -41,7 +41,7 @@ window/size/height=540
 
 [gdnative]
 
-singletons=[ "res://addons/godot_ovrmobile/godot_ovrmobile.gdnlib" ]
+singletons=[ "res://addons/godot-openvr/godot_openvr.gdnlib", "res://addons/godot_ovrmobile/godot_ovrmobile.gdnlib" ]
 
 [importer_defaults]
 

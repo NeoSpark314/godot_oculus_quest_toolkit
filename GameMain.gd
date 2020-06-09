@@ -25,6 +25,7 @@ func _process(_dt):
 #		vr.switch_scene(room_list[0]);
 		
 func _ready():
+	print(ARVRServer.get_interfaces())
 	vr.initialize();
 	
 	#vr.set_display_refresh_rate(60);
