@@ -10,24 +10,53 @@ var held_object = null;
 var held_object_data = {};
 var grab_mesh : MeshInstance = null;
 var held_object_initial_parent : Node
+var last_gesture := "";
 
-
+export(vr.CONTROLLER_BUTTON) var grab_button = vr.CONTROLLER_BUTTON.GRIP_TRIGGER;
+export(String) var grab_gesture := "Fist"
+export(int, LAYERS_3D_PHYSICS) var grab_layer := 1
 export (vr.GrabTypes) var grab_type := vr.GrabTypes.HINGEJOINT;
-
 export var collision_body_active := false;
-
+export(int, LAYERS_3D_PHYSICS) var collision_body_layer := 1
 onready var _hinge_joint : HingeJoint = $HingeJoint;
-
 export var reparent_mesh = false;
-
 export var hide_model_on_grab := false;
+
+
+func just_grabbed() -> bool:
+	var did_grab: bool
+	
+	if controller.is_hand:
+		var cur_gesture = controller.get_hand_model().detect_simple_gesture()
+		did_grab = cur_gesture != last_gesture and cur_gesture == grab_gesture
+		last_gesture = cur_gesture
+	else:
+		did_grab = controller._button_just_pressed(grab_button)
+	
+	return did_grab
+
+
+func not_grabbing() -> bool:
+	var not_grabbed: bool
+	
+	if controller.is_hand:
+		last_gesture = controller.get_hand_model().detect_simple_gesture()
+		not_grabbed = last_gesture != grab_gesture
+	else:
+		not_grabbed = !controller._button_pressed(grab_button)
+	
+	return not_grabbed
+
 
 func _ready():
 	controller = get_parent();
 	if (not controller is ARVRController):
 		vr.log_error(" in Feature_RigidBodyGrab: parent not ARVRController.");
 	grab_area = $GrabArea;
+	grab_area.collision_mask = grab_layer;
 	
+	$CollisionKinematicBody.collision_layer = collision_body_layer;
+	$CollisionKinematicBody.collision_mask = collision_body_layer;
 	
 	if (!collision_body_active):
 		$CollisionKinematicBody/CollisionBodyShape.disabled = true;
@@ -45,16 +74,16 @@ func _physics_process(_dt):
 
 # TODO: we will re-implement signals later on when we have compatability with the OQ simulator and recorder
 func update_grab() -> void:
-	if (controller._button_just_pressed(vr.CONTROLLER_BUTTON.GRIP_TRIGGER)):
+	if (just_grabbed()):
 		grab()
-	elif (!controller._button_pressed(vr.CONTROLLER_BUTTON.GRIP_TRIGGER)):
+	elif (not_grabbing()):
 		release()
 
 
 func grab() -> void:
 	if (held_object):
 		return
-
+	
 	# find the right rigid body to grab
 	var grabbable_rigid_body = null;
 	var bodies = grab_area.get_overlapping_bodies();
@@ -73,7 +102,9 @@ func grab() -> void:
 			vr.GrabTypes.HINGEJOINT:
 				start_grab_hinge_joint(grabbable_rigid_body);
 
-		if hide_model_on_grab:
+		# Hiding a hand tracking model disables pose updating,
+		# so we can't hide it here or we can't ever change gesture again
+		if hide_model_on_grab and not controller.is_hand:
 			#make model dissappear
 			var model = $"../Feature_ControllerModel_Left"
 			if model:
@@ -96,7 +127,9 @@ func release():
 		vr.GrabTypes.HINGEJOINT:
 			release_grab_hinge_joint()
 
-	if hide_model_on_grab:
+	# Hiding a hand tracking model disables pose updating,
+	# so we can't hide it here or we can't ever change gesture again
+	if hide_model_on_grab and not controller.is_hand:
 		#make model reappear
 		var model = $"../Feature_ControllerModel_Left"
 		if model:

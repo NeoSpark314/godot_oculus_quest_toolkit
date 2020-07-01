@@ -10,34 +10,33 @@ export var check_parent_can_static_grab = false;
 signal oq_static_grab_started;
 signal oq_static_grab_ended;
 
+export(vr.CONTROLLER_BUTTON) var grab_button = vr.CONTROLLER_BUTTON.GRIP_TRIGGER;
+export(String) var grab_gesture := "Fist"
+export(int, LAYERS_3D_PHYSICS) var grab_layer := 1
+
 var is_grabbing = false;
 var is_just_grabbing = false;
 var grabbed_object = null;
 var grab_position = Vector3();
 var delta_position = Vector3();
-
-var last_gesture
+var last_gesture := "";
 
 var _additional_grab_checker = null;
 
-export(String) var grab_gesture := "Fist"
-export(vr.CONTROLLER_BUTTON) var grab_button = vr.CONTROLLER_BUTTON.GRIP_TRIGGER;
-export(int, LAYERS_3D_PHYSICS) var grab_layer := 1
 
 func _ready():
 	controller = get_parent();
 	if (not controller is ARVRController):
 		vr.log_error(" in Feature_StaticGrab: parent not ARVRController.");
 	grab_area = $GrabArea;
-	grab_area.collision_mask = grab_layer
+	grab_area.collision_mask = grab_layer;
 
 
 func just_grabbed() -> bool:
 	var did_grab: bool
 	
-	var hand = controller.get_hand_model();
-	if hand:
-		var cur_gesture = hand.detect_simple_gesture()
+	if controller.is_hand:
+		var cur_gesture = controller.get_hand_model().detect_simple_gesture()
 		did_grab = cur_gesture != last_gesture and cur_gesture == grab_gesture
 		last_gesture = cur_gesture
 	else:
@@ -49,9 +48,8 @@ func just_grabbed() -> bool:
 func not_grabbing() -> bool:
 	var not_grabbed: bool
 	
-	var hand = controller.get_hand_model();
-	if hand:
-		last_gesture = hand.detect_simple_gesture()
+	if controller.is_hand:
+		last_gesture = controller.get_hand_model().detect_simple_gesture()
 		not_grabbed = last_gesture != grab_gesture
 	else:
 		not_grabbed = !controller._button_pressed(grab_button)
