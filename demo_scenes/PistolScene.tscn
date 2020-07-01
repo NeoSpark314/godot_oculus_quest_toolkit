@@ -1,16 +1,17 @@
 [gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://demo_scenes/actors/Pistol.tscn" type="PackedScene" id=1]
-[ext_resource path="res://OQ_Toolkit/OQ_ARVRCamera.tscn" type="PackedScene" id=2]
-[ext_resource path="res://OQ_Toolkit/OQ_ARVROrigin.tscn" type="PackedScene" id=3]
+[ext_resource path="res://addons/OQ_Toolkit/OQ_ARVRCamera.tscn" type="PackedScene" id=2]
+[ext_resource path="res://addons/OQ_Toolkit/OQ_ARVROrigin.tscn" type="PackedScene" id=3]
 [ext_resource path="res://demo_scenes/PistolScene.gd" type="Script" id=4]
-[ext_resource path="res://OQ_Toolkit/OQ_RightController.tscn" type="PackedScene" id=5]
-[ext_resource path="res://OQ_Toolkit/OQ_LeftController.tscn" type="PackedScene" id=6]
-[ext_resource path="res://OQ_Toolkit/OQ_ARVRController/Feature_ToolGrab.tscn" type="PackedScene" id=7]
-[ext_resource path="res://OQ_Toolkit/OQ_ARVRController/Feature_UIRayCast.tscn" type="PackedScene" id=8]
-[ext_resource path="res://OQ_Toolkit/OQ_UI2D/OQ_UI2DLogWindow.tscn" type="PackedScene" id=9]
+[ext_resource path="res://addons/OQ_Toolkit/OQ_RightController.tscn" type="PackedScene" id=5]
+[ext_resource path="res://addons/OQ_Toolkit/OQ_LeftController.tscn" type="PackedScene" id=6]
+[ext_resource path="res://addons/OQ_Toolkit/OQ_ARVRController/Feature_ToolGrab.tscn" type="PackedScene" id=7]
+[ext_resource path="res://addons/OQ_Toolkit/OQ_ARVRController/Feature_UIRayCast.tscn" type="PackedScene" id=8]
+[ext_resource path="res://addons/OQ_Toolkit/OQ_UI2D/OQ_UI2DLogWindow.tscn" type="PackedScene" id=9]
 [ext_resource path="res://demo_scenes/data/models_3d/GrabAndThrowRoom/GrabAndThrowRoom.gltf" type="PackedScene" id=10]
-[ext_resource path="res://OQ_Toolkit/OQ_ARVROrigin/Feature_VRSimulator.tscn" type="PackedScene" id=11]
+[ext_resource path="res://addons/OQ_Toolkit/OQ_ARVROrigin/Feature_VRSimulator.tscn" type="PackedScene" id=11]
+
 
 [sub_resource type="HeightMapShape" id=1]
 map_width = 5

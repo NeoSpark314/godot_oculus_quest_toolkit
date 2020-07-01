@@ -1,19 +1,20 @@
 [gd_scene load_steps=24 format=2]
 
 [ext_resource path="res://demo_games/BeepSaber/BeepCube_Cut.material" type="Material" id=1]
-[ext_resource path="res://OQ_Toolkit/OQ_UI2D/OQ_UI2DLabel.tscn" type="PackedScene" id=2]
-[ext_resource path="res://OQ_Toolkit/OQ_UI2D/OQ_UI2DCanvas.tscn" type="PackedScene" id=3]
-[ext_resource path="res://OQ_Toolkit/OQ_ARVROrigin.tscn" type="PackedScene" id=4]
-[ext_resource path="res://OQ_Toolkit/OQ_ARVRCamera.tscn" type="PackedScene" id=5]
-[ext_resource path="res://OQ_Toolkit/OQ_ARVROrigin/Feature_VRSimulator.tscn" type="PackedScene" id=6]
-[ext_resource path="res://OQ_Toolkit/OQ_LeftController.tscn" type="PackedScene" id=7]
-[ext_resource path="res://OQ_Toolkit/OQ_RightController.tscn" type="PackedScene" id=8]
+[ext_resource path="res://addons/OQ_Toolkit/OQ_UI2D/OQ_UI2DLabel.tscn" type="PackedScene" id=2]
+[ext_resource path="res://addons/OQ_Toolkit/OQ_UI2D/OQ_UI2DCanvas.tscn" type="PackedScene" id=3]
+[ext_resource path="res://addons/OQ_Toolkit/OQ_ARVROrigin.tscn" type="PackedScene" id=4]
+[ext_resource path="res://addons/OQ_Toolkit/OQ_ARVRCamera.tscn" type="PackedScene" id=5]
+[ext_resource path="res://addons/OQ_Toolkit/OQ_ARVROrigin/Feature_VRSimulator.tscn" type="PackedScene" id=6]
+[ext_resource path="res://addons/OQ_Toolkit/OQ_LeftController.tscn" type="PackedScene" id=7]
+[ext_resource path="res://addons/OQ_Toolkit/OQ_RightController.tscn" type="PackedScene" id=8]
 [ext_resource path="res://demo_games/BeepSaber/BeepSaber_Game.gd" type="Script" id=9]
 [ext_resource path="res://demo_games/BeepSaber/LightSaber.tscn" type="PackedScene" id=10]
 [ext_resource path="res://demo_games/BeepSaber/BeepSaberMainMenu.tscn" type="PackedScene" id=11]
-[ext_resource path="res://OQ_Toolkit/OQ_ARVRController/Feature_UIRayCast.tscn" type="PackedScene" id=12]
+[ext_resource path="res://addons/OQ_Toolkit/OQ_ARVRController/Feature_UIRayCast.tscn" type="PackedScene" id=12]
 [ext_resource path="res://demo_games/BeepSaber/background.tres" type="Texture" id=13]
 [ext_resource path="res://demo_games/BeepSaber/background_sky.tres" type="PanoramaSky" id=14]
+
 
 [sub_resource type="Environment" id=2]
 background_mode = 3
