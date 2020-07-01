@@ -4,11 +4,15 @@ export var debug_information := false;
 
 var is_fixed = false;
 
+export(bool) var initialize_vr := true
+
 # Sets up everything as it is expected by the helper scripts in the vr singleton
 func _enter_tree():
 	if (!vr):
 		vr.log_error("in OQ_ARVROrigin._enter_tree(): no vr singleton");
 		return;
+	if (!vr.initialized and initialize_vr):
+		vr.initialize()
 	if (vr.vrOrigin != null):
 		vr.log_warning("in OQ_ARVROrigin._enter_tree(): origin already set; overwrting it");
 	vr.vrOrigin = self;

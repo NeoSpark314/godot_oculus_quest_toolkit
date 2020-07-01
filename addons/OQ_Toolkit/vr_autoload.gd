@@ -16,6 +16,8 @@ var frame_counter := 0;
 
 var physics_frame_counter := 0;
 
+var initialized := false
+
 ###############################################################################
 # VR logging systems
 ###############################################################################
@@ -701,6 +703,9 @@ func _process(dt):
 
 
 func initialize():
+	if initialized:
+		return
+	
 	_init_vr_log();
 	
 	var available_interfaces = ARVRServer.get_interfaces();
@@ -753,4 +758,6 @@ func initialize():
 		inVR = false;
 		log_warning("No compatible ARVR Interface could be found.");
 		return false;
+	
+	initialized = true
 
