@@ -14,3 +14,5 @@ func _exit_tree():
 	remove_autoload_singleton("vr")
 	
 	remove_custom_type("OQ_ARVROrigin")
+	remove_custom_type("OQ_ARVRCamera")
+	remove_custom_type("OQ_ARVRController")
