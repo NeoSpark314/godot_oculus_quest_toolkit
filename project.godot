@@ -12,37 +12,37 @@ _global_script_classes=[ {
 "base": "Spatial",
 "class": "Feature_RigidBodyGrab",
 "language": "GDScript",
-"path": "res://OQ_Toolkit/OQ_ARVRController/scripts/Feature_RigidBodyGrab.gd"
+"path": "res://addons/OQ_Toolkit/OQ_ARVRController/scripts/Feature_RigidBodyGrab.gd"
 }, {
 "base": "Spatial",
 "class": "Feature_ToolGrab",
 "language": "GDScript",
-"path": "res://OQ_Toolkit/OQ_ARVRController/scripts/Feature_ToolGrab.gd"
+"path": "res://addons/OQ_Toolkit/OQ_ARVRController/scripts/Feature_ToolGrab.gd"
 }, {
 "base": "RigidBody",
 "class": "OQClass_GrabbableRigidBody",
 "language": "GDScript",
-"path": "res://OQ_Toolkit/OQ_Classes/OQClass_GrabbableRigidBody.gd"
+"path": "res://addons/OQ_Toolkit/OQ_Classes/OQClass_GrabbableRigidBody.gd"
 }, {
 "base": "Area",
 "class": "OQClass_GrabbableToolPart",
 "language": "GDScript",
-"path": "res://OQ_Toolkit/OQ_Classes/OQClass_GrabbableToolPart.gd"
+"path": "res://addons/OQ_Toolkit/OQ_Classes/OQClass_GrabbableToolPart.gd"
 }, {
 "base": "Spatial",
 "class": "OQClass_Tool",
 "language": "GDScript",
-"path": "res://OQ_Toolkit/OQ_Classes/OQClass_Tool.gd"
+"path": "res://addons/OQ_Toolkit/OQ_Classes/OQClass_Tool.gd"
 }, {
 "base": "Spatial",
 "class": "OQClass_ToolGrabController",
 "language": "GDScript",
-"path": "res://OQ_Toolkit/OQ_Classes/OQClass_ToolGrabController.gd"
+"path": "res://addons/OQ_Toolkit/OQ_Classes/OQClass_ToolGrabController.gd"
 }, {
 "base": "OQClass_ToolGrabController",
 "class": "OQClass_ToolGrabLinearController",
 "language": "GDScript",
-"path": "res://OQ_Toolkit/OQ_Classes/OQClass_ToolGrabLinearController.gd"
+"path": "res://addons/OQ_Toolkit/OQ_Classes/OQClass_ToolGrabLinearController.gd"
 } ]
 _global_script_class_icons={
 "Feature_RigidBodyGrab": "",
@@ -62,12 +62,16 @@ config/icon="res://icon.png"
 
 [autoload]
 
-vr="*res://OQ_Toolkit/vr_autoload.gd"
+vr="*res://addons/OQ_Toolkit/vr_autoload.gd"
 
 [display]
 
 window/size/width=960
 window/size/height=540
+
+[editor_plugins]
+
+enabled=PoolStringArray( "OQ_Toolkit" )
 
 [gdnative]
 

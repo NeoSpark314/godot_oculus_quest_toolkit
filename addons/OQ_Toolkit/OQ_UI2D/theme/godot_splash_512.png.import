@@ -1,0 +1,36 @@
+[remap]
+
+importer="texture"
+type="StreamTexture"
+path.s3tc="res://.import/godot_splash_512.png-0de901c2fb2bfdf66cc78c687782eb09.s3tc.stex"
+path.etc="res://.import/godot_splash_512.png-0de901c2fb2bfdf66cc78c687782eb09.etc.stex"
+metadata={
+"imported_formats": [ "s3tc", "etc" ],
+"vram_texture": true
+}
+
+[deps]
+
+source_file="res://addons/OQ_Toolkit/OQ_UI2D/theme/godot_splash_512.png"
+dest_files=[ "res://.import/godot_splash_512.png-0de901c2fb2bfdf66cc78c687782eb09.s3tc.stex", "res://.import/godot_splash_512.png-0de901c2fb2bfdf66cc78c687782eb09.etc.stex" ]
+
+[params]
+
+compress/mode=2
+compress/lossy_quality=0.7
+compress/hdr_mode=0
+compress/bptc_ldr=0
+compress/normal_map=0
+flags/repeat=true
+flags/filter=true
+flags/mipmaps=true
+flags/anisotropic=false
+flags/srgb=1
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/HDR_as_SRGB=false
+process/invert_color=false
+stream=false
+size_limit=0
+detect_3d=false
+svg/scale=1.0

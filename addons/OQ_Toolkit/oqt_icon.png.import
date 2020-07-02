@@ -1,0 +1,36 @@
+[remap]
+
+importer="texture"
+type="StreamTexture"
+path.s3tc="res://.import/oqt_icon.png-67a8ed03880c9bafe850331cc3a0e3fa.s3tc.stex"
+path.etc="res://.import/oqt_icon.png-67a8ed03880c9bafe850331cc3a0e3fa.etc.stex"
+metadata={
+"imported_formats": [ "s3tc", "etc" ],
+"vram_texture": true
+}
+
+[deps]
+
+source_file="res://addons/OQ_Toolkit/oqt_icon.png"
+dest_files=[ "res://.import/oqt_icon.png-67a8ed03880c9bafe850331cc3a0e3fa.s3tc.stex", "res://.import/oqt_icon.png-67a8ed03880c9bafe850331cc3a0e3fa.etc.stex" ]
+
+[params]
+
+compress/mode=2
+compress/lossy_quality=0.7
+compress/hdr_mode=0
+compress/bptc_ldr=0
+compress/normal_map=0
+flags/repeat=true
+flags/filter=true
+flags/mipmaps=true
+flags/anisotropic=false
+flags/srgb=1
+process/fix_alpha_border=false
+process/premult_alpha=false
+process/HDR_as_SRGB=false
+process/invert_color=false
+stream=false
+size_limit=0
+detect_3d=true
+svg/scale=1.0

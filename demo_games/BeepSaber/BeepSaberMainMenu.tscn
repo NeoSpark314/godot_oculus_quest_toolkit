@@ -1,8 +1,9 @@
 [gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://OQ_Toolkit/OQ_UI2D/theme/oq_ui2d_standard.theme" type="Theme" id=1]
+[ext_resource path="res://addons/OQ_Toolkit/OQ_UI2D/theme/oq_ui2d_standard.theme" type="Theme" id=1]
 [ext_resource path="res://demo_games/BeepSaber/data/beepsaber_logo.png" type="Texture" id=2]
 [ext_resource path="res://demo_games/BeepSaber/BeepSaberMainMenu.gd" type="Script" id=3]
+
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0, 0, 0, 1 )
