@@ -33,7 +33,7 @@ func _ready():
 	vr.scene_switch_root = self;
 	
 	#vr.switch_scene("res://demo_scenes/experiments/BowAndArrow.tscn"); return;
-	vr.switch_scene("res://demo_scenes/experiments/TestRoom.tscn"); return;
+	#vr.switch_scene("res://demo_scenes/experiments/TestRoom.tscn"); return;
 	#vr.switch_scene("res://demo_scenes/StereoPanoramaDemoScene.tscn"); return;
 	#vr.switch_scene("res://demo_games/BeepSaber/BeepSaber_Game.tscn");  return;
 

@@ -90,3 +90,7 @@ func _on_ObjectInteraction_pressed():
 
 func _on_StereoPanorama_pressed():
 	vr.switch_scene("res://demo_scenes/StereoPanoramaDemoScene.tscn");
+
+
+func _on_ButtonTeleport_pressed():
+	vr.switch_scene("res://demo_scenes/TeleportDemoScene.tscn");
