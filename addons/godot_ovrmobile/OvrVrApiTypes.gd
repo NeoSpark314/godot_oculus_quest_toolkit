@@ -69,12 +69,15 @@ enum OvrDeviceEmulationMode {
 
 
 enum OvrProperty {
-	VRAPI_FOVEATION_LEVEL 								= 15, #< Used by apps that want to control swapchain foveation levels.
-	VRAPI_REORIENT_HMD_ON_CONTROLLER_RECENTER 			= 17, #< Used to determine if a controller recenter should also reorient the headset.
-	VRAPI_LATCH_BACK_BUTTON_ENTIRE_FRAME 				= 18, #< Used to determine if the 'short press' back button should lasts an entire frame.
-	VRAPI_BLOCK_REMOTE_BUTTONS_WHEN_NOT_EMULATING_HMT 	= 19, #< Used to not send the remote back button java events to the apps.
-	VRAPI_ACTIVE_INPUT_DEVICE_ID 						= 24, #< Used by apps to query which input device is most 'active' or primary, a# -1 means no active input device
-	VRAPI_DEVICE_EMULATION_MODE 						= 29, #< Used by apps to determine if they are running in an emulation mode. Is a OvrDeviceEmulationMode value
+	VRAPI_FOVEATION_LEVEL 			= 15, # Used by apps that want to control swapchain foveation levels.
+	VRAPI_EAT_NATIVE_GAMEPAD_EVENTS = 20, # Used to tell the runtime not to eat gamepad events.  If this is false on a native
+	                                      # app, the app must be listening for the events.
+	VRAPI_ACTIVE_INPUT_DEVICE_ID    = 24, # Used by apps to query which input device is most 'active'
+								          # or primary, a -1 means no active input device
+	VRAPI_DEVICE_EMULATION_MODE     = 29  # Used by apps to determine if they are running in an
+								          # emulation mode. Is a ovrDeviceEmulationMode value
+
+	VRAPI_DYNAMIC_FOVEATION_ENABLED     = 30
 }
 
 enum OvrHandedness {

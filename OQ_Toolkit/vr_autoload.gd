@@ -5,6 +5,7 @@ extends Node
 const UI_PIXELS_TO_METER = 1.0 / 1024; # defines the (auto) size of UI elements in 3D
 
 var inVR = false;
+var active_arvr_interface_name = "Unknown";
 
 # we use this to be position indepented of the OQ_Toolkit directory
 # so make sure to always use this if instancing nodes/features via code
@@ -700,13 +701,16 @@ func _process(dt):
 	_check_for_scene_switch_and_fade(dt);
 
 
-func initialize():
+func initialize(initialize_vr = true):
 	_init_vr_log();
 	
 	var available_interfaces = ARVRServer.get_interfaces();
 	
 	log_info("Initializing VR");
 	log_info("  Available Interfaces are %s: " % str(available_interfaces));
+	
+	inVR = false;
+	if (!initialize_vr): return true;
 	
 	var arvr_ovr_mobile_interface = null;
 	var arvr_oculus_interface = null;
@@ -723,6 +727,7 @@ func initialize():
 	if arvr_ovr_mobile_interface:
 		log_info("  Found OVRMobile Interface.");
 		if arvr_ovr_mobile_interface.initialize():
+			active_arvr_interface_name = "OVRMobile";
 			get_viewport().arvr = true;
 			Engine.target_fps = 72; # TODO: only true for Oculus Quest; query the info here
 			inVR = true;
@@ -735,6 +740,7 @@ func initialize():
 	elif arvr_oculus_interface:
 		log_info("  Found Oculus Interface.");
 		if arvr_oculus_interface.initialize():
+			active_arvr_interface_name = "Oculus";
 			get_viewport().arvr = true;
 			Engine.target_fps = 80 # TODO: this is headset dependent (RiftS == 80)=> figure out how to get this info at runtime
 			OS.vsync_enabled = false;
@@ -743,6 +749,7 @@ func initialize():
 	elif arvr_open_vr_interface:
 		log_info("  Found OpenVR Interface.");
 		if arvr_open_vr_interface.initialize():
+			active_arvr_interface_name = "OpenVR"
 			get_viewport().arvr = true;
 			get_viewport().keep_3d_linear = true
 			Engine.target_fps = 90 # TODO: this is headset dependent => figure out how to get this info at runtime
