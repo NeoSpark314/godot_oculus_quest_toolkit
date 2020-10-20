@@ -82,8 +82,8 @@ func show_menu():
 		_main_menu.set_mode_continue();
 	else:
 		_main_menu.set_mode_game_start();
-		left_saber.visible = false;
-		right_saber.visible = false;
+		left_saber.hide();
+		right_saber.hide();
 
 	ui_raycast.visible = true;
 	$MainMenu_OQ_UI2DCanvas.visible = true;
@@ -250,6 +250,12 @@ func _ready():
 	left_saber.type = 0;
 	right_saber._mat.set_shader_param("color", COLOR_RIGHT);
 	right_saber.type = 1;
+
+	# This is a workaround for now to orient correctly for the Vive controllers
+	if (vr.active_arvr_interface_name == "OpenVR"):
+		left_saber.rotation_degrees.x = -90;
+		right_saber.rotation_degrees.x = -90;
+		ui_raycast.rotation_degrees.x = 0;
 
 	$MainMenu_OQ_UI2DCanvas.visible = false;
 	show_menu();
