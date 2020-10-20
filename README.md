@@ -65,7 +65,6 @@ As this is a very early version there are some known issues that are not yet res
 
 There are a lot of potential extensions and missing features. Some of the things I think I will tackle next are on this list; but if you have some other suggestions feel free to open an issue to discuss it.
 
-- Teleport movement option
 - Jumping of ledges while climbing
 - Grabbed objects
   - handing over objects
@@ -79,5 +78,5 @@ There are a lot of potential extensions and missing features. Some of the things
 
 
 # Licensing
-The Godot Oculus Quest Toolkit and the demo scenes in this repository are licensed under an MIT License. The Oculus Touch controller 3d models the hand model and the Oculus Mobile SDK contained in this repository are copyright Oculus, see http://oculus.com for license information.
+The Godot Oculus Quest Toolkit and the demo scenes in this repository are licensed under the MIT License. The Oculus Touch controller 3d models the hand model and the Oculus Mobile SDK contained in this repository are copyright Oculus, see http://oculus.com for license information.
 The Roboto font used is licensed under an Apache License and available at https://github.com/google/roboto.
