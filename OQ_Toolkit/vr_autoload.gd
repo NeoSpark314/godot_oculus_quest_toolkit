@@ -4,6 +4,8 @@ extends Node
 
 const UI_PIXELS_TO_METER = 1.0 / 1024; # defines the (auto) size of UI elements in 3D
 
+var toolkit_version = "0.4.1_dev (WebXR_branch 00)"
+
 var inVR = false;
 var active_arvr_interface_name = "Unknown";
 
@@ -155,8 +157,14 @@ func set_dominant_controller_left(is_left_handed):
 		
 func is_dominant_controller_left():
 	return dominantController == leftController;
+	
 
-enum AXIS {
+enum VR_CONTROLLER_TYPE {
+	OCULUS_TOUCH,
+	WEBXR
+}
+
+var AXIS := {
 	None = -1,
 	
 	LEFT_JOYSTICK_X = 0,
@@ -170,7 +178,7 @@ enum AXIS {
 	RIGHT_GRIP_TRIGGER = 3 + 16,
 }
 
-enum CONTROLLER_AXIS {
+var CONTROLLER_AXIS := {
 	None = -1,
 	
 	JOYSTICK_X = 0,
@@ -180,7 +188,7 @@ enum CONTROLLER_AXIS {
 }
 
 # the individual buttons directly identified left or right controller
-enum BUTTON {
+var BUTTON := {
 	None = -1,
 
 	Y = 1,
@@ -214,7 +222,7 @@ enum BUTTON {
 
 
 # Button list mapping to both controllers (needed for actions assigned to specific controllers instead of global)
-enum CONTROLLER_BUTTON {
+var CONTROLLER_BUTTON := {
 	None = -1,
 
 	YB = 1,
@@ -232,6 +240,71 @@ enum CONTROLLER_BUTTON {
 	THUMBSTICK = 14, # left/right thumb stick pressed
 	INDEX_TRIGGER = 15, # index trigger pressed over threshold
 }
+
+func remap_controller_axis_and_buttons(controller_type = VR_CONTROLLER_TYPE.OCULUS_TOUCH):
+	
+	if (controller_type == VR_CONTROLLER_TYPE.OCULUS_TOUCH):
+		# for now nothing to do here as this is the default when the dictionary 
+		# variables are created above
+		BUTTON.ENTER = 3; # this is a special case for the oculus touch controller
+	elif (controller_type == VR_CONTROLLER_TYPE.WEBXR):
+		# reset everything
+		for k in CONTROLLER_AXIS: CONTROLLER_AXIS[k] = -1;
+		for k in CONTROLLER_BUTTON: CONTROLLER_BUTTON[k] = -1;
+		
+		CONTROLLER_AXIS.JOYSTICK_X = 2;
+		CONTROLLER_AXIS.JOYSTICK_Y = 3
+		
+		#CONTROLLER_AXIS.INDEX_TRIGGER = 
+		CONTROLLER_BUTTON.INDEX_TRIGGER = 0;
+		CONTROLLER_BUTTON.GRIP_TRIGGER = 1;
+		CONTROLLER_BUTTON.THUMBSTICK = 3;
+		CONTROLLER_BUTTON.XA = 4;
+		CONTROLLER_BUTTON.YB = 5;
+		
+
+	# now we assign AXIS and BUTTON dictionaries that are used to identify
+	# individual buttons on each controller via name
+	AXIS.LEFT_JOYSTICK_X = CONTROLLER_AXIS.JOYSTICK_X;
+	AXIS.LEFT_JOYSTICK_Y = CONTROLLER_AXIS.JOYSTICK_Y;
+	AXIS.LEFT_INDEX_TRIGGER = CONTROLLER_AXIS.INDEX_TRIGGER;
+	AXIS.LEFT_GRIP_TRIGGER = CONTROLLER_AXIS.GRIP_TRIGGER;
+	if (CONTROLLER_AXIS.JOYSTICK_X!=-1): AXIS.RIGHT_JOYSTICK_X = CONTROLLER_AXIS.JOYSTICK_X + 16;
+	if (CONTROLLER_AXIS.JOYSTICK_Y!=-1): AXIS.RIGHT_JOYSTICK_Y = CONTROLLER_AXIS.JOYSTICK_Y + 16;
+	if (CONTROLLER_AXIS.INDEX_TRIGGER!=-1): AXIS.RIGHT_INDEX_TRIGGER = CONTROLLER_AXIS.INDEX_TRIGGER + 16;
+	if (CONTROLLER_AXIS.GRIP_TRIGGER!=-1): AXIS.RIGHT_GRIP_TRIGGER = CONTROLLER_AXIS.GRIP_TRIGGER + 16;
+	
+	BUTTON.Y = CONTROLLER_BUTTON.YB;
+	BUTTON.LEFT_GRIP_TRIGGER = CONTROLLER_BUTTON.GRIP_TRIGGER;
+	BUTTON.TOUCH_X = CONTROLLER_BUTTON.TOUCH_XA;
+	BUTTON.TOUCH_Y = CONTROLLER_BUTTON.TOUCH_YB;
+	BUTTON.X = CONTROLLER_BUTTON.XA;
+
+	BUTTON.LEFT_TOUCH_THUMB_UP = CONTROLLER_BUTTON.TOUCH_THUMB_UP;
+	BUTTON.LEFT_TOUCH_INDEX_TRIGGER = CONTROLLER_BUTTON.TOUCH_INDEX_TRIGGER;
+	BUTTON.LEFT_TOUCH_INDEX_POINTING = CONTROLLER_BUTTON.TOUCH_INDEX_POINTING;
+
+	BUTTON.LEFT_THUMBSTICK = CONTROLLER_BUTTON.THUMBSTICK;
+	BUTTON.LEFT_INDEX_TRIGGER = CONTROLLER_BUTTON.INDEX_TRIGGER;
+	
+	if (CONTROLLER_BUTTON.YB!=-1): BUTTON.B = CONTROLLER_BUTTON.YB + 16;
+	if (CONTROLLER_BUTTON.GRIP_TRIGGER!=-1): BUTTON.RIGHT_GRIP_TRIGGER = CONTROLLER_BUTTON.GRIP_TRIGGER + 16;
+	if (CONTROLLER_BUTTON.TOUCH_XA!=-1): BUTTON.TOUCH_A = CONTROLLER_BUTTON.TOUCH_XA + 16;
+	if (CONTROLLER_BUTTON.TOUCH_YB!=-1): BUTTON.TOUCH_B = CONTROLLER_BUTTON.TOUCH_YB + 16;
+	if (CONTROLLER_BUTTON.XA!=-1): BUTTON.A = CONTROLLER_BUTTON.XA + 16;
+	
+	if (CONTROLLER_BUTTON.TOUCH_THUMB_UP!=-1): BUTTON.RIGHT_TOUCH_THUMB_UP = CONTROLLER_BUTTON.TOUCH_THUMB_UP + 16;
+	if (CONTROLLER_BUTTON.TOUCH_INDEX_TRIGGER!=-1): BUTTON.RIGHT_TOUCH_INDEX_TRIGGER = CONTROLLER_BUTTON.TOUCH_INDEX_TRIGGER + 16;
+	if (CONTROLLER_BUTTON.TOUCH_INDEX_POINTING!=-1): BUTTON.RIGHT_TOUCH_INDEX_POINTING = CONTROLLER_BUTTON.TOUCH_INDEX_POINTING + 16;
+
+	if (CONTROLLER_BUTTON.THUMBSTICK!=-1): BUTTON.RIGHT_THUMBSTICK = CONTROLLER_BUTTON.THUMBSTICK + 16;
+	if (CONTROLLER_BUTTON.INDEX_TRIGGER!=-1): BUTTON.RIGHT_INDEX_TRIGGER = CONTROLLER_BUTTON.INDEX_TRIGGER + 16;
+	
+	log_info("Current Controller Mapping: ");
+	for k in CONTROLLER_AXIS:
+		log_info(" Axis " + k + " = " + str(CONTROLLER_AXIS[k]));
+	for k in CONTROLLER_BUTTON:
+		log_info(" Button " + k + " = " + str(CONTROLLER_BUTTON[k]));
 
 func get_controller_axis(axis_id):
 	if (axis_id == AXIS.None) : return 0.0;
@@ -735,10 +808,17 @@ func _webxr_initialize(enable_vr):
 func _webxr_create_entervr_buttons():
 	var enter_vr_button = Button.new();
 	var simulate_vr_button = Button.new();
+	
+	# the info label here is only for info during dev right now; it will be replaced
+	# in the future by something more generic
+	var info_label = Label.new();
+	info_label.text = "Godot Oculus Quest Toolkit Demo\n  " + toolkit_version + "\n";
+	
 	enter_vr_button.text = "Enter VR";
 	simulate_vr_button.text = "Simulator Only"
 
 	var vbox = VBoxContainer.new();
+	vbox.add_child(info_label);
 	vbox.add_child(enter_vr_button);
 	vbox.add_child(simulate_vr_button);
 	var centercontainer = CenterContainer.new();
@@ -788,6 +868,7 @@ func initialize(initialize_vr = true):
 			# this will initialize the default
 			_refresh_settings();
 			log_info("  Success initializing OVRMobile Interface.");
+			remap_controller_axis_and_buttons(VR_CONTROLLER_TYPE.OCULUS_TOUCH);
 			# TODO: set physics FPS here too instead of in the project settings
 			return true;
 	elif arvr_oculus_interface:
@@ -799,6 +880,7 @@ func initialize(initialize_vr = true):
 			OS.vsync_enabled = false;
 			inVR = true;
 			log_info("  Success initializing Oculus Interface.");
+			remap_controller_axis_and_buttons(VR_CONTROLLER_TYPE.OCULUS_TOUCH);
 	elif arvr_open_vr_interface:
 		log_info("  Found OpenVR Interface.");
 		if arvr_open_vr_interface.initialize():
@@ -811,6 +893,7 @@ func initialize(initialize_vr = true):
 			log_info("  Success initializing OpenVR Interface.");
 	elif arvr_webxr_interface:
 		log_info("  Found WebXR Interface.");
+		active_arvr_interface_name = "WebXR"
 		arvr_webxr_interface.connect("session_supported", self, "_webxr_cb_session_supported")
 		arvr_webxr_interface.connect("session_started", self, "_webxr_cb_session_started")
 		arvr_webxr_interface.session_mode = 'immersive-vr'
@@ -818,10 +901,13 @@ func initialize(initialize_vr = true):
 		arvr_webxr_interface.optional_features = 'bounded-floor'
 		arvr_webxr_interface.requested_reference_space_types = 'bounded-floor, local-floor, local'
 		arvr_webxr_interface.is_session_supported("immersive-vr")
+		remap_controller_axis_and_buttons(VR_CONTROLLER_TYPE.WEBXR);
 		_webxr_create_entervr_buttons();
 
 	else:
 		inVR = false;
 		log_warning("No compatible ARVR Interface could be found.");
+		# Simulator uses Oculus Touch
+		remap_controller_axis_and_buttons(VR_CONTROLLER_TYPE.OCULUS_TOUCH);
 		return false;
 
