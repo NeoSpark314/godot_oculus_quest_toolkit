@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=2]
+[gd_scene load_steps=31 format=2]
 
 [ext_resource path="res://OQ_Toolkit/OQ_ARVRCamera.tscn" type="PackedScene" id=1]
 [ext_resource path="res://OQ_Toolkit/OQ_ARVROrigin/Feature_VRSimulator.tscn" type="PackedScene" id=2]
@@ -24,6 +24,7 @@
 [ext_resource path="res://demo_scenes/data/Material_Red.material" type="Material" id=22]
 [ext_resource path="res://OQ_Toolkit/OQ_ARVRController/Feature_AreaObjectGrab.tscn" type="PackedScene" id=23]
 [ext_resource path="res://demo_games/BeepSaber/data/beepsaber_logo.png" type="Texture" id=24]
+[ext_resource path="res://OQ_Toolkit/OQ_ARVROrigin/Feature_MixedRealityCapture.tscn" type="PackedScene" id=25]
 
 [sub_resource type="PlaneMesh" id=1]
 size = Vector2( 16, 16 )
@@ -197,6 +198,8 @@ ui_raycast_visible_button = -1
 [node name="Feature_AreaObjectGrab" parent="OQ_ARVROrigin/OQ_RightController" instance=ExtResource( 23 )]
 
 [node name="Locomotion_Stick" parent="OQ_ARVROrigin" instance=ExtResource( 11 )]
+
+[node name="Feature_MixedRealityCapture" parent="OQ_ARVROrigin" instance=ExtResource( 25 )]
 
 [node name="OQ_UI2DLogWindow" parent="." instance=ExtResource( 17 )]
 transform = Transform( -4, 0, -8.74228e-08, 1.74846e-07, 3.4641, -0.5, 3.02841e-07, -2, -0.866025, 0, 3, 2 )

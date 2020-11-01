@@ -701,6 +701,60 @@ func _process(dt):
 	_check_for_scene_switch_and_fade(dt);
 
 
+# webxr callback
+func _webxr_cb_session_supported(a, b):
+	log_info("WebXR session is supported: " + str(a) + ", " + str(b));
+	pass
+
+func _webxr_cb_session_started():
+	get_viewport().arvr = true
+	log_info("WebXR Session Started; reference space type: " + arvr_webxr_interface.reference_space_type);
+
+signal signal_webxr_started;
+
+func _webxr_initialize(enable_vr):
+	if (!enable_vr):
+		inVR = false;
+		log_info("  WebXR starting only in simulator mode.");
+		emit_signal("signal_webxr_started");
+		return;
+		
+	if (arvr_webxr_interface.initialize()):
+		get_viewport().arvr = true;
+		OS.vsync_enabled = false;
+		inVR = true;
+		log_info("  Success initializing WebXR Interface.");
+		emit_signal("signal_webxr_started")
+	else:
+		OS.alert("Failed to initialize WebXR Interface")
+		inVR = false;
+		emit_signal("signal_webxr_started");
+		
+# create two buttons and connect them to _webxr_initialize; this is required
+# for WebXR because initializing it on webpage load might fail
+func _webxr_create_entervr_buttons():
+	var enter_vr_button = Button.new();
+	var simulate_vr_button = Button.new();
+	enter_vr_button.text = "Enter VR";
+	simulate_vr_button.text = "Simulator Only"
+
+	var vbox = VBoxContainer.new();
+	vbox.add_child(enter_vr_button);
+	vbox.add_child(simulate_vr_button);
+	var centercontainer = CenterContainer.new();
+	centercontainer.theme = load("res://OQ_Toolkit/OQ_UI2D/theme/oq_ui2d_standard.theme")
+	centercontainer.rect_size = OS.get_real_window_size();
+	centercontainer.add_child(vbox);
+	get_tree().get_current_scene().add_child(centercontainer);
+
+	enter_vr_button.connect("pressed", self, "_webxr_initialize", [true]);
+	simulate_vr_button.connect("pressed", self, "_webxr_initialize", [false]);
+
+var arvr_ovr_mobile_interface = null;
+var arvr_oculus_interface = null;
+var arvr_open_vr_interface = null;
+var arvr_webxr_interface = null;
+
 func initialize(initialize_vr = true):
 	_init_vr_log();
 	
@@ -712,9 +766,6 @@ func initialize(initialize_vr = true):
 	inVR = false;
 	if (!initialize_vr): return true;
 	
-	var arvr_ovr_mobile_interface = null;
-	var arvr_oculus_interface = null;
-	var arvr_open_vr_interface = null;
 	for interface in available_interfaces:
 		match interface.name:
 			"OVRMobile":
@@ -723,6 +774,8 @@ func initialize(initialize_vr = true):
 				arvr_oculus_interface = ARVRServer.find_interface("Oculus");
 			"OpenVR":
 				arvr_open_vr_interface = ARVRServer.find_interface("OpenVR");
+			"WebXR":
+				arvr_webxr_interface = ARVRServer.find_interface("WebXR");
 	
 	if arvr_ovr_mobile_interface:
 		log_info("  Found OVRMobile Interface.");
@@ -756,6 +809,17 @@ func initialize(initialize_vr = true):
 			OS.vsync_enabled = false;
 			inVR = true;
 			log_info("  Success initializing OpenVR Interface.");
+	elif arvr_webxr_interface:
+		log_info("  Found WebXR Interface.");
+		arvr_webxr_interface.connect("session_supported", self, "_webxr_cb_session_supported")
+		arvr_webxr_interface.connect("session_started", self, "_webxr_cb_session_started")
+		arvr_webxr_interface.session_mode = 'immersive-vr'
+		arvr_webxr_interface.required_features = 'local-floor'
+		arvr_webxr_interface.optional_features = 'bounded-floor'
+		arvr_webxr_interface.requested_reference_space_types = 'bounded-floor, local-floor, local'
+		arvr_webxr_interface.is_session_supported("immersive-vr")
+		_webxr_create_entervr_buttons();
+
 	else:
 		inVR = false;
 		log_warning("No compatible ARVR Interface could be found.");

@@ -26,18 +26,18 @@ func _process(_dt):
 		
 func _ready():
 	vr.initialize();
-	
-	#vr.set_display_refresh_rate(60);
-	#Engine.target_fps = 60;
-	
 	vr.scene_switch_root = self;
+	
+	# This is required for WebXR support to wait until the user pressed the button
+	# the buttons itself are created inside the vr.initialize();
+	if (vr.arvr_webxr_interface): yield(vr, "signal_webxr_started");
 	
 	#vr.switch_scene("res://demo_scenes/experiments/BowAndArrow.tscn"); return;
 	#vr.switch_scene("res://demo_scenes/experiments/TestRoom.tscn"); return;
 	#vr.switch_scene("res://demo_scenes/StereoPanoramaDemoScene.tscn"); return;
 	#vr.switch_scene("res://demo_games/BeepSaber/BeepSaber_Game.tscn");  return;
 
-	# Always advertise Godot a bit in the beggining
+	# Always advertise Godot a bit in the beginning
 	if (vr.inVR): vr.switch_scene("res://demo_scenes/GodotSplash.tscn", 0.0, 0.0);
 	
 	vr.switch_scene(room_list[current_room], 0.1, 5.0);
