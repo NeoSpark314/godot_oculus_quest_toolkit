@@ -120,6 +120,10 @@ func randomArrayElement(rng, array):
 	return array[rng.randi_range(0, array.size()-1)];
 
 
+# helper function to read and parse a JSON file and return the contents as a dictionary
+# Note: if you want to use it with .json files that are part of your project you 
+#       need to make sure they are exported by including *.json in the 
+#       ExportSettings->Resources->Filters options
 func load_json_file(filename):
 	var save = File.new();
 	var err = save.open(filename, File.READ)
