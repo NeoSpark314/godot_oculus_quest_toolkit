@@ -1,14 +1,3 @@
-# !! WebXR Development Branch !!
-This is the WebXR branch used for testing and developing integration with the currently in-development WebXR support for Godot from @dsnopek (https://github.com/godotengine/godot/pull/42397)
-
-Some notes if you want to try it:
-- This repo contains a prebuild html export template that supports WebXR in the `bin/` folder
-- Export to html (default setting will export compressed textures for both Desktop and Mobile)
-- WebXR with the oculus quest requires https: a test environment can be started via `browser-sync start -s --https --no-open --port=5001`; this can be installed via npm
-
-A prebuild test version can be accessed here (probably out of date compared to this repo): [https://godot-toolkit-webxr.glitch.me/](https://godot-toolkit-webxr.glitch.me/)
-
-
 # Godot Oculus Quest Toolkit <!-- omit in toc --> 
 This is an in-development toolkit for basic VR interactions with the Oculus Quest using the Godot game engine.
 The toolkit in this repository requires (at the time of writing) a recent version of Godot 3.2.
