@@ -411,7 +411,7 @@ func _initialize_OVR_API():
 	if (OvrVrApiProxy): ovrVrApiProxy = OvrVrApiProxy.new();
 	else: log_error("Failed to load OvrVrApiProxy.gdns");
 	
-	#log_info(str("    Supported display refresh rates: ", get_supported_display_refresh_rates()));
+	log_info(str("    Quest Supported display refresh rates: ", get_supported_display_refresh_rates()));
 
 
 # When the android application gets paused it will destroy the VR context
