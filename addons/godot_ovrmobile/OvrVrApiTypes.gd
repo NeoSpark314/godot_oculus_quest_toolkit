@@ -76,8 +76,7 @@ enum OvrProperty {
 								          # or primary, a -1 means no active input device
 	VRAPI_DEVICE_EMULATION_MODE     = 29  # Used by apps to determine if they are running in an
 								          # emulation mode. Is a ovrDeviceEmulationMode value
-
-	VRAPI_DYNAMIC_FOVEATION_ENABLED     = 30
+	VRAPI_DYNAMIC_FOVEATION_ENABLED = 30  # Used by apps to enable / disable dynamic foveation adjustments.
 }
 
 enum OvrHandedness {
@@ -125,13 +124,19 @@ enum OvrSystemProperty {
 	VRAPI_SYS_PROP_DEVICE_REGION							= 10,
 	# Video decoder limit for the device.
 	VRAPI_SYS_PROP_VIDEO_DECODER_LIMIT						= 11,
-	VRAPI_SYS_PROP_HEADSET_TYPE								= 12,
 
+	# enum 12 used to be VRAPI_SYS_PROP_HEADSET_TYPE.
 	# enum 13 used to be VRAPI_SYS_PROP_BACK_BUTTON_SHORTPRESS_TIME
 	# enum 14 used to be VRAPI_SYS_PROP_BACK_BUTTON_DOUBLETAP_TIME
 
 	# Returns an OvrHandedness enum indicating left or right hand.
 	VRAPI_SYS_PROP_DOMINANT_HAND							= 15,
+
+	# Returns VRAPI_TRUE if the system supports orientation tracking.
+    VRAPI_SYS_PROP_HAS_ORIENTATION_TRACKING = 16,
+    # Returns VRAPI_TRUE if the system supports positional tracking.
+    VRAPI_SYS_PROP_HAS_POSITION_TRACKING = 17,
+
 
 	# Returns the number of display refresh rates supported by the system.
 	VRAPI_SYS_PROP_NUM_SUPPORTED_DISPLAY_REFRESH_RATES		= 64,
@@ -145,13 +150,8 @@ enum OvrSystemProperty {
 	# GL internal formats.
 	VRAPI_SYS_PROP_SUPPORTED_SWAPCHAIN_FORMATS				= 67,
 
-	# Returns VRAPI_TRUE if Multiview rendering support is available for this system,
-	# otherwise VRAPI_FALSE.
-	VRAPI_SYS_PROP_MULTIVIEW_AVAILABLE						= 128,
-
-	# Returns VRAPI_TRUE if submission of SRGB Layers is supported for this system,
-	# otherwise VRAPI_FALSE.
-	VRAPI_SYS_PROP_SRGB_LAYER_SOURCE_AVAILABLE				= 129,
+	#enum 128 used to be VRAPI_SYS_PROP_MULTIVIEW_AVAILABLE.
+    # enum 129 used to be VRAPI_SYS_PROP_SRGB_LAYER_SOURCE_AVAILABLE.
 
 	# Returns VRAPI_TRUE if on-chip foveated rendering of swapchains is supported
 	# for this system, otherwise VRAPI_FALSE.
@@ -159,7 +159,7 @@ enum OvrSystemProperty {
 }
 
 enum OvrSystemStatus {
-	VRAPI_SYS_STATUS_DOCKED							= 0,	#< Device is docked.
+	# enum 0 used to be VRAPI_SYS_STATUS_DOCKED.
 	VRAPI_SYS_STATUS_MOUNTED						= 1,	#< Device is mounted.
 	VRAPI_SYS_STATUS_THROTTLED						= 2,	#< Device is in powersave mode.
 	# enum  3 used to be VRAPI_SYS_STATUS_THROTTLED2.
@@ -177,8 +177,8 @@ enum OvrSystemStatus {
 	VRAPI_SYS_STATUS_USER_RECENTER_COUNT			= 15,	#< Returns the current HMD recenter count for user initiated recenters only. Defaults to 0.
 
 	VRAPI_SYS_STATUS_FRONT_BUFFER_PROTECTED			= 128,	#< VRAPI_TRUE if the front buffer is allocated in TrustZone memory.
-	VRAPI_SYS_STATUS_FRONT_BUFFER_565				= 129,	#< VRAPI_TRUE if the front buffer is 16-bit 5:6:5
-	VRAPI_SYS_STATUS_FRONT_BUFFER_SRGB				= 130,	#< VRAPI_TRUE if the front buffer uses the sRGB color space.
+	VRAPI_SYS_STATUS_FRONT_BUFFER_SRGB              = 130,  #< VRAPI_TRUE if the front buffer uses the sRGB color space.
+    VRAPI_SYS_STATUS_SCREEN_CAPTURE_RUNNING         = 131,  # VRAPI_TRUE if the screen is currently being recorded.
 }
 
 
