@@ -369,13 +369,9 @@ enum LocomotionStickTurnType {
 ###############################################################################
 
 # Oculus VR Api Classes
-var ovrDisplayRefreshRate = null;
-var ovrGuardianSystem = null;
-var ovrInitConfig = null;
-var ovrPerformance = null;
-var ovrTrackingTransform = null;
+var ovrBaseAPI = null;
+var ovrInitAPI = null;
 var ovrUtilities = null;
-var ovrHandTracking = null;
 var ovrVrApiProxy = null;
 # for the types we need to assume it is always available
 var ovrVrApiTypes = load("res://addons/godot_ovrmobile/OvrVrApiTypes.gd").new();
@@ -385,30 +381,18 @@ var _need_settings_refresh = false;
 
 func _initialize_OVR_API():
 	# load all native interfaces to the vrApi
-	var OvrDisplayRefreshRate = load("res://addons/godot_ovrmobile/OvrDisplayRefreshRate.gdns");
-	var OvrGuardianSystem = load("res://addons/godot_ovrmobile/OvrGuardianSystem.gdns");
-	var OvrInitConfig = load("res://addons/godot_ovrmobile/OvrInitConfig.gdns");
-	var OvrPerformance = load("res://addons/godot_ovrmobile/OvrPerformance.gdns");
-	var OvrTrackingTransform = load("res://addons/godot_ovrmobile/OvrTrackingTransform.gdns");
-	var OvrUtilities = load("res://addons/godot_ovrmobile/OvrUtilities.gdns");
-	var OvrHandTracking = load("res://addons/godot_ovrmobile/OvrHandTracking.gdns");
-	var OvrVrApiProxy = load("res://addons/godot_ovrmobile/OvrVrApiProxy.gdns");
+	var _OvrBaseAPI = load("res://addons/godot_ovrmobile/OvrBaseAPI.gdns");
+	var _OvrInitAPI = load("res://addons/godot_ovrmobile/OvrInitAPI.gdns");
+	var _OvrUtilities = load("res://addons/godot_ovrmobile/OvrUtilities.gdns");
+	var _OvrVrApiProxy = load("res://addons/godot_ovrmobile/OvrVrApiProxy.gdns");
 	
-	if (OvrDisplayRefreshRate): ovrDisplayRefreshRate = OvrDisplayRefreshRate.new();
-	else: log_error("Failed to load OvrDisplayRefreshRate.gdns");
-	if (OvrGuardianSystem): ovrGuardianSystem = OvrGuardianSystem.new();
-	else: log_error("Failed to load OvrGuardianSystem.gdns");
-	if (OvrInitConfig): ovrInitConfig = OvrInitConfig.new();
-	else: log_error("Failed to load OvrInitConfig.gdns");
-	if (OvrPerformance): ovrPerformance = OvrPerformance.new();
-	else: log_error("Failed to load OvrPerformance.gdns");
-	if (OvrTrackingTransform): ovrTrackingTransform = OvrTrackingTransform.new();
-	else: log_error("Failed to load OvrTrackingTransform.gdns");
-	if (OvrUtilities): ovrUtilities = OvrUtilities.new();
+	if (_OvrBaseAPI): ovrBaseAPI = _OvrBaseAPI.new();
+	else: log_error("Failed to load OvrBaseAPI.gdns");
+	if (_OvrInitAPI): ovrInitAPI = _OvrInitAPI.new();
+	else: log_error("Failed to load OvrInitAPI.gdns");
+	if (_OvrUtilities): ovrUtilities = _OvrUtilities.new();
 	else: log_error("Failed to load OvrUtilities.gdns");
-	if (OvrHandTracking): ovrHandTracking = OvrHandTracking.new();
-	else: log_error("Failed to load OvrHandTracking.gdns");
-	if (OvrVrApiProxy): ovrVrApiProxy = OvrVrApiProxy.new();
+	if (_OvrVrApiProxy): ovrVrApiProxy = _OvrVrApiProxy.new();
 	else: log_error("Failed to load OvrVrApiProxy.gdns");
 	
 	log_info(str("    Quest Supported display refresh rates: ", get_supported_display_refresh_rates()));
@@ -459,66 +443,66 @@ var oculus_mobile_settings_cache = {
 # wrapper for accessing the VrAPI helper functions that check for availability
 
 func get_supported_display_refresh_rates():
-	if (!ovrDisplayRefreshRate):
-		log_error("get_supported_display_refresh_rates(): no ovrDisplayRefreshRate object.");
+	if (!ovrBaseAPI):
+		log_error("get_supported_display_refresh_rates(): no ovrBaseAPI object.");
 		return [];
 	else:
-		return ovrDisplayRefreshRate.get_supported_display_refresh_rates();
+		return ovrBaseAPI.get_supported_display_refresh_rates();
 
 func set_display_refresh_rate(value):
-	if (!ovrDisplayRefreshRate):
-		log_error("set_display_refresh_rate(): no ovrDisplayRefreshRate object.");
+	if (!ovrBaseAPI):
+		log_error("set_display_refresh_rate(): no ovrBaseAPI object.");
 	else:
 		oculus_mobile_settings_cache["display_refresh_rate"] = value;
-		ovrDisplayRefreshRate.set_display_refresh_rate(value);
+		ovrBaseAPI.set_display_refresh_rate(value);
 
 func get_boundary_oriented_bounding_box():
-	if (!ovrGuardianSystem):
-		log_error("get_boundary_oriented_bounding_box(): no ovrGuardianSystem object.");
+	if (!ovrBaseAPI):
+		log_error("get_boundary_oriented_bounding_box(): no ovrBaseAPI object.");
 		return [Transform(), Vector3(1.93, 2.5, 2.25)]; # return a default value
 	else:
-		var ret = ovrGuardianSystem.get_boundary_oriented_bounding_box();
+		var ret = ovrBaseAPI.get_boundary_oriented_bounding_box();
 		if ((ret == null) || !(ret is Array) || (ret.size() != 2)):
 			log_error(str("get_boundary_oriented_bounding_box(): invalid return value: ", ret));
 			return [Transform(), Vector3(0, 0, 0)]; # return a default value
 		return ret;
 		
 func request_boundary_visible(val):
-	if (!ovrGuardianSystem):
-		log_error("request_boundary_visible(): no ovrGuardianSystem object.");
+	if (!ovrBaseAPI):
+		log_error("request_boundary_visible(): no ovrBaseAPI object.");
 		return false;
 	else:
 		oculus_mobile_settings_cache["boundary_visible"] = val;
-		return ovrGuardianSystem.request_boundary_visible(val);
+		return ovrBaseAPI.request_boundary_visible(val);
 		
 func get_boundary_visible():
-	if (!ovrGuardianSystem):
-		log_error("get_boundary_visible(): no ovrGuardianSystem object.");
+	if (!ovrBaseAPI):
+		log_error("get_boundary_visible(): no ovrBaseAPI object.");
 		return false;
 	else:
-		return ovrGuardianSystem.get_boundary_visible();
+		return ovrBaseAPI.get_boundary_visible();
 
 func get_tracking_space():
-	if (!ovrTrackingTransform):
-		log_error("get_tracking_space(): no ovrTrackingTransform object.");
+	if (!ovrBaseAPI):
+		log_error("get_tracking_space(): no ovrBaseAPI object.");
 		return -1;
 	else:
-		return ovrTrackingTransform.get_tracking_space();
+		return ovrBaseAPI.get_tracking_space();
 		
 func set_tracking_space(tracking_space):
-	if (!ovrTrackingTransform):
-		log_error("set_tracking_space(): no ovrTrackingTransform object.");
+	if (!ovrBaseAPI):
+		log_error("set_tracking_space(): no ovrBaseAPI object.");
 		return false;
 	else:
 		oculus_mobile_settings_cache["tracking_space"] = tracking_space;
-		return ovrTrackingTransform.set_tracking_space(tracking_space);
+		return ovrBaseAPI.set_tracking_space(tracking_space);
 		
 func locate_tracking_space(target_tracking_space):
-	if (!ovrTrackingTransform):
-		log_error("set_tracking_space(): no ovrTrackingTransform object.");
+	if (!ovrBaseAPI):
+		log_error("set_tracking_space(): no ovrBaseAPI object.");
 		return Transform();
 	else:
-		return ovrTrackingTransform.locate_tracking_space(target_tracking_space);
+		return ovrBaseAPI.locate_tracking_space(target_tracking_space);
 
 
 # these variables are currently only used by the recording playback
@@ -622,12 +606,12 @@ func set_default_layer_color_scale(color : Color):
 
 
 func set_extra_latency_mode(latency_mode):
-	if (!ovrPerformance):
-		log_error("set_tracking_space(): no ovrPerformance object.");
+	if (!ovrBaseAPI):
+		log_error("set_tracking_space(): no ovrBaseAPI object.");
 		return false;
 	else:
 		oculus_mobile_settings_cache["extra_latency_mode"] = latency_mode;
-		return ovrPerformance.set_extra_latency_mode(latency_mode);
+		return ovrBaseAPI.set_extra_latency_mode(latency_mode);
 
 
 enum FoveatedRenderingLevel {
@@ -639,37 +623,37 @@ enum FoveatedRenderingLevel {
 }
 
 func set_foveation_level(ffr_level):
-	if (!ovrPerformance):
-		log_error("set_foveation_level(): no ovrPerformance object.");
+	if (!ovrBaseAPI):
+		log_error("set_foveation_level(): no ovrBaseAPI object.");
 		return false;
 	else:
 		oculus_mobile_settings_cache["foveation_level"] = ffr_level;
-		return ovrPerformance.set_foveation_level(ffr_level);
+		return ovrBaseAPI.set_foveation_level(ffr_level);
 
 func set_enable_dynamic_foveation(ffr_dynamic):
-	if (!ovrPerformance):
-		log_error("set_enable_dynamic_foveation(): no ovrPerformance object.");
+	if (!ovrBaseAPI):
+		log_error("set_enable_dynamic_foveation(): no ovrBaseAPI object.");
 		return false;
 	else:
 		oculus_mobile_settings_cache["foveation_dynamic"] = ffr_dynamic;
-		return ovrPerformance.set_enable_dynamic_foveation(ffr_dynamic);
+		return ovrBaseAPI.set_enable_dynamic_foveation(ffr_dynamic);
 
 func set_swap_interval(interval):
-	if (!ovrPerformance):
-		log_error("set_swap_interval(): no ovrPerformance object.");
+	if (!ovrBaseAPI):
+		log_error("set_swap_interval(): no ovrBaseAPI object.");
 		return false;
 	else:
 		oculus_mobile_settings_cache["swap_interval"] = interval;
-		return ovrPerformance.set_swap_interval(interval);
+		return ovrBaseAPI.set_swap_interval(interval);
 	
 func set_clock_levels(cpu_level, gpu_level):
-	if (!ovrPerformance):
-		log_error("set_clock_levels(): no ovrPerformance object.");
+	if (!ovrBaseAPI):
+		log_error("set_clock_levels(): no ovrBaseAPI object.");
 		return false;
 	else:
 		oculus_mobile_settings_cache["clock_levels_cpu"] = cpu_level;
 		oculus_mobile_settings_cache["clock_levels_gpu"] = gpu_level;
-		return ovrPerformance.set_clock_levels(cpu_level, gpu_level);
+		return ovrBaseAPI.set_clock_levels(cpu_level, gpu_level);
 
 
 ###############################################################################

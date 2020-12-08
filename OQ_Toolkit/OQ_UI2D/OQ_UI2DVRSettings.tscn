@@ -8,6 +8,8 @@
 script = ExtResource( 3 )
 
 [node name="OQ_UI2DCanvas" parent="." instance=ExtResource( 2 )]
+editor_live_update = false
+transparent = false
 
 [node name="ReferenceRect" type="ReferenceRect" parent="OQ_UI2DCanvas"]
 visible = false
@@ -114,6 +116,7 @@ margin_bottom = 48.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
 [connection signal="item_selected" from="OQ_UI2DCanvas/ReferenceRect/FoveationLevel_Label/FoveationLevel_OptionButton" to="." method="_on_FoveationLevel_OptionButton_item_selected"]
 [connection signal="item_selected" from="OQ_UI2DCanvas/ReferenceRect/ExtraLatency_Label/ExtraLatency_OptionButton" to="." method="_on_ExtraLatency_OptionButton_item_selected"]
 [connection signal="item_selected" from="OQ_UI2DCanvas/ReferenceRect/TrackingSpace_Label/TrackingSpace_OptionButton" to="." method="_on_TrackingSpace_OptionButton_item_selected"]

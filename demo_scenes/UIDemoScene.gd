@@ -47,8 +47,8 @@ func _on_MoveSpeedSpinBox_value_changed(value):
 
 
 func _on_RotationOptionButton_item_selected(id):
-	if (id == 0): locomotion_stick.turn_type = locomotion_stick.TurnType.CLICK;
-	if (id == 1): locomotion_stick.turn_type = locomotion_stick.TurnType.SMOOTH;
+	if (id == 0): locomotion_stick.turn_type = vr.LocomotionStickTurnType.CLICK;
+	if (id == 1): locomotion_stick.turn_type = vr.LocomotionStickTurnType.SMOOTH;
 	vr.log_info("Changed turn type to %s" % locomotion_stick.turn_type);
 
 func _on_RotateSpeedSpinBox_value_changed(value):
