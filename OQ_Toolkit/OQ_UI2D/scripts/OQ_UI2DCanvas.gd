@@ -11,6 +11,7 @@ export var editor_live_update := false;
 
 export var transparent := false;
 
+# set to true to prevent UIRayCast marker from colliding with canvas
 export var disable_collision := false;
 
 var mesh_material = null;
