@@ -11,6 +11,9 @@ export var editor_live_update := false;
 
 export var transparent := false;
 
+# set to true to prevent UIRayCast marker from colliding with canvas
+export var disable_collision := false;
+
 var mesh_material = null;
 onready var mesh_instance : MeshInstance = $UIArea/UIMeshInstance
 
@@ -81,13 +84,11 @@ func _editor_update_preview():
 
 func _process(_dt):
 	if !Engine.editor_hint: # not in edtior
-		# if we are invisible we need to disable the collision shape to avoid interaction with the UIRayCast
-		if (!is_visible_in_tree()): 
+		if disable_collision:
 			ui_collisionshape.disabled = true;
-			ui_control.visible = false;
 		else:
-			ui_collisionshape.disabled = false;
-			ui_control.visible = true;
+			# if we are invisible we need to disable the collision shape to avoid interaction with the UIRayCast
+			ui_collisionshape.disabled = not is_visible_in_tree()
 		return;
 		
 
