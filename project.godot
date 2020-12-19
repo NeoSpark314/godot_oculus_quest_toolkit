@@ -71,7 +71,8 @@ window/size/height=540
 
 [gdnative]
 
-singletons=[ "res://addons/godot_ovrmobile/godot_ovrmobile.gdnlib" ]
+singletons=[  ]
+singletons_disabled=[  ]
 
 [importer_defaults]
 

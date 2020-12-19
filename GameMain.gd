@@ -30,6 +30,8 @@ func _ready():
 	
 	vr.switch_scene(room_list[current_room], 0.1, 5.0);
 
+	vr.set_display_refresh_rate_to_highest()
+
 	vr.log_info("  Tracking space is: %d" % vr.get_tracking_space());
 	vr.log_info(str("  get_boundary_oriented_bounding_box is: ", vr.get_boundary_oriented_bounding_box()));
 	vr.log_info("Engine.target_fps = %d" % Engine.target_fps);

@@ -1,3 +1,6 @@
 .import
 src_data
 .DS_STORE
+android/build/.gradle
+android/build
+android/.build_version
