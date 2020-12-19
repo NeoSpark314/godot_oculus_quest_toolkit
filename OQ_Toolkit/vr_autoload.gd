@@ -168,7 +168,7 @@ enum VR_CONTROLLER_TYPE {
 	WEBXR
 }
 
-var AXIS := {
+enum AXIS {
 	None = -1,
 	
 	LEFT_JOYSTICK_X = 0,
@@ -182,7 +182,7 @@ var AXIS := {
 	RIGHT_GRIP_TRIGGER = 3 + 16,
 }
 
-var CONTROLLER_AXIS := {
+enum CONTROLLER_AXIS {
 	None = -1,
 	
 	JOYSTICK_X = 0,
@@ -192,7 +192,7 @@ var CONTROLLER_AXIS := {
 }
 
 # the individual buttons directly identified left or right controller
-var BUTTON := {
+enum BUTTON {
 	None = -1,
 
 	Y = 1,
@@ -226,7 +226,7 @@ var BUTTON := {
 
 
 # Button list mapping to both controllers (needed for actions assigned to specific controllers instead of global)
-var CONTROLLER_BUTTON := {
+enum CONTROLLER_BUTTON {
 	None = -1,
 
 	YB = 1,
