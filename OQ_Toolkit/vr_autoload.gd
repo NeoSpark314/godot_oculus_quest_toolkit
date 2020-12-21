@@ -396,6 +396,8 @@ func _initialize_OVR_API():
 	else: log_error("Failed to load OvrVrApiProxy.gdns");
 	
 	log_info(str("    Quest Supported display refresh rates: ", get_supported_display_refresh_rates()));
+	log_info(str("      is_oculus_quest_1_device: ", is_oculus_quest_1_device()));
+	log_info(str("      is_oculus_quest_2_device: ", is_oculus_quest_2_device()));
 
 
 # When the android application gets paused it will destroy the VR context
@@ -603,6 +605,19 @@ func set_default_layer_color_scale(color : Color):
 	else:
 		oculus_mobile_settings_cache["default_layer_color_scale"] = color;
 		return ovrUtilities.set_default_layer_color_scale(color);
+
+
+func is_oculus_quest_1_device():
+	if (!ovrUtilities):
+		return false;
+	else:
+		return ovrUtilities.is_oculus_quest_1_device();
+	
+func is_oculus_quest_2_device():
+	if (!ovrUtilities):
+		return false;
+	else:
+		return ovrUtilities.is_oculus_quest_2_device();
 
 
 func set_extra_latency_mode(latency_mode):
