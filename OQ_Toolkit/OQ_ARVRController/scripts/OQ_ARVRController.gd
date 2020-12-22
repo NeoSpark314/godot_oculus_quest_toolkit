@@ -146,15 +146,15 @@ func _get_touch_controller_model(type,is_left):
 	match type:
 		TOUCH_CONTROLLER_MODEL_TYPE.AUTO:
 			# TODO determine this automatically somehow...
-			model = load(vr.oq_base_dir + "/OQ_ARVRController/Feature_ControllerModel_%s.tscn" % lOrR).instance()
+			model = load(vr.oq_base_dir + "/OQ_ARVRController/Feature_Quest1ControllerModel_%s.tscn" % lOrR).instance()
 		TOUCH_CONTROLLER_MODEL_TYPE.QUEST1:
-			model = load(vr.oq_base_dir + "/OQ_ARVRController/Feature_ControllerModel_%s.tscn" % lOrR).instance()
+			model = load(vr.oq_base_dir + "/OQ_ARVRController/Feature_Quest1ControllerModel_%s.tscn" % lOrR).instance()
 		TOUCH_CONTROLLER_MODEL_TYPE.QUEST2:
 			model = load(vr.oq_base_dir + "/OQ_ARVRController/Feature_Quest2ControllerModel_%s.tscn" % lOrR).instance();
 		_:
 			vr.log_warning("Unsupported controller model type in _get_touch_controller_model(): " + str(type))
 			# default to Quest 1 controller
-			model = load(vr.oq_base_dir + "/OQ_ARVRController/Feature_ControllerModel_%s.tscn" % lOrR).instance()
+			model = load(vr.oq_base_dir + "/OQ_ARVRController/Feature_Quest1ControllerModel_%s.tscn" % lOrR).instance()
 			
 	return model
 

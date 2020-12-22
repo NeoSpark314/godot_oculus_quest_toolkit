@@ -61,6 +61,7 @@ script = ExtResource( 9 )
 [node name="OQ_ARVRCamera" parent="OQ_ARVROrigin" instance=ExtResource( 1 )]
 
 [node name="OQ_LeftController" parent="OQ_ARVROrigin" instance=ExtResource( 4 )]
+controller_model_type = 2
 
 [node name="OQ_VisibilityToggle" parent="OQ_ARVROrigin/OQ_LeftController" instance=ExtResource( 6 )]
 invisible_on_start = true
@@ -188,6 +189,7 @@ __meta__ = {
 [node name="Feature_AreaObjectGrab" parent="OQ_ARVROrigin/OQ_LeftController" instance=ExtResource( 23 )]
 
 [node name="OQ_RightController" parent="OQ_ARVROrigin" instance=ExtResource( 13 )]
+controller_model_type = 2
 
 [node name="Feature_UIRayCast" parent="OQ_ARVROrigin/OQ_RightController" instance=ExtResource( 12 )]
 ui_raycast_visible_button = -1

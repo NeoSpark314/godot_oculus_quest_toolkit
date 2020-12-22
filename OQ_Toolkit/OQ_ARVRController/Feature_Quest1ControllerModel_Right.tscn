@@ -3,7 +3,7 @@
 [ext_resource path="res://OQ_Toolkit/OQ_ARVRController/models3d/OculusQuestTouchController_Right.gltf" type="PackedScene" id=1]
 [ext_resource path="res://OQ_Toolkit/OQ_ARVRController/scripts/Feature_ControllerModel.gd" type="Script" id=2]
 
-[node name="Feature_ControllerModel_Right" type="Spatial"]
+[node name="Feature_Quest1ControllerModel_Right" type="Spatial"]
 script = ExtResource( 2 )
 
 [node name="OculusQuestTouchController_Right" parent="." instance=ExtResource( 1 )]

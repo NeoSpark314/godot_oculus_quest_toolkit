@@ -7,16 +7,18 @@
 [ext_resource path="res://OQ_Toolkit/OQ_ARVROrigin/Feature_VRSimulator.tscn" type="PackedScene" id=5]
 [ext_resource path="res://OQ_Toolkit/OQ_ARVRController/Feature_UIRayCast.tscn" type="PackedScene" id=6]
 [ext_resource path="res://OQ_Toolkit/OQ_LeftController.tscn" type="PackedScene" id=7]
-[ext_resource path="res://OQ_Toolkit/OQ_ARVRController/Feature_ControllerModel_Right.tscn" type="PackedScene" id=8]
+[ext_resource path="res://OQ_Toolkit/OQ_ARVRController/Feature_Quest1ControllerModel_Right.tscn" type="PackedScene" id=8]
 [ext_resource path="res://demo_scenes/data/models_3d/TableTennis/Untitled.png" type="Texture" id=9]
 [ext_resource path="res://OQ_Toolkit/OQ_ARVROrigin/Feature_Climbing.tscn" type="PackedScene" id=10]
 [ext_resource path="res://OQ_Toolkit/OQ_RightController.tscn" type="PackedScene" id=11]
 [ext_resource path="res://OQ_Toolkit/OQ_ARVROrigin/Feature_Falling.tscn" type="PackedScene" id=12]
 [ext_resource path="res://OQ_Toolkit/OQ_ARVROrigin/Locomotion_Stick.tscn" type="PackedScene" id=13]
 [ext_resource path="res://OQ_Toolkit/OQ_Helpers/OQ_VisibilityToggle.tscn" type="PackedScene" id=14]
-[ext_resource path="res://OQ_Toolkit/OQ_ARVRController/Feature_ControllerModel_Left.tscn" type="PackedScene" id=15]
+[ext_resource path="res://OQ_Toolkit/OQ_ARVRController/Feature_Quest1ControllerModel_Left.tscn" type="PackedScene" id=15]
 [ext_resource path="res://OQ_Toolkit/OQ_UI2D/OQ_UI2DLabel.tscn" type="PackedScene" id=16]
 [ext_resource path="res://OQ_Toolkit/OQ_ARVROrigin/Feature_MixedRealityCapture.tscn" type="PackedScene" id=17]
+
+
 
 [sub_resource type="BoxShape" id=1]
 extents = Vector3( 0.5, 0.05, 0.05 )
