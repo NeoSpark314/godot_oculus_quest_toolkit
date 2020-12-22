@@ -7,3 +7,5 @@ background_mode = 2
 background_sky = SubResource( 1 )
 glow_intensity = 1.93
 glow_strength = 2.0
+ambient_light_color = Color( 1, 1, 1, 1 )
+ambient_light_sky_contribution = 0.0
