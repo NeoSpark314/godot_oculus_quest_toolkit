@@ -1,9 +1,17 @@
 # This script contains the button logic for the controller
 extends ARVRController
 
+enum TOUCH_CONTROLLER_MODEL_TYPE {
+	AUTO,
+	QUEST1,
+	QUEST2
+}
 
 # When set to true it will try to detect and load a model
 export var autoload_model = true;
+
+# override for the model used for the touch controller
+export (TOUCH_CONTROLLER_MODEL_TYPE) var controller_model_type = TOUCH_CONTROLLER_MODEL_TYPE.AUTO
 
 # if set to true it will propagate the hand pinch gestures as axis events
 export var hand_pinch_to_axis = false;
@@ -77,7 +85,7 @@ func get_linear_acceleration():
 
 func _ready():
 	# check if we already have one of the models attached so autoload still works
-	_controller_model = find_node("Feature_ControllerModel*", false, false);
+	_controller_model = find_node("Feature_*ControllerModel*", false, false);
 	_hand_model = find_node("Feature_HandModel*", false, false);
 
 	# heuristic to detect if we want hand behaviour
@@ -128,6 +136,28 @@ func get_hand_model():
 		vr.log_warning("get_hand_model called but no hand model found.");
 	return _hand_model;
 
+# loads the corresponding controller model scene
+# type: the controller model type to load
+# is_left: true if left controller, false if right controller
+func _get_touch_controller_model(type,is_left):
+	var lOrR = "Left" if is_left else "Right"
+	var model = null 
+	
+	match type:
+		TOUCH_CONTROLLER_MODEL_TYPE.AUTO:
+			# TODO determine this automatically somehow...
+			model = load(vr.oq_base_dir + "/OQ_ARVRController/Feature_ControllerModel_%s.tscn" % lOrR).instance()
+		TOUCH_CONTROLLER_MODEL_TYPE.QUEST1:
+			model = load(vr.oq_base_dir + "/OQ_ARVRController/Feature_ControllerModel_%s.tscn" % lOrR).instance()
+		TOUCH_CONTROLLER_MODEL_TYPE.QUEST2:
+			model = load(vr.oq_base_dir + "/OQ_ARVRController/Feature_Quest2ControllerModel_%s.tscn" % lOrR).instance();
+		_:
+			vr.log_warning("Unsupported controller model type in _get_touch_controller_model(): " + str(type))
+			# default to Quest 1 controller
+			model = load(vr.oq_base_dir + "/OQ_ARVRController/Feature_ControllerModel_%s.tscn" % lOrR).instance()
+			
+	return model
+
 func _auto_update_controller_model():
 	var controller_name = get_controller_name();
 
@@ -166,14 +196,14 @@ func _auto_update_controller_model():
 		is_hand = false;
 		if (_hand_model != null): _hand_model.visible = false;
 		if (autoload_model && _controller_model == null):
-			_controller_model = load(vr.oq_base_dir + "/OQ_ARVRController/Feature_ControllerModel_Left.tscn").instance();
+			_controller_model = _get_touch_controller_model(controller_model_type,true);
 			add_child(_controller_model);
 		if (_controller_model != null): _controller_model.visible = true;
 	elif (controller_id == 2):
 		is_hand = false;
 		if (_hand_model != null): _hand_model.visible = false;
 		if (autoload_model && _controller_model == null):
-			_controller_model = load(vr.oq_base_dir + "/OQ_ARVRController/Feature_ControllerModel_Right.tscn").instance();
+			_controller_model = _get_touch_controller_model(controller_model_type,false);
 			add_child(_controller_model);
 		if (_controller_model != null): _controller_model.visible = true;
 	else:
