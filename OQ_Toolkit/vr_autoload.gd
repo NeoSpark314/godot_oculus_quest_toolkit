@@ -879,7 +879,10 @@ func initialize(initialize_vr = true):
 		if arvr_oculus_interface.initialize():
 			active_arvr_interface_name = "Oculus";
 			get_viewport().arvr = true;
-			Engine.target_fps = 80 # TODO: this is headset dependent (RiftS == 80)=> figure out how to get this info at runtime
+			# Oculus on PC appears to select the correct refresh rate automatically.
+			# Rift and Quest 2 via Link can handle 90 Hz, but Quest 1 via link and Rift S will run at 72 and 80 respectively.
+			# Setting this below 90 will cap Q2 and Rift to what ever that is set to which is not ideal.
+			Engine.target_fps = 90
 			OS.vsync_enabled = false;
 			inVR = true;
 			log_info("  Success initializing Oculus Interface.");
