@@ -11,7 +11,7 @@ enum TOUCH_CONTROLLER_MODEL_TYPE {
 export var autoload_model = true;
 
 # override for the model used for the touch controller
-export (TOUCH_CONTROLLER_MODEL_TYPE) var controller_model_type = TOUCH_CONTROLLER_MODEL_TYPE.AUTO
+export (TOUCH_CONTROLLER_MODEL_TYPE) var controller_model_type = TOUCH_CONTROLLER_MODEL_TYPE.AUTO;
 
 # if set to true it will propagate the hand pinch gestures as axis events
 export var hand_pinch_to_axis = false;
