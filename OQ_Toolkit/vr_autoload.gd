@@ -168,7 +168,7 @@ enum VR_CONTROLLER_TYPE {
 	WEBXR
 }
 
-enum AXIS {
+const AXIS := {
 	None = -1,
 	
 	LEFT_JOYSTICK_X = 0,
