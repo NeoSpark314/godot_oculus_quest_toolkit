@@ -1,6 +1,14 @@
-extends Spatial
+extends "res://OQ_Toolkit/OQ_ARVRController/scripts/Feature_ControllerModel.gd"
 
 
-onready var palm_marker = $PalmMarker;
-onready var grab_marker = $GrabMarker;
-onready var ui_marker = $UIMarker;
+func _process(delta):
+	update_buttons()
+	._process(delta)
+
+# this function handles updating the positions of the buttons on the controller model
+#  ideally the digital buttons would be updated on a signal so they wouldn't need to be checked every delta
+#  but to avoid modififying existing architecture it is handled by the controller's input array
+# 
+func update_buttons():
+	
+
