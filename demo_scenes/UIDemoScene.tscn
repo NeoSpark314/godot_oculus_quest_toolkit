@@ -7,13 +7,13 @@
 [ext_resource path="res://OQ_Toolkit/OQ_UI2D/theme/oq_ui2d_standard.theme" type="Theme" id=5]
 [ext_resource path="res://OQ_Toolkit/OQ_Helpers/OQ_VisibilityToggle.tscn" type="PackedScene" id=6]
 [ext_resource path="res://OQ_Toolkit/OQ_ARVROrigin.tscn" type="PackedScene" id=7]
-[ext_resource path="res://OQ_Toolkit/OQ_ARVRController/Feature_ControllerModel_Right.tscn" type="PackedScene" id=8]
+[ext_resource path="res://OQ_Toolkit/OQ_ARVRController/Feature_ControllerModel_Right_Reactive.tscn" type="PackedScene" id=8]
 [ext_resource path="res://demo_scenes/UIDemoScene.gd" type="Script" id=9]
 [ext_resource path="res://OQ_Toolkit/OQ_UI2D/OQ_UI2DCanvas.tscn" type="PackedScene" id=10]
 [ext_resource path="res://OQ_Toolkit/OQ_ARVROrigin/Locomotion_Stick.tscn" type="PackedScene" id=11]
 [ext_resource path="res://OQ_Toolkit/OQ_ARVRController/Feature_UIRayCast.tscn" type="PackedScene" id=12]
 [ext_resource path="res://OQ_Toolkit/OQ_RightController.tscn" type="PackedScene" id=13]
-[ext_resource path="res://OQ_Toolkit/OQ_ARVRController/Feature_ControllerModel_Left.tscn" type="PackedScene" id=14]
+[ext_resource path="res://OQ_Toolkit/OQ_ARVRController/Feature_ControllerModel_Left_Reactive.tscn" type="PackedScene" id=14]
 [ext_resource path="res://OQ_Toolkit/OQ_UI2D/OQ_UI2DVRSettings.tscn" type="PackedScene" id=15]
 [ext_resource path="res://icon.png" type="Texture" id=16]
 [ext_resource path="res://OQ_Toolkit/OQ_UI2D/OQ_UI2DLogWindow.tscn" type="PackedScene" id=17]
@@ -71,6 +71,7 @@ invisible_on_start = true
 transform = Transform( 0.796625, 0, 0.604474, 0, 1, 0, -0.604474, 0, 0.796625, -0.0757154, 0.186514, -0.0449487 )
 editor_live_update = false
 transparent = false
+disable_collision = false
 
 [node name="ReferenceRect" type="ReferenceRect" parent="OQ_ARVROrigin/OQ_LeftController/OQ_VisibilityToggle/OQ_UI2DCanvas_NumButtons"]
 visible = false
@@ -208,6 +209,7 @@ transform = Transform( -4, 0, -8.74228e-08, 1.74846e-07, 3.4641, -0.5, 3.02841e-
 transform = Transform( -8.74227e-08, 0, -1, 0, 2, 0, 2, 0, -4.37114e-08, 1.85, 1.752, 0 )
 editor_live_update = false
 transparent = false
+disable_collision = false
 
 [node name="Control" type="ReferenceRect" parent="TestUI"]
 visible = false
@@ -324,6 +326,7 @@ color = Color( 0.192157, 0.411765, 0.141176, 1 )
 transform = Transform( -8.74228e-08, 0, 1, 0, 2, 0, -2, 0, -4.37114e-08, -2, 1.5, -0.246 )
 editor_live_update = false
 transparent = false
+disable_collision = false
 
 [node name="Control" type="ReferenceRect" parent="OQ_UI2DCanvas_MovementOptions"]
 visible = false
@@ -455,6 +458,7 @@ transparent = false
 transform = Transform( 1.67744, -0.544566, 0.471608, 0, 1.73205, 0.5, -1.08913, -0.838718, 0.726351, -0.915071, 1.17961, -1.52167 )
 editor_live_update = false
 transparent = false
+disable_collision = false
 
 [node name="ReferenceRect" type="ReferenceRect" parent="OQ_UI2DCanvas_LevelSelector"]
 margin_right = 544.0
@@ -558,6 +562,7 @@ __meta__ = {
 transform = Transform( 2, 0, 0, 0, 2, 0, 0, 0, 1, 0.084929, 1.17961, -1.52167 )
 editor_live_update = false
 transparent = false
+disable_collision = false
 
 [node name="ReferenceRect" type="Panel" parent="OQ_UI2DCanvas_DemoGameSelect"]
 visible = false
@@ -617,7 +622,6 @@ font_size_multiplier = 1.0
 font_color = Color( 1, 1, 1, 1 )
 background_color = Color( 0, 0, 0, 1 )
 transparent = false
-
 [connection signal="value_changed" from="OQ_UI2DCanvas_MovementOptions/Control/MoveSpeedSpinBox" to="." method="_on_MoveSpeedSpinBox_value_changed"]
 [connection signal="value_changed" from="OQ_UI2DCanvas_MovementOptions/Control/RotateSpeedSpinBox" to="." method="_on_RotateSpeedSpinBox_value_changed"]
 [connection signal="value_changed" from="OQ_UI2DCanvas_MovementOptions/Control/ClickTurnAngleSpinBox" to="." method="_on_ClickTurnAngleSpinBox_value_changed"]

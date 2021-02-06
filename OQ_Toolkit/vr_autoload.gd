@@ -227,7 +227,7 @@ enum BUTTON {
 
 # Button list mapping to both controllers (needed for actions assigned to specific controllers instead of global)
 enum CONTROLLER_BUTTON {
-	None = -1,
+None = -1,
 
 	YB = 1,
 	GRIP_TRIGGER = 2, # grip trigger pressed over threshold
