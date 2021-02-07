@@ -22,7 +22,7 @@ export var height_offset := 0.0; # you can make the player taller with this
 export var force_move_up : bool = false;
 export var move_up_speed : float = 0.0; # 0.0 == instance move up
 export var max_raycast_distance : float = 128.0; 
-export var ray_collision_mask : int = 2147483647;
+export (int, LAYERS_3D_PHYSICS) var ray_collision_mask = 2147483647;
 export var fall_without_hit : bool = false;
 export var fall_raycast_radius = 0.0;
 
