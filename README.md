@@ -6,7 +6,12 @@ The main target of this toolkit is native Oculus Quest development but it also s
 You can try a Web-Exported version of the tookit at https://neospark314.itch.io/godot-oculus-quest-toolkit
 
 The toolkit in this repository requires (at the time of writing) a recent version of Godot 3.2.
-If you have questions or run into problems please open an issue here or contact me at the [official Godot Discord](https://discord.gg/zH7NUgz): @NeoSpark314 in the #XR channel.
+
+If you have questions or run into problems please open an issue here or contact me on discord.
+
+There is a discord server specific for users of the toolkit. Feel free to join: https://discord.gg/JtTpFk9852
+
+For general discussions about VR in godot you can also join the [official Godot Discord](https://discord.gg/zH7NUgz) #XR channel.
 
 ## Showcases
 A list of links to projects and prototypes that use the Oculus Quest Toolkit that I'm aware of. If you are using the toolkit and would like to be here you can ping me or open an issue with a link to your project and I will add it.
