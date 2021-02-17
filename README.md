@@ -16,7 +16,7 @@ A list of links to projects and prototypes that use the Oculus Quest Toolkit tha
 |[![Voxel Works Quest](doc/images/showcase/voxel_works_quest.jpg)](https://sidequestvr.com/#/app/431) | [![Get Wood](doc/images/showcase/getwood.jpg)](https://globalgamejam.org/2020/games/get-wood-0) | [![Seurat TPS test](doc/images/showcase/seurat_tps_test.jpg)](https://www.youtube.com/watch?v=2RgMMeGQi2Q) |
 |[![Seurat Capture](doc/images/showcase/seurat_capture.jpg)](https://www.youtube.com/watch?v=ikYTkyIMV8k) | [![Pipelines](doc/images/showcase/pipelines.jpg)](https://saoigames.itch.io/pipelines-quest) | [![Mawashi](doc/images/showcase/mawashi.jpg)](https://sidequestvr.com/#/app/460) |
 |[![Blocks](doc/images/showcase/blocks.jpg)](https://kosmosschool.itch.io/blocks) | [![The Impossible Crypt](doc/images/showcase/impossible_crypt.jpg)](https://neospark314.itch.io/the-impossible-crypt)  | [![SpaceToys](doc/images/showcase/spacetoys.jpg)](https://github.com/ssj71/SpaceToys)|
-| [![Fugitive](doc/images/showcase/fugitive.jpg)](https://wavesonics.itch.io/fugitive-3d) | [![NeonGunslingerVR](doc/images/showcase/neon_gunslinger_vr.jpg)](https://sidequestvr.com/app/2680)| |
+| [![Fugitive](doc/images/showcase/fugitive.jpg)](https://wavesonics.itch.io/fugitive-3d) | [![NeonGunslingerVR](doc/images/showcase/neon_gunslinger_vr.jpg)](https://sidequestvr.com/app/2680)| [![JapaneseInANutshell](doc/images/showcase/japanese_in_a_nutshell.jpg)](https://sidequestvr.com/app/2519)|
 | | | |
 
 ## Demo Scenes and Games
