@@ -27,8 +27,8 @@ func _set_raycast_transform():
 	
 	if (controller.is_hand):
 		
-		if (vr.ovrHandTracking):
-			ui_raycast_position.transform = controller.transform.inverse() * vr.ovrHandTracking.get_pointer_pose(controller.controller_id);
+		if (vr.ovrBaseAPI):
+			ui_raycast_position.transform = controller.transform.inverse() * vr.ovrBaseAPI.get_pointer_pose(controller.controller_id);
 		else:
 			ui_raycast_position.transform.basis = Basis(Vector3(deg2rad(-90),0,0));
 	else:
@@ -51,8 +51,8 @@ func _update_raycasts():
 	ui_raycast_hitmarker.visible = false;
 	
 	
-	if (controller.is_hand && vr.ovrHandTracking): # hand has separate logic
-		ui_raycast_mesh.visible = vr.ovrHandTracking.is_pointer_pose_valid(controller.controller_id);
+	if (controller.is_hand && vr.ovrBaseAPI): # hand has separate logic
+		ui_raycast_mesh.visible = vr.ovrBaseAPI.is_pointer_pose_valid(controller.controller_id);
 		if (!ui_raycast_mesh.visible): return;
 	elif (ui_raycast_visible_button == vr.CONTROLLER_BUTTON.None ||
 		  controller._button_pressed(ui_raycast_visible_button) ||
