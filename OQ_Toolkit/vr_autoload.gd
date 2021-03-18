@@ -394,10 +394,16 @@ func _initialize_OVR_API():
 	else: log_error("Failed to load OvrUtilities.gdns");
 	if (_OvrVrApiProxy): ovrVrApiProxy = _OvrVrApiProxy.new();
 	else: log_error("Failed to load OvrVrApiProxy.gdns");
+
+	# print out a warning message if ovrBaseAPI is not found because it likely means that
+	# an incompatible version of the godot_ovrmobile version is used; the toolkit comes with a version
+	# that is compatible in https://github.com/NeoSpark314/godot_oculus_quest_toolkit
+	if (not ovrBaseAPI):
+		log_error("No OvrBaseAPI found; please make sure to use a godot_ovrmobile addon version compatible with the toolkit!; A compatible version is part of https://github.com/NeoSpark314/godot_oculus_quest_toolkit")
 	
 	log_info(str("    Quest Supported display refresh rates: ", get_supported_display_refresh_rates()));
-	log_info(str("      is_oculus_quest_1_device: ", is_oculus_quest_1_device()));
-	log_info(str("      is_oculus_quest_2_device: ", is_oculus_quest_2_device()));
+	#log_info(str("      is_oculus_quest_1_device: ", is_oculus_quest_1_device()));
+	#log_info(str("      is_oculus_quest_2_device: ", is_oculus_quest_2_device()));
 
 
 # When the android application gets paused it will destroy the VR context
