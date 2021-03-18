@@ -29,6 +29,7 @@ func _ready():
 	if (vr.inVR): vr.switch_scene("res://demo_scenes/GodotSplash.tscn", 0.0, 0.0);
 	
 	vr.switch_scene(room_list[current_room], 0.1, 5.0);
+	#vr.switch_scene("res://demo_scenes/experiments/TestRoom.tscn")
 
 	vr.log_info("  Tracking space is: %d" % vr.get_tracking_space());
 	vr.log_info(str("  get_boundary_oriented_bounding_box is: ", vr.get_boundary_oriented_bounding_box()));
