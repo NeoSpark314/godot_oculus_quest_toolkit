@@ -18,6 +18,5 @@ func _process(_dt):
 
 
 func _ready():
-	vr.initialize();
-
+	pass
 

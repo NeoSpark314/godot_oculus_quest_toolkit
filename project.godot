@@ -57,7 +57,7 @@ _global_script_class_icons={
 [application]
 
 config/name="Godot Oculus Quest Toolkit Demo"
-run/main_scene="res://demo_scenes/HandTrackingDemoScene.tscn"
+run/main_scene="res://GameMain.tscn"
 config/icon="res://icon.png"
 
 [autoload]
@@ -71,7 +71,8 @@ window/size/height=540
 
 [gdnative]
 
-singletons=[ "res://addons/godot-openvr/godot_openvr.gdnlib", "res://addons/godot_ovrmobile/godot_ovrmobile.gdnlib" ]
+singletons=[ "res://addons/godot_ovrmobile/godot_ovrmobile.gdnlib" ]
+singletons_disabled=[  ]
 
 [importer_defaults]
 
