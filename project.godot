@@ -72,6 +72,7 @@ window/size/height=540
 [gdnative]
 
 singletons=[ "res://addons/godot_ovrmobile/godot_ovrmobile.gdnlib" ]
+singletons_disabled=[  ]
 
 [importer_defaults]
 
@@ -144,8 +145,8 @@ quality/reflections/high_quality_ggx=false
 quality/shading/force_vertex_shading.mobile=false
 quality/shading/force_lambert_over_burley=true
 quality/shading/force_blinn_over_ggx.mobile=false
-quality/lightmapping/use_bicubic_sampling=false
 environment/default_clear_color=Color( 0, 0, 0, 1 )
 quality/filters/msaa=6
 quality/depth/hdr=false
 environment/default_environment="res://default_env.tres"
+quality/lightmapping/use_bicubic_sampling=false

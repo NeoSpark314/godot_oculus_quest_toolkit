@@ -18,5 +18,5 @@ func _process(_dt):
 
 
 func _ready():
-	pass # Replace with function body.
+	pass
 

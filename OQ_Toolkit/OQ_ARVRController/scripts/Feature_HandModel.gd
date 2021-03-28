@@ -239,26 +239,13 @@ func _process(_dt):
 		_update_hand_model(hand, model, skel);
 	_track_average_velocity(_dt);
 
-# the rotations we get from the OVR sdk are absolute and not relative
-# to the rest pose we have in the model; so we clear them here to be
-# able to use set pose
-# This is more like a workaround then a clean solution but allows to use 
-# the hand model from the sample without major modifications
 func _clear_bone_rest(skeleton : Skeleton):
 	_vrapi_inverse_neutral_pose.resize(skeleton.get_bone_count());
+	skeleton.set_bone_rest(0, Transform()); # only base pose needs to be reset
 	for i in range(0, skeleton.get_bone_count()):
 		var bone_rest = skeleton.get_bone_rest(i);
-		
-		skeleton.set_bone_pose(i, Transform(bone_rest.basis)); # use the loaded rest as start pose
-		
 		_vrapi_inverse_neutral_pose[_hand2vrapi_bone_map[i]] = bone_rest.basis.get_rotation_quat().inverse();
-		
-		# we fill this array here also with the rest pose so on Desktop we still have a valid array
 		_vrapi_bone_orientations[_hand2vrapi_bone_map[i]]  = bone_rest.basis.get_rotation_quat();
-		
-		bone_rest.basis = Basis(); # clear the rotation of the rest pose
-		skeleton.set_bone_rest(i, bone_rest); # and set this as the rest pose for the skeleton
-
 
 # Query the VrApi hand pose state and update the hand model bone pose
 func _update_hand_model(param_hand: ARVRController, param_model : Spatial, skeleton: Skeleton):
@@ -267,13 +254,14 @@ func _update_hand_model(param_hand: ARVRController, param_model : Spatial, skele
 	if (vr.ovrBaseAPI && visible): # check if the hand tracking API was loaded
 		# scale of the hand model as reported by VrApi
 		var ls = vr.ovrBaseAPI.get_hand_scale(param_hand.controller_id);
-		if (ls > 0.0): param_model.scale = Vector3(ls, ls, ls);
+		if (ls > 0.0): 
+			param_model.scale = Vector3(ls, ls, ls);
 		
 		tracking_confidence = vr.ovrBaseAPI.get_hand_pose(param_hand.controller_id, _vrapi_bone_orientations);
 		if (tracking_confidence > 0.0):
 			param_model.visible = true;
 			for i in range(0, _vrapi2hand_bone_map.size()):
-				skeleton.set_bone_pose(_vrapi2hand_bone_map[i], Transform(_vrapi_bone_orientations[i]));
+				skeleton.set_bone_pose(_vrapi2hand_bone_map[i], Transform(_vrapi_inverse_neutral_pose[i]*_vrapi_bone_orientations[i]));
 		else:
 			param_model.visible = false;
 		return true;
