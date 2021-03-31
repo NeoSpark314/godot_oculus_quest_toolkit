@@ -12,6 +12,15 @@ var model : Spatial = null;
 var skel : Skeleton = null; 
 
 var tracking_confidence = 1.0;
+const tracking_confidence_threshold = 1.0
+var last_tracked_controller_position = null
+var hand_tracking_valid = false
+var translucentvalidity = 0.0
+const fadetimevalidity = 1/0.2
+var handmeshnode
+var handmaterial
+var handmaterial_fading
+
 
 # the VrApi has at the moment no velocity tracking so we average sth. ourselves for now
 # this variable is used/returned in the method OQ_ARVRController.gd get_linear_velocity()
@@ -136,6 +145,18 @@ func _ready():
 	skel = model.get_child(0).get_child(0); # this is specific to the .gltf file that was exported
 	if (skel == null):
 		vr.log_error(" in Feature_HandModel: could not get skeleton of hand");
+
+	handmeshnode = skel.find_node("?_handMeshNode")
+	
+	# for some reason handmeshnode.get_surface_material(0) returns null, and this 
+	# is my only work-around to access its material for transparency adjustment 
+	var islefthand = (handmeshnode.get_name()[0] == "l")
+	handmaterial = load("res://OQ_Toolkit/OQ_ARVRController/models3d/HandMaterialLeft.material") if islefthand else load("res://OQ_Toolkit/OQ_ARVRController/models3d/HandMaterialLeft.material")
+	handmaterial_fading = handmaterial.duplicate()
+	handmaterial_fading.flags_transparent = true
+	
+	# transparency glitches with back surfaces present
+	handmaterial_fading.params_cull_mode = SpatialMaterial.CULL_BACK
 		
 	_vrapi_bone_orientations.resize(24);
 	_clear_bone_rest(skel);
@@ -236,7 +257,7 @@ func _debug_show_finger_estimate():
 
 func _process(_dt):
 	if (vr.inVR):
-		_update_hand_model(hand, model, skel);
+		_update_hand_model(_dt, hand, model, skel);
 	_track_average_velocity(_dt);
 
 func _clear_bone_rest(skeleton : Skeleton):
@@ -247,8 +268,12 @@ func _clear_bone_rest(skeleton : Skeleton):
 		_vrapi_inverse_neutral_pose[_hand2vrapi_bone_map[i]] = bone_rest.basis.get_rotation_quat().inverse();
 		_vrapi_bone_orientations[_hand2vrapi_bone_map[i]]  = bone_rest.basis.get_rotation_quat();
 
+
+
 # Query the VrApi hand pose state and update the hand model bone pose
-func _update_hand_model(param_hand: ARVRController, param_model : Spatial, skeleton: Skeleton):
+func _update_hand_model(_dt, param_hand: ARVRController, param_model : Spatial, skeleton: Skeleton):
+	# function arguments redundant, should use hand, model, skel, ... as we are accessing class variable anyway
+	
 	# we check to level visibility here for the node to not update
 	# when the application (or the OQ_XXXController) set it invisible
 	if (vr.ovrBaseAPI && visible): # check if the hand tracking API was loaded
@@ -258,12 +283,33 @@ func _update_hand_model(param_hand: ARVRController, param_model : Spatial, skele
 			param_model.scale = Vector3(ls, ls, ls);
 		
 		tracking_confidence = vr.ovrBaseAPI.get_hand_pose(param_hand.controller_id, _vrapi_bone_orientations);
-		if (tracking_confidence > 0.0):
-			param_model.visible = true;
+		hand_tracking_valid = (tracking_confidence >= tracking_confidence_threshold)
+		if hand_tracking_valid:
 			for i in range(0, _vrapi2hand_bone_map.size()):
 				skeleton.set_bone_pose(_vrapi2hand_bone_map[i], Transform(_vrapi_inverse_neutral_pose[i]*_vrapi_bone_orientations[i]));
-		else:
-			param_model.visible = false;
+			transform = Transform()
+			if translucentvalidity == 0.0:
+				handmeshnode.material_override = handmaterial_fading
+				param_model.visible = true;
+			if translucentvalidity < 1.0:
+				translucentvalidity += _dt*fadetimevalidity
+				if translucentvalidity < 1.0:
+					handmaterial_fading.albedo_color.a = translucentvalidity*handmaterial.albedo_color.a
+				else:
+					translucentvalidity = 1.0
+					handmeshnode.material_override = null
+			last_tracked_controller_position = get_parent().transform
+
+		elif translucentvalidity != 0.0:
+			transform = get_parent().transform.inverse()*last_tracked_controller_position
+			if translucentvalidity == 1.0:
+				handmeshnode.material_override = handmaterial_fading
+			translucentvalidity -= _dt*fadetimevalidity
+			if translucentvalidity > 0.0:
+				handmaterial_fading.albedo_color.a = translucentvalidity*handmaterial.albedo_color.a
+			else:
+				translucentvalidity = 0.0
+				param_model.visible = false
 		return true;
 	else:
 		return false;
