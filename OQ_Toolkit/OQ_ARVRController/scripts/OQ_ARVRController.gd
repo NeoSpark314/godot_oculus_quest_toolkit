@@ -141,20 +141,25 @@ func get_hand_model():
 # is_left: true if left controller, false if right controller
 func _get_touch_controller_model(type,is_left):
 	var lOrR = "Left" if is_left else "Right"
-	var model = null 
+	# default to Quest 1 controller
+	var model = load(vr.oq_base_dir + "/OQ_ARVRController/Feature_Quest1ControllerModel_%s.tscn" % lOrR).instance()
 	
 	match type:
 		TOUCH_CONTROLLER_MODEL_TYPE.AUTO:
-			# TODO determine this automatically somehow...
-			model = load(vr.oq_base_dir + "/OQ_ARVRController/Feature_Quest1ControllerModel_%s.tscn" % lOrR).instance()
+			if vr.is_oculus_quest_1_device():
+				vr.log_info("Loading quest 1 controller model")
+				model = load(vr.oq_base_dir + "/OQ_ARVRController/Feature_Quest1ControllerModel_%s.tscn" % lOrR).instance()
+			elif vr.is_oculus_quest_2_device():
+				vr.log_info("Loading quest 1 controller model")
+				model = load(vr.oq_base_dir + "/OQ_ARVRController/Feature_Quest2ControllerModel_%s.tscn" % lOrR).instance()
+			else:
+				vr.log_warning("Unable to automatically determine controller model type.")
 		TOUCH_CONTROLLER_MODEL_TYPE.QUEST1:
 			model = load(vr.oq_base_dir + "/OQ_ARVRController/Feature_Quest1ControllerModel_%s.tscn" % lOrR).instance()
 		TOUCH_CONTROLLER_MODEL_TYPE.QUEST2:
 			model = load(vr.oq_base_dir + "/OQ_ARVRController/Feature_Quest2ControllerModel_%s.tscn" % lOrR).instance();
 		_:
 			vr.log_warning("Unsupported controller model type in _get_touch_controller_model(): " + str(type))
-			# default to Quest 1 controller
-			model = load(vr.oq_base_dir + "/OQ_ARVRController/Feature_Quest1ControllerModel_%s.tscn" % lOrR).instance()
 			
 	return model
 
