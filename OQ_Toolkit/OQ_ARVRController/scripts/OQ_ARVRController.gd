@@ -1,5 +1,6 @@
 # This script contains the button logic for the controller
 extends ARVRController
+class_name OQ_ARVRController
 
 enum TOUCH_CONTROLLER_MODEL_TYPE {
 	AUTO,
@@ -127,7 +128,8 @@ func get_ui_transform() -> Transform:
 # at the moment it is not configurable from the outside
 var _last_controller_name = null;
 var _controller_model : Spatial = null;
-var _hand_model : Spatial = null;
+var _hand_model : Spatial = null
+var _last_controller_model_type = null;
 
 func get_hand_model():
 	if (!is_hand):
@@ -165,10 +167,19 @@ func _get_touch_controller_model(type,is_left):
 
 func _auto_update_controller_model():
 	var controller_name = get_controller_name();
-
-	if (_last_controller_name == controller_name): return; # nothing to do
+	
+	# determine if we need to make any controller model changes
+	var requires_update = false;
+	if (_last_controller_name != controller_name):
+		requires_update = true;
+	if (_last_controller_model_type != controller_model_type):
+		requires_update = true;
+		
+	if (not requires_update):
+		return; # do nothing
 
 	_last_controller_name = controller_name;
+	_last_controller_model_type = controller_model_type;
 
 	# in vr when we are not connected we hide all controllers (but not in desktop mode)
 	if (vr.inVR && controller_name == "Not connected"):
@@ -203,6 +214,11 @@ func _auto_update_controller_model():
 		if (autoload_model && _controller_model == null):
 			_controller_model = _get_touch_controller_model(controller_model_type,true);
 			add_child(_controller_model);
+		elif (autoload_model && _controller_model):
+			# reload touch controller model based on new type
+			remove_child(_controller_model)
+			_controller_model = _get_touch_controller_model(controller_model_type,true);
+			add_child(_controller_model)
 		if (_controller_model != null): _controller_model.visible = true;
 	elif (controller_id == 2):
 		is_hand = false;
@@ -210,6 +226,11 @@ func _auto_update_controller_model():
 		if (autoload_model && _controller_model == null):
 			_controller_model = _get_touch_controller_model(controller_model_type,false);
 			add_child(_controller_model);
+		elif (autoload_model && _controller_model):
+			# reload touch controller model based on new type
+			remove_child(_controller_model)
+			_controller_model = _get_touch_controller_model(controller_model_type,false);
+			add_child(_controller_model)
 		if (_controller_model != null): _controller_model.visible = true;
 	else:
 		vr.log_warning("Unknown/Unsupported controller id in _auto_update_controller_model()")

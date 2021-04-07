@@ -43,6 +43,11 @@ _global_script_classes=[ {
 "class": "OQClass_ToolGrabLinearController",
 "language": "GDScript",
 "path": "res://OQ_Toolkit/OQ_Classes/OQClass_ToolGrabLinearController.gd"
+}, {
+"base": "ARVRController",
+"class": "OQ_ARVRController",
+"language": "GDScript",
+"path": "res://OQ_Toolkit/OQ_ARVRController/scripts/OQ_ARVRController.gd"
 } ]
 _global_script_class_icons={
 "Feature_RigidBodyGrab": "",
@@ -51,7 +56,8 @@ _global_script_class_icons={
 "OQClass_GrabbableToolPart": "",
 "OQClass_Tool": "",
 "OQClass_ToolGrabController": "",
-"OQClass_ToolGrabLinearController": ""
+"OQClass_ToolGrabLinearController": "",
+"OQ_ARVRController": ""
 }
 
 [application]
