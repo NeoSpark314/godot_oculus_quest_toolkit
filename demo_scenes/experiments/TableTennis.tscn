@@ -2,16 +2,18 @@
 
 [ext_resource path="res://demo_scenes/experiments/TableTennis.gd" type="Script" id=1]
 [ext_resource path="res://OQ_Toolkit/OQ_ARVRCamera.tscn" type="PackedScene" id=2]
-[ext_resource path="res://OQ_Toolkit/OQ_ARVRController/Feature_ControllerModel_Left.tscn" type="PackedScene" id=3]
+[ext_resource path="res://OQ_Toolkit/OQ_ARVRController/Feature_Quest1ControllerModel_Left.tscn" type="PackedScene" id=3]
 [ext_resource path="res://OQ_Toolkit/OQ_LeftController.tscn" type="PackedScene" id=4]
 [ext_resource path="res://OQ_Toolkit/OQ_ARVRController/Feature_RigidBodyGrab.tscn" type="PackedScene" id=5]
 [ext_resource path="res://OQ_Toolkit/OQ_ARVROrigin.tscn" type="PackedScene" id=6]
 [ext_resource path="res://demo_scenes/static_objects/TableTennisRoom.tscn" type="PackedScene" id=7]
 [ext_resource path="res://OQ_Toolkit/OQ_RightController.tscn" type="PackedScene" id=8]
-[ext_resource path="res://OQ_Toolkit/OQ_ARVRController/Feature_ControllerModel_Right.tscn" type="PackedScene" id=9]
+[ext_resource path="res://OQ_Toolkit/OQ_ARVRController/Feature_Quest1ControllerModel_Right.tscn" type="PackedScene" id=9]
 [ext_resource path="res://demo_scenes/actors/TableTennisBall.tscn" type="PackedScene" id=10]
 [ext_resource path="res://demo_scenes/actors/TableTennisRacket.tscn" type="PackedScene" id=11]
 [ext_resource path="res://OQ_Toolkit/OQ_ARVROrigin/Feature_VRSimulator.tscn" type="PackedScene" id=12]
+
+
 
 [node name="TableTennis" type="Spatial"]
 script = ExtResource( 1 )

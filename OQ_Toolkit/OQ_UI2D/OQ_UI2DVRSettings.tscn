@@ -8,11 +8,8 @@
 script = ExtResource( 3 )
 
 [node name="OQ_UI2DCanvas" parent="." instance=ExtResource( 2 )]
-editor_live_update = false
-transparent = false
 
 [node name="ReferenceRect" type="ReferenceRect" parent="OQ_UI2DCanvas"]
-visible = false
 margin_right = 512.0
 margin_bottom = 512.0
 theme = ExtResource( 1 )
@@ -117,7 +114,43 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="DeviceType_Label" type="Label" parent="OQ_UI2DCanvas/ReferenceRect"]
+margin_left = 16.0
+margin_top = 375.0
+margin_right = 188.0
+margin_bottom = 423.0
+text = "Device Type:"
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DeviceType_LineEdit" type="LineEdit" parent="OQ_UI2DCanvas/ReferenceRect/DeviceType_Label"]
+margin_left = 240.0
+margin_right = 480.0
+margin_bottom = 48.0
+editable = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ControllerOverride_Label" type="Label" parent="OQ_UI2DCanvas/ReferenceRect"]
+margin_left = 16.0
+margin_top = 432.0
+margin_right = 245.0
+margin_bottom = 501.0
+text = "Controller Model
+Override:"
+
+[node name="ControllerOverride_OptionButton" type="OptionButton" parent="OQ_UI2DCanvas/ReferenceRect/ControllerOverride_Label"]
+margin_left = 240.0
+margin_right = 480.0
+margin_bottom = 48.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
 [connection signal="item_selected" from="OQ_UI2DCanvas/ReferenceRect/FoveationLevel_Label/FoveationLevel_OptionButton" to="." method="_on_FoveationLevel_OptionButton_item_selected"]
 [connection signal="item_selected" from="OQ_UI2DCanvas/ReferenceRect/ExtraLatency_Label/ExtraLatency_OptionButton" to="." method="_on_ExtraLatency_OptionButton_item_selected"]
 [connection signal="item_selected" from="OQ_UI2DCanvas/ReferenceRect/TrackingSpace_Label/TrackingSpace_OptionButton" to="." method="_on_TrackingSpace_OptionButton_item_selected"]
 [connection signal="toggled" from="OQ_UI2DCanvas/ReferenceRect/BoundaryVisible_Label/BoundaryVisible_CheckButton" to="." method="_on_BoundaryVisible_CheckButton_toggled"]
+[connection signal="item_selected" from="OQ_UI2DCanvas/ReferenceRect/ControllerOverride_Label/ControllerOverride_OptionButton" to="." method="_on_ControllerOverride_OptionButton_item_selected"]

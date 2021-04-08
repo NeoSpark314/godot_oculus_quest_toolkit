@@ -3,10 +3,11 @@
 [ext_resource path="res://OQ_Toolkit/OQ_RightController.tscn" type="PackedScene" id=1]
 [ext_resource path="res://OQ_Toolkit/OQ_ARVRCamera.tscn" type="PackedScene" id=2]
 [ext_resource path="res://OQ_Toolkit/OQ_ARVROrigin.tscn" type="PackedScene" id=3]
-[ext_resource path="res://OQ_Toolkit/OQ_ARVRController/Feature_ControllerModel_Right.tscn" type="PackedScene" id=4]
+[ext_resource path="res://OQ_Toolkit/OQ_ARVRController/Feature_Quest1ControllerModel_Right.tscn" type="PackedScene" id=4]
 [ext_resource path="res://OQ_Toolkit/OQ_ARVRController/Feature_RigidBodyGrab.tscn" type="PackedScene" id=5]
 [ext_resource path="res://OQ_Toolkit/OQ_ARVROrigin/Feature_VRSimulator.tscn" type="PackedScene" id=6]
 [ext_resource path="res://OQ_Toolkit/OQ_LeftController.tscn" type="PackedScene" id=7]
+
 
 [sub_resource type="BoxShape" id=1]
 extents = Vector3( 0.1, 0.1, 0.1 )
