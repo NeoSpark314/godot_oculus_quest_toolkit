@@ -4,7 +4,7 @@ extends Node
 
 const UI_PIXELS_TO_METER = 1.0 / 1024; # defines the (auto) size of UI elements in 3D
 
-var toolkit_version = "0.4.1_dev"
+var toolkit_version = "0.4.2"
 
 var inVR = false;
 var active_arvr_interface_name = "Unknown";
@@ -849,7 +849,7 @@ func initialize(initialize_vr = true):
 	
 	var available_interfaces = ARVRServer.get_interfaces();
 	
-	log_info("Initializing VR");
+	log_info("Initializing VR (Toolkit version %s)" % toolkit_version);
 	log_info("  Available Interfaces are %s: " % str(available_interfaces));
 	
 	inVR = false;

@@ -140,7 +140,6 @@ common/physics_jitter_fix=0.0
 [rendering]
 
 quality/driver/driver_name="GLES2"
-quality/intended_usage/framebuffer_allocation=3
 vram_compression/import_etc=true
 vram_compression/import_etc2=false
 quality/directional_shadow/size=2048
@@ -151,8 +150,8 @@ quality/reflections/high_quality_ggx=false
 quality/shading/force_vertex_shading.mobile=false
 quality/shading/force_lambert_over_burley=true
 quality/shading/force_blinn_over_ggx.mobile=false
+quality/lightmapping/use_bicubic_sampling=false
 environment/default_clear_color=Color( 0, 0, 0, 1 )
 quality/filters/msaa=6
 quality/depth/hdr=false
 environment/default_environment="res://default_env.tres"
-quality/lightmapping/use_bicubic_sampling=false
