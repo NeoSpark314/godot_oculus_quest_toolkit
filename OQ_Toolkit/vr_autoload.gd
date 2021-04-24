@@ -4,7 +4,7 @@ extends Node
 
 const UI_PIXELS_TO_METER = 1.0 / 1024; # defines the (auto) size of UI elements in 3D
 
-var toolkit_version = "0.4.2"
+var toolkit_version = "0.4.3_dev"
 
 var inVR = false;
 var active_arvr_interface_name = "Unknown";
