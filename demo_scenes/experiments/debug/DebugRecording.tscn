@@ -6,12 +6,14 @@
 [ext_resource path="res://OQ_Toolkit/OQ_ARVRCamera.tscn" type="PackedScene" id=4]
 [ext_resource path="res://OQ_Toolkit/OQ_ARVROrigin/Locomotion_Stick.tscn" type="PackedScene" id=5]
 [ext_resource path="res://demo_scenes/experiments/debug/DebugRecording.gd" type="Script" id=6]
-[ext_resource path="res://OQ_Toolkit/OQ_ARVRController/Feature_ControllerModel_Left.tscn" type="PackedScene" id=7]
-[ext_resource path="res://OQ_Toolkit/OQ_ARVRController/Feature_ControllerModel_Right.tscn" type="PackedScene" id=8]
+[ext_resource path="res://OQ_Toolkit/OQ_ARVRController/Feature_Quest1ControllerModel_Left.tscn" type="PackedScene" id=7]
+[ext_resource path="res://OQ_Toolkit/OQ_ARVRController/Feature_Quest1ControllerModel_Right.tscn" type="PackedScene" id=8]
 [ext_resource path="res://demo_scenes/data/models_3d/GrabAndThrowRoom/GrabAndThrowRoom.gltf" type="PackedScene" id=9]
 [ext_resource path="res://OQ_Toolkit/OQ_ARVROrigin/Feature_VRSimulator.tscn" type="PackedScene" id=10]
 [ext_resource path="res://OQ_Toolkit/OQ_ARVROrigin/Feature_VRRecorder.tscn" type="PackedScene" id=11]
 [ext_resource path="res://OQ_Toolkit/OQ_ARVRController/Feature_RigidBodyGrab.tscn" type="PackedScene" id=12]
+
+
 
 [sub_resource type="BoxShape" id=1]
 extents = Vector3( 0.1, 0.1, 0.1 )
