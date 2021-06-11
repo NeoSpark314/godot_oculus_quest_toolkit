@@ -1,12 +1,15 @@
 extends Spatial
 
 export var show_text_input := true;
+# if 'show_text_input' is enabled and this flag is set true, then
+# the text input box will aquire focus when then keyboard gains visibilty
+export var focus_on_visible := false;
 
 var _text_edit : TextEdit = null;
 var _keyboard = null;
 
-signal text_input_cancel;
-signal text_input_enter;
+signal text_input_cancel();
+signal text_input_enter(text);
 
 
 func _on_cancel():
@@ -32,3 +35,7 @@ func _ready():
 		_text_edit.grab_focus();
 	else:
 		$OQ_UI2DCanvas_TextInput.visible = false; # ?? maybe delte the node if not used
+
+func _on_OQ_UI2DKeyboard_visibility_changed():
+	if visible and show_text_input and focus_on_visible:
+		_text_edit.grab_focus()

@@ -32,7 +32,7 @@ func _set_raycast_transform():
 		else:
 			ui_raycast_position.transform.basis = Basis(Vector3(deg2rad(-90),0,0));
 	else:
-		ui_raycast_position.transform.basis = Basis();
+		ui_raycast_position.transform = Transform();
 		
 		# center the ray cast better to the actual controller position
 		if (adjust_left_right):
