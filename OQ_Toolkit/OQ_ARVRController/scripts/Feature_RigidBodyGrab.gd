@@ -21,6 +21,14 @@ export(int, LAYERS_3D_PHYSICS) var collision_body_layer := 1
 onready var _hinge_joint : HingeJoint = $HingeJoint;
 export var reparent_mesh = false;
 export var hide_model_on_grab := false;
+# control the intesity of vibration when player grabs an object
+export(float,0,1,0.01) var rumble_on_grab_intensity = 0.4
+# set to true to vibrate controller when object is grabbed
+export var rumble_on_grab := false;
+# control the intesity of vibration when an object becomes grabbable
+export(float,0,1,0.01) var rumble_on_grabbable_intensity = 0.2
+# set to true to vibrate controller when object becomes grabbable
+export var rumble_on_grabbable := false;
 
 
 func just_grabbed() -> bool:
@@ -94,6 +102,10 @@ func grab() -> void:
 					grabbable_rigid_body = body;
 	
 	if grabbable_rigid_body:
+		# rumble controller to acknowledge grab action
+		if rumble_on_grab:
+			controller.simple_rumble(rumble_on_grab_intensity,0.1)
+
 		match grab_type:
 			vr.GrabTypes.KINEMATIC:
 				start_grab_kinematic(grabbable_rigid_body);
@@ -273,3 +285,10 @@ func release_grab_velocity():
 #
 #	# if grab button, grab
 #	release()
+
+
+func _on_GrabArea_body_entered(body):
+	pass # Replace with function body.
+
+func _on_GrabArea_area_entered(area):
+	pass # Replace with function body.
