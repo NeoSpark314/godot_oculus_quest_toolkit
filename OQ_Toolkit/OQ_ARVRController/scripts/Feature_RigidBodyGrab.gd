@@ -4,8 +4,12 @@
 extends Spatial
 class_name Feature_RigidBodyGrab
 
+# The controller that this grab feature is bound to
 var controller : ARVRController = null;
-# the other hand's grab feature
+# The other controller's grab feature. null if it doesn't exist, or isn't found.
+# This is needed so that we can release the object from the other controller
+# prior to transferring grab ownership to this controller. If the release isn't
+# performed correctly, strange node reparenting behavior can occur.
 var other_grab_feature : Feature_RigidBodyGrab = null
 var grab_area : Area = null;
 var held_object = null;
@@ -13,9 +17,9 @@ var held_object_data = {};
 var grab_mesh : MeshInstance = null;
 var held_object_initial_parent : Node
 var last_gesture := "";
-# A list of grabbable objects
-# First object that entered the grab area is at the front. When grab is
-# initiated the object at the front of the list will be grabbed.
+# A list of grabbable objects that are within the controller's grab distance.
+# First object that entered the grab area is at the front. When grab event is
+# initiated, the object at the front of the list will be grabbed.
 var grabbable_candidates = []
 
 export(vr.CONTROLLER_BUTTON) var grab_button = vr.CONTROLLER_BUTTON.GRIP_TRIGGER;
@@ -36,7 +40,8 @@ export var rumble_on_grabbable := false;
 # control the intesity of vibration when an object becomes grabbable
 export(float,0,1,0.01) var rumble_on_grabbable_intensity = 0.2
 
-
+# Returns true if controller's grab button was pressed, or hand's grab gesture
+# was detected.
 func just_grabbed() -> bool:
 	var did_grab: bool
 	
@@ -49,7 +54,8 @@ func just_grabbed() -> bool:
 	
 	return did_grab
 
-
+# Returns true if controller's grab button is not pressed, or hand's grab
+# gesture is not detected
 func not_grabbing() -> bool:
 	var not_grabbed: bool
 	
