@@ -324,7 +324,7 @@ func release_grab_velocity():
 
 func _on_GrabArea_body_entered(body):
 	if body is OQClass_GrabbableRigidBody:
-		if body.is_grabbable:
+		if body.grab_enabled:
 			grabbable_candidates.push_back(body)
 			
 			if grabbable_candidates.size() == 1:

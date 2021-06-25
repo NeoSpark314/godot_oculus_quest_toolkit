@@ -21,9 +21,8 @@ var delta_orientation = Basis();
 var delta_position = Vector3();
 var is_grabbed := false
 
-# TODO rename this to "grab_enabled" so it's not confused with the
-# grabbability_changed signal
-export var is_grabbable := true
+# set to false to prevent the object from being grabbable
+export var grab_enabled := true
 # set to true to allow grab to be transferable between hands
 export var is_transferable := true
 
