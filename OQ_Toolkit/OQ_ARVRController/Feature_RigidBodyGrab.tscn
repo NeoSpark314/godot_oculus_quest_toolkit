@@ -10,8 +10,6 @@ radius = 0.05
 
 [node name="Feature_RigidBodyGrab" type="Spatial"]
 script = ExtResource( 1 )
-rumble_on_grab = true
-rumble_on_grabbable = true
 
 [node name="GrabArea" type="Area" parent="."]
 collision_layer = 0

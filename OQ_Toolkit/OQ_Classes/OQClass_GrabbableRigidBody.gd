@@ -4,12 +4,24 @@ extends RigidBody
 
 class_name OQClass_GrabbableRigidBody
 
+# Emitted when the objects grabbability changes state.
+# Example usage could be for making an object "glow" when it is within
+# grab distance.
+signal grabbability_changed(body, grabbable)
+
+# Emitted when the object is grabbed by the player.
+signal grabbed(body)
+
+# Emitted when the object is released by the player.
+signal released(body)
 
 var target_node = null;
 var delta_orientation = Basis();
 var delta_position = Vector3();
 var is_grabbed := false
 
+# TODO rename this to "grab_enabled" so it's not confused with the
+# grabbability_changed signal
 export var is_grabbable := true
 # set to true to allow grab to be transferable between hands
 export var is_transferable := true
@@ -32,11 +44,13 @@ func grab_init(node, grab_type: int) -> void:
 	sleeping = false;
 	_orig_can_sleep = can_sleep;
 	can_sleep = false;
+	emit_signal("grabbed",self)
 
 func _release():
 	is_grabbed = false
 	target_node = null
 	can_sleep = _orig_can_sleep;
+	emit_signal("released",self)
 
 
 func grab_release() -> void:
@@ -68,6 +82,17 @@ func position_follow(state, current_position, target_position) -> void:
 	var dir = target_position - current_position;
 	state.set_linear_velocity(dir / state.get_step());
 
+# called by the Feature_RigidBodyGrab class when this object becomes the
+# next grabbable object candidacy
+func _notify_became_grabbable():
+	# for now, just fire the signal
+	emit_signal("grabbability_changed",self,true)
+
+# called by the Feature_RigidBodyGrab class when this object loses the
+# next grabbable object candidacy
+func _notify_lost_grabbable():
+	# for now, just fire the signal
+	emit_signal("grabbability_changed",self,false)
 
 func _integrate_forces(state):
 	if (!is_grabbed): return;

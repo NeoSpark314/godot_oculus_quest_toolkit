@@ -14,7 +14,7 @@ var last_gesture := "";
 # A list of grabbable objects
 # First object that entered the grab area is at the front. When grab is
 # initiated the object at the front of the list will be grabbed.
-var grabbable_canidates = []
+var grabbable_candidates = []
 
 export(vr.CONTROLLER_BUTTON) var grab_button = vr.CONTROLLER_BUTTON.GRIP_TRIGGER;
 export(String) var grab_gesture := "Fist"
@@ -294,12 +294,30 @@ func release_grab_velocity():
 func _on_GrabArea_body_entered(body):
 	if body is OQClass_GrabbableRigidBody:
 		if body.is_grabbable:
-			grabbable_canidates.push_back(body)
+			grabbable_candidates.push_back(body)
 			
-			# initiate "grabbable" rumble when there's at least 1 candidate
-			if rumble_on_grabbable and grabbable_canidates.size() == 1 and controller:
-				controller.simple_rumble(rumble_on_grabbable_intensity,0.1)
+			if grabbable_candidates.size() == 1:
+				body._notify_became_grabbable()
+				
+				# initiate "grabbable" rumble when first candidate acquired
+				if rumble_on_grabbable and controller:
+					controller.simple_rumble(rumble_on_grabbable_intensity,0.1)
+				
 
 func _on_GrabArea_body_exited(body):
 	if body is OQClass_GrabbableRigidBody:
-		grabbable_canidates.erase(body)
+		var prev_candidate = null
+		
+		# see if body is losing its grab candidacy. if so, notify
+		if grabbable_candidates.size() > 0:
+			prev_candidate = grabbable_candidates.front()
+			if prev_candidate == body:
+				prev_candidate._notify_lost_grabbable()
+		
+		grabbable_candidates.erase(body)
+		
+		# see if a grab candidacy has changed after removal. if so, notify
+		if grabbable_candidates.size() > 0:
+			var curr_candidate = grabbable_candidates.front()
+			if prev_candidate != curr_candidate:
+				curr_candidate._notify_became_grabbable()
