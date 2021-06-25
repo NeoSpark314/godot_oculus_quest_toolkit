@@ -11,6 +11,8 @@ var delta_position = Vector3();
 var is_grabbed := false
 
 export var is_grabbable := true
+# set to true to allow grab to be transferable between hands
+export var is_transferable := true
 
 var last_reported_collision_pos : Vector3 = Vector3(0,0,0);
 

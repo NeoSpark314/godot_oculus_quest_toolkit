@@ -141,7 +141,8 @@ func release():
 
 
 func start_grab_kinematic(grabbable_rigid_body):
-	if grabbable_rigid_body.is_grabbed:
+	# reject grab if object is already held and it's non-transferable
+	if grabbable_rigid_body.is_grabbed and not grabbable_rigid_body.is_transferable:
 		return
 	
 	held_object = grabbable_rigid_body
@@ -209,9 +210,10 @@ func start_grab_hinge_joint(grabbable_rigid_body):
 	if (grabbable_rigid_body == null):
 		vr.log_warning("Invalid grabbable_rigid_body in start_grab_hinge_joint()");
 		return;
-		
-	if grabbable_rigid_body.is_grabbed:
-		return;
+	
+	# reject grab if object is already held and it's non-transferable
+	if grabbable_rigid_body.is_grabbed and not grabbable_rigid_body.is_transferable:
+		return
 		
 	held_object = grabbable_rigid_body
 	held_object.grab_init(self, grab_type)
@@ -233,8 +235,9 @@ func start_grab_velocity(grabbable_rigid_body):
 		vr.log_warning("Invalid grabbable_rigid_body in start_grab_velocity()");
 		return;
 	
-	if grabbable_rigid_body.is_grabbed:
-		return;
+	# reject grab if object is already held and it's non-transferable
+	if grabbable_rigid_body.is_grabbed and not grabbable_rigid_body.is_transferable:
+		return
 	
 	var temp_global_pos = grabbable_rigid_body.global_transform.origin;
 	var temp_rotation = grabbable_rigid_body.global_transform.basis;
