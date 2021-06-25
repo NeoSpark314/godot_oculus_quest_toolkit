@@ -11,6 +11,10 @@ var held_object_data = {};
 var grab_mesh : MeshInstance = null;
 var held_object_initial_parent : Node
 var last_gesture := "";
+# A list of grabbable objects
+# First object that entered the grab area is at the front. When grab is
+# initiated the object at the front of the list will be grabbed.
+var grabbable_canidates = []
 
 export(vr.CONTROLLER_BUTTON) var grab_button = vr.CONTROLLER_BUTTON.GRIP_TRIGGER;
 export(String) var grab_gesture := "Fist"
@@ -21,14 +25,14 @@ export(int, LAYERS_3D_PHYSICS) var collision_body_layer := 1
 onready var _hinge_joint : HingeJoint = $HingeJoint;
 export var reparent_mesh = false;
 export var hide_model_on_grab := false;
-# control the intesity of vibration when player grabs an object
-export(float,0,1,0.01) var rumble_on_grab_intensity = 0.4
 # set to true to vibrate controller when object is grabbed
 export var rumble_on_grab := false;
-# control the intesity of vibration when an object becomes grabbable
-export(float,0,1,0.01) var rumble_on_grabbable_intensity = 0.2
+# control the intesity of vibration when player grabs an object
+export(float,0,1,0.01) var rumble_on_grab_intensity = 0.4
 # set to true to vibrate controller when object becomes grabbable
 export var rumble_on_grabbable := false;
+# control the intesity of vibration when an object becomes grabbable
+export(float,0,1,0.01) var rumble_on_grabbable_intensity = 0.2
 
 
 func just_grabbed() -> bool:
@@ -103,7 +107,7 @@ func grab() -> void:
 	
 	if grabbable_rigid_body:
 		# rumble controller to acknowledge grab action
-		if rumble_on_grab:
+		if rumble_on_grab and controller:
 			controller.simple_rumble(rumble_on_grab_intensity,0.1)
 
 		match grab_type:
@@ -288,7 +292,14 @@ func release_grab_velocity():
 
 
 func _on_GrabArea_body_entered(body):
-	pass # Replace with function body.
+	if body is OQClass_GrabbableRigidBody:
+		if body.is_grabbable:
+			grabbable_canidates.push_back(body)
+			
+			# initiate "grabbable" rumble when there's at least 1 candidate
+			if rumble_on_grabbable and grabbable_canidates.size() == 1 and controller:
+				controller.simple_rumble(rumble_on_grabbable_intensity,0.1)
 
-func _on_GrabArea_area_entered(area):
-	pass # Replace with function body.
+func _on_GrabArea_body_exited(body):
+	if body is OQClass_GrabbableRigidBody:
+		grabbable_canidates.erase(body)
