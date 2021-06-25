@@ -5,6 +5,8 @@ extends Spatial
 class_name Feature_RigidBodyGrab
 
 var controller : ARVRController = null;
+# the other hand's grab feature
+var other_grab_feature : Feature_RigidBodyGrab = null
 var grab_area : Area = null;
 var held_object = null;
 var held_object_data = {};
@@ -73,11 +75,32 @@ func _ready():
 	if (!collision_body_active):
 		$CollisionKinematicBody/CollisionBodyShape.disabled = true;
 	
-	
+	# find the other Feature_RigidBodyGrab if it exists
+	if controller:
+		if controller.controller_id == 1:# left
+			if vr.rightController:
+				for c in vr.rightController.get_children():
+					# can't use "is" because of cyclical dependency issue
+					if c.get_class() == "Feature_RigidBodyGrab":
+						other_grab_feature = c
+						break
+		else:# right
+			if vr.leftController:
+				for c in vr.leftController.get_children():
+					# can't use "is" because of cyclical dependency issue
+					if c.get_class() == "Feature_RigidBodyGrab":
+						other_grab_feature = c
+						break
+						
 	# TODO: we will re-implement signals later on when we have compatability with the OQ simulator and recorder
 	#controller.connect("button_pressed", self, "_on_ARVRController_button_pressed")
 	#controller.connect("button_release", self, "_on_ARVRController_button_release")
 
+# Godot's get_class() method only return native class names
+# we need this because we can't use "is" to test against a class_name within
+# the class itself, Godot complains about a weird cyclical dependency...
+func get_class():
+	return "Feature_RigidBodyGrab"
 
 func _physics_process(_dt):
 	# TODO: we will re-implement signals later on when we have compatability with the OQ simulator and recorder
@@ -153,9 +176,13 @@ func release():
 
 
 func start_grab_kinematic(grabbable_rigid_body):
-	# reject grab if object is already held and it's non-transferable
-	if grabbable_rigid_body.is_grabbed and not grabbable_rigid_body.is_transferable:
-		return
+	if grabbable_rigid_body.is_grabbed:
+		if grabbable_rigid_body.is_transferable:
+			# release from other hand to we can transfer to this hand
+			other_grab_feature.release()
+		else:
+			# reject grab if object is already held and it's non-transferable
+			return
 	
 	held_object = grabbable_rigid_body
 	
@@ -223,9 +250,13 @@ func start_grab_hinge_joint(grabbable_rigid_body):
 		vr.log_warning("Invalid grabbable_rigid_body in start_grab_hinge_joint()");
 		return;
 	
-	# reject grab if object is already held and it's non-transferable
-	if grabbable_rigid_body.is_grabbed and not grabbable_rigid_body.is_transferable:
-		return
+	if grabbable_rigid_body.is_grabbed:
+		if grabbable_rigid_body.is_transferable:
+			# release from other hand to we can transfer to this hand
+			other_grab_feature.release()
+		else:
+			# reject grab if object is already held and it's non-transferable
+			return
 		
 	held_object = grabbable_rigid_body
 	held_object.grab_init(self, grab_type)
@@ -247,9 +278,13 @@ func start_grab_velocity(grabbable_rigid_body):
 		vr.log_warning("Invalid grabbable_rigid_body in start_grab_velocity()");
 		return;
 	
-	# reject grab if object is already held and it's non-transferable
-	if grabbable_rigid_body.is_grabbed and not grabbable_rigid_body.is_transferable:
-		return
+	if grabbable_rigid_body.is_grabbed:
+		if grabbable_rigid_body.is_transferable:
+			# release from other hand to we can transfer to this hand
+			other_grab_feature.release()
+		else:
+			# reject grab if object is already held and it's non-transferable
+			return
 	
 	var temp_global_pos = grabbable_rigid_body.global_transform.origin;
 	var temp_rotation = grabbable_rigid_body.global_transform.basis;
