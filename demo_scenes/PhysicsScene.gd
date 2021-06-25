@@ -15,20 +15,18 @@ func _physics_process(_dt):
 func _ready():
 	$InfoLabel.set_label_text(info_text);
 
-func _set_grabbable_color(grab_object, color):
-	var mesh_inst = grab_object.get_node("MeshInstance")
-	if mesh_inst is MeshInstance:
-		var mat : SpatialMaterial = mesh_inst.get_surface_material(0)
-		mat.albedo_color = color
-
-func _on_RigidBody_grabbability_changed(body, grabbable):
+func _on_RigidBody_grabbability_changed(body, grabbable, controller):
 	if grabbable:
 		_set_grabbable_color(body,Color.yellow)
 	else:
 		_set_grabbable_color(body,Color.white)
 
-func _on_RigidBody_grabbed(body):
-	_set_grabbable_color(body,Color.lightgreen)
+func _on_RigidBody_grabbed(body, controller):
+	if controller is ARVRController:
+		if controller.controller_id == 1:# left
+			_set_grabbable_color(body,Color.lightgreen)
+		else:# right
+			_set_grabbable_color(body,Color.coral)
 
-func _on_RigidBody_released(body):
+func _on_RigidBody_released(body, controller):
 	_set_grabbable_color(body,Color.white)

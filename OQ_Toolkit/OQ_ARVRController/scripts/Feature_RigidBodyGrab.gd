@@ -328,7 +328,7 @@ func _on_GrabArea_body_entered(body):
 			grabbable_candidates.push_back(body)
 			
 			if grabbable_candidates.size() == 1:
-				body._notify_became_grabbable()
+				body._notify_became_grabbable(self)
 				
 				# initiate "grabbable" rumble when first candidate acquired
 				if rumble_on_grabbable and controller:
@@ -343,7 +343,7 @@ func _on_GrabArea_body_exited(body):
 		if grabbable_candidates.size() > 0:
 			prev_candidate = grabbable_candidates.front()
 			if prev_candidate == body:
-				prev_candidate._notify_lost_grabbable()
+				prev_candidate._notify_lost_grabbable(self)
 		
 		grabbable_candidates.erase(body)
 		
@@ -351,4 +351,4 @@ func _on_GrabArea_body_exited(body):
 		if grabbable_candidates.size() > 0:
 			var curr_candidate = grabbable_candidates.front()
 			if prev_candidate != curr_candidate:
-				curr_candidate._notify_became_grabbable()
+				curr_candidate._notify_became_grabbable(self)
