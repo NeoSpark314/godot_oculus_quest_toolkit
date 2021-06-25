@@ -96,14 +96,10 @@ func grab() -> void:
 	if (held_object):
 		return
 	
-	# find the right rigid body to grab
+	# get the next grabbable candidate
 	var grabbable_rigid_body = null;
-	var bodies = grab_area.get_overlapping_bodies();
-	if len(bodies) > 0:
-		for body in bodies:
-			if body is OQClass_GrabbableRigidBody:
-				if body.is_grabbable:
-					grabbable_rigid_body = body;
+	if grabbable_candidates.size() > 0:
+		grabbable_rigid_body = grabbable_candidates.front()
 	
 	if grabbable_rigid_body:
 		# rumble controller to acknowledge grab action
