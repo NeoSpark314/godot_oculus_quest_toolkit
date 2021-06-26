@@ -34,3 +34,5 @@ angular_limit/upper = 0.0
 angular_limit/lower = 0.0
 angular_limit/bias = 0.99
 angular_limit/relaxation = 0.5
+[connection signal="body_entered" from="GrabArea" to="." method="_on_GrabArea_body_entered"]
+[connection signal="body_exited" from="GrabArea" to="." method="_on_GrabArea_body_exited"]
