@@ -14,4 +14,3 @@ func _physics_process(_dt):
 
 func _ready():
 	$InfoLabel.set_label_text(info_text);
-
