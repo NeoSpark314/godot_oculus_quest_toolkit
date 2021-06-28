@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://OQ_Toolkit/OQ_ARVRController/scripts/tracked_obj_game.gd" type="Script" id=3]
+
+[sub_resource type="SphereMesh" id=1]
+radius = 0.01
+height = 0.02
+
+[sub_resource type="SpatialMaterial" id=2]
+emission_enabled = true
+emission = Color( 1, 0, 0, 1 )
+emission_energy = 1.0
+emission_operator = 0
+emission_on_uv2 = false
+
+[node name="Q_recog_tracked_game" type="Position3D"]
+script = ExtResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="."]
+mesh = SubResource( 1 )
+material/0 = SubResource( 2 )
