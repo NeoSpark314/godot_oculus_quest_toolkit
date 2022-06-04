@@ -843,6 +843,7 @@ var arvr_ovr_mobile_interface = null;
 var arvr_oculus_interface = null;
 var arvr_open_vr_interface = null;
 var arvr_webxr_interface = null;
+var arvr_openxr_interface = null;
 
 func initialize(initialize_vr = true):
 	_init_vr_log();
@@ -865,8 +866,20 @@ func initialize(initialize_vr = true):
 				arvr_open_vr_interface = ARVRServer.find_interface("OpenVR");
 			"WebXR":
 				arvr_webxr_interface = ARVRServer.find_interface("WebXR");
+			"OpenXR":
+				arvr_openxr_interface = ARVRServer.find_interface("OpenXR");
 	
-	if arvr_ovr_mobile_interface:
+	if arvr_openxr_interface:
+		log_info("  Found OpenXR Interface.");
+		if arvr_openxr_interface.initialize():
+			active_arvr_interface_name = "OpenVR"
+			get_viewport().arvr = true;
+			get_viewport().keep_3d_linear = true
+			Engine.target_fps = 72 
+			OS.vsync_enabled = false;
+			inVR = true;
+			log_info("  Success initializing OpenXR Interface.");
+	elif arvr_ovr_mobile_interface:
 		log_info("  Found OVRMobile Interface.");
 		if arvr_ovr_mobile_interface.initialize():
 			active_arvr_interface_name = "OVRMobile";
