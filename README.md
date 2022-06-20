@@ -1,11 +1,11 @@
 # Godot Oculus Quest Toolkit <!-- omit in toc --> 
 This is an in-development toolkit for basic VR interactions using the Godot game engine.
 
-The main target of this toolkit is native Oculus Quest development but it also supports WebXR export and DesktopVR (via the OpenVR and Oculus Godot modules) and most of the features are not platform specific.
+The main target of this toolkit is native Oculus Quest development but it also supports the Godot OpenXR plugin, WebXR export and DesktopVR (via the OpenXR, OpenVR and Oculus Godot modules). Most of the implemented features are **not platform specific**.
 
 You can try a Web-Exported version of the tookit at https://neospark314.itch.io/godot-oculus-quest-toolkit
 
-The toolkit in this repository requires (at the time of writing) a recent version of Godot 3.4.
+The current version of the toolkit in this repository was build/tested with Godot 3.4.5.
 
 If you have questions or run into problems please open an issue here or contact me on discord.
 

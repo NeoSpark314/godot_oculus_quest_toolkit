@@ -874,7 +874,7 @@ func initialize(initialize_vr = true):
 		if arvr_openxr_interface.initialize():
 			active_arvr_interface_name = "OpenVR"
 			get_viewport().arvr = true;
-			get_viewport().keep_3d_linear = true
+			get_viewport().keep_3d_linear = false;
 			Engine.target_fps = 72 
 			OS.vsync_enabled = false;
 			inVR = true;
